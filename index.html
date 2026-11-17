@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- APP:HEAD:START -->
+<title>Reason Lah!</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A pixel-art study game for GET1026 / GEK2048 Effective Reasoning, set in Singapore.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap">
+<!-- APP:HEAD:END -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- APP:BODY:START -->
+<div class="crt-bg" aria-hidden="true">
+  <div class="grid-floor"></div>
+  <div class="porthole"></div>
+  <canvas class="deco deco-bolt" data-icon="bolt" data-scale="9"></canvas>
+  <canvas class="deco deco-smile" data-icon="smiley" data-scale="12"></canvas>
+  <canvas class="deco deco-glass" data-icon="hourglass" data-scale="11"></canvas>
+  <canvas class="deco deco-star" data-icon="star" data-scale="10"></canvas>
+</div>
+<div class="scanlines" aria-hidden="true"></div>
+<div id="app" class="app">
+  <header class="topbar">
+    <div class="badges" aria-hidden="true">
+      <canvas data-icon="brain" data-scale="3"></canvas>
+      <canvas data-icon="bulb" data-scale="3"></canvas>
+      <canvas data-icon="merlion" data-scale="2"></canvas>
+    </div>
+    <div class="topbar-text">
+      <span>GET1026 / GEK2048 Effective Reasoning</span>
+      <span>Study Arcade · Final Exam 30 Nov 2026, 1pm · Examplify</span>
+      <span>Kent Ridge · Singapore</span>
+    </div>
+    <div class="topbar-tools">
+      <button type="button" class="chip" id="btn-sound" data-act="toggle-sound" aria-pressed="true">SFX ON</button>
+      <button type="button" class="chip" id="btn-home" data-act="home">MAP</button>
+    </div>
+  </header>
+  <main id="screen" class="screen" tabindex="-1" aria-live="polite"></main>
+  <div id="overlay" class="overlay" hidden></div>
+  <footer class="foot">Unofficial revision game built from your semester notes. Lecture and tutorial material wins every conflict.</footer>
+</div>
+<!-- APP:BODY:END -->
+<!-- APP:SCRIPTS:START -->
+<script src="js/core.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/content/cast.js"></script>
+<script src="js/content/traps.js"></script>
+<script src="js/content/ch01.js"></script>
+<script src="js/content/ch02.js"></script>
+<script src="js/content/ch03.js"></script>
+<script src="js/content/ch04.js"></script>
+<script src="js/content/ch05.js"></script>
+<script src="js/content/ch06.js"></script>
+<script src="js/content/ch07.js"></script>
+<script src="js/content/ch08.js"></script>
+<script src="js/content/ch09.js"></script>
+<script src="js/content/ch10.js"></script>
+<script src="js/content/ch11.js"></script>
+<script src="js/content/reference.js"></script>
+<script src="js/grading.js"></script>
+<script src="js/ui.js"></script>
+<!-- APP:SCRIPTS:END -->
+</body>
+</html>

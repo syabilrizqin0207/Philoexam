@@ -1,0 +1,13 @@
+{
+  "name": "reason-lah",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pixel-art study game for GET1026 / GEK2048 Effective Reasoning, set in Singapore.",
+  "scripts": {
+    "test": "node --test tests/content.test.mjs",
+    "build": "node scripts/build.mjs",
+    "smoke": "node tests/smoke.mjs",
+    "serve": "python3 -m http.server 8080"
+  },
+  "license": "UNLICENSED"
+}

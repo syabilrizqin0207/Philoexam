@@ -1,0 +1,145 @@
+/* Chapter 8 — Sample, Analogy & Causation [L8] [T5] */
+RL.chapter({
+  n: 8, code: 'RL8', lec: 'L8 · T5', title: `Sample, Analogy & Causation`, short: `Samples, Analogy, Mill`,
+  place: `Pulau Ubin`, spot: `Kampong makan, after the bumboat`, icon: 'house', sky: 808,
+  mentor: ['mill'], mentorName: `Detective Mill`,
+  story: [
+    `Detective Mill, at your service. Four guests at last night's kampong makan. Two fell ill. Someone at this table will tell me what caused it.`,
+    `First, samples. A large, varied sample and a cautious conclusion make a strong projection. Six hotel staff in Rome do not tell you about all Italians.`,
+    `Second, analogies. Relevant similarities strengthen, relevant differences weaken, and the colour of a book cover is irrelevant.`,
+    `Third, my methods: agreement, disagreement, difference, variation. Learn which one a passage uses, and what each one lets you conclude.`
+  ],
+  win: `Case closed. It was the satay, as you deduced. Well, induced. Next: the labs at one-north.`,
+  cards: [
+    { t: `Three inductive forms`, b: `**Statistical syllogism:** N% of A's are B (50<N<100) / x is an A / (all we know) / ∴ x is B. Population → individual.\n\n**Sample projection:** N% of examined A's are B / a large and varied group of A's has been examined / ∴ probably roughly N% of all A's are B. Sample → population.\n\n**Analogy syllogism:** most things true of X are also true of Y / X is A / (all we know) / ∴ probably Y is A. "A university is like a business..."` },
+    { t: `Strong samples`, b: `Three factors: **(1) sample size, (2) variety of sample, (3) cautiousness of conclusion.**\n\n**Representative (stratified) sample:** subgroups represented in the right proportions.\n**Random sample:** each member has an equal chance to be chosen.\n\n"Italians are fat and lazy: all six hotel staff in Rome were." Weak: tiny, not varied, sweeping conclusion.\n"Exactly 78.4% of Loyola students born in Chicago": too precise; say "roughly 78.4%".` },
+    { t: `Analogies`, b: `Relevant similarities **strengthen**; relevant differences **weaken**; trivial ones are **irrelevant**. No hard and fast rules; background knowledge plays a role.\n\nTextbook analogy ("my logic book covers analogy, so Sarah's likely does"): different colour = irrelevant; same chapters = strengthens; taught by a maths lecturer = weakens.\n\nTony's ethics course: same teacher transferring = strengthens; Tony's was medical ethics, yours general ethical theory = **strengthens** (background knowledge); teacher's reputation = irrelevant.` },
+    { t: `Mill: agreement`, b: `**Premises:** A occurred **more than once**. B is the **only additional factor** that occurred if A occurred (iff).\n**Conclusion:** probably B caused A, **or** A caused B.\n\nPicnic table: sickness occurred twice (Alice, David). Pie is the only food eaten by exactly the people who got sick. So probably pie caused the sickness, or the reverse.` },
+    { t: `Mill: disagreement`, b: `**Premises:** A occurred in some case. B didn't occur in that same case.\n**Conclusion:** A doesn't **necessarily** cause B (A is not a total cause of B).\n\nBob ate ice cream but was not sick, so eating ice cream doesn't necessarily cause sickness.\n\nPeople who **deny** a causal claim by pointing to cases where the cause occurred without the effect are using disagreement (2018 Q16, welfare).` },
+    { t: `Mill: difference and variation`, b: `**Difference:** A occurred in case 1 but not case 2; the cases are otherwise identical except B also occurred in case 1. Conclusion: probably B is (or is part of) the cause of A, or A is (or is part of) the cause of B. Works with a one-off pair (ants on the rock slab).\n\n**Variation:** A changes in a certain way if B changes in a certain way (degrees). Conclusion: probably B caused A, **or** A caused B, **or some C caused both**. Pie slices vs how sick.` },
+    { t: `Which method?`, b: `- Conclusion "X doesn't necessarily cause Y" (cause present, effect absent) → **disagreement**.\n- Correlation in amounts/degrees → **variation** (remember the common cause).\n- Two otherwise identical cases, one factor differs → **difference**.\n- Effect occurred more than once, one factor present iff effect → **agreement**.\n- Factors always together, never separated → **no method** (hangover).\n- One-way "All F are G" + contrapositive ≠ iff (mooncake app).\n\nNarrow the "or" options with time order, common cause (night/day) and reverse causation (headband).` },
+    { t: `Tutorial passages (T5)`, b: `- Reaction time after drinks: **difference**; reverse ruled out by time order.\n- Bacteria + food particles → cavities: combine into B·F; **agreement (or difference)**.\n- Scotch/gin/rum + soda → hangover: **no method** (soda always present).\n- Ants on the rock slab: **difference**; agreement fails (effect once).\n- Fluoride towns / fluoride groups: **difference (or agreement)**.\n- Matches: combine (H∨S)·(D·O); **agreement (or difference)**.\n- Night and day: agreement doesn't apply; **common cause** (Earth's rotation).\n- Kurt's headband: agreement or difference; reverse causation possible.\n- Inflation vs national debt: **variation**.` },
+    { t: `Easy to mix up`, b: `- Statistical syllogism (population → individual) vs sample projection (sample → population).\n- Sample projection (large, varied, cautious) vs false stereotype (isolated cases → all).\n- Agreement (several occurrences, one common factor) vs difference (two otherwise identical cases).\n- Difference (concludes a cause) vs disagreement ("not necessarily a cause").\n- Random (equal chance) vs representative (right proportions).` },
+    { t: `Trap check`, b: `- Do not name a method the passage never shows someone using (2018 Q16 I).\n- Agreement needs the effect more than once.\n- "Closest to analogy" = look for "most things true of X are true of Y" (Singapore/JB satay).\n- "All F are G" + its contrapositive adds nothing: no iff.\n- Several tutorial slides accept "agreement (or difference)".` }
+  ],
+  quick: [
+    [`Mill's agreement needs the effect to occur more than once.`, true, `The ant invasion happened once, so agreement fails.`],
+    [`Disagreement concludes that A is the cause of B.`, false, `It concludes A doesn't necessarily cause B.`],
+    [`Variation's conclusion allows that some C caused both.`, true, `Common-cause option.`],
+    [`If two factors always occur together, Mill's difference can separate them.`, false, `No method applies (hangover).`],
+    [`A sample-projection conclusion should say "roughly N%".`, true, `Not an exact figure.`],
+    [`A random sample gives every member an equal chance of being chosen.`, true, `Representative = right proportions of subgroups.`],
+    [`A trivial similarity strengthens an analogy.`, false, `Trivial similarities are irrelevant.`],
+    [`Night and day show a common cause, not one causing the other.`, true, `Earth's rotation.`],
+    [`Kurt's headband: making field goals could cause wearing the headband.`, true, `Reverse causation is possible.`],
+    [`Inflation correlating with national debt over years fits Mill's variation.`, true, `Degrees of change.`],
+    [`"Six hotel staff were lazy, so Italians are lazy" is a strong sample projection.`, false, `Tiny, unvaried sample, sweeping conclusion.`],
+    [`Tony's medical-ethics course vs your general ethics course weakens the analogy.`, false, `It strengthens: general theory is even more likely to cover utilitarianism.`],
+    [`A teacher's reputation is irrelevant to whether a course covers utilitarianism.`, true, `Tutorial answer.`],
+    [`Statistical syllogism reasons from a sample to a population.`, false, `That is sample projection. Statistical syllogism: population → individual.`],
+    [`Difference can work with a single pair of otherwise identical cases.`, true, `Ants on the rock slab.`],
+    [`"All F are G" plus its contrapositive establishes F iff G.`, false, `The contrapositive adds no new information.`]
+  ],
+  qs: [
+    { id: 'c8-01', t: 'set', topic: `Analogy`, src: `2018 Q15`, q: `"Corporate executives who knowingly sell cars with a defective design that is likely to cost the lives of their users are guilty of intentional killing. Likewise, those who eat pizzas and biscuits and use beauty products are guilty of intentional killing as well, because these are some of the thousands of products that contain palm oil, and the production of palm oil threatens the survival of orangutans through deforestation."`,
+      opts: [[0, 1, 2], [0], [2], [1, 2]],
+      s: [
+        [`There are no relevant similarities between manufacturing defective cars and using palm oil products.`, false, `Both are linked to the killing of living beings, which is relevant to "intentional killing".`, 'relevance-analogy'],
+        [`That selling cars is an act of selling while using these palm oil products is not an act of selling is NOT a relevant difference.`, true, `Selling vs using has nothing to do with whether it is intentional killing.`, 'relevance-analogy'],
+        [`That corporate executives knowingly sell defective cars whilst many people who use palm oil products do not know they are linked to the survival of orangutans is a relevant difference.`, true, `Knowledge is central to whether an act is intentional.`, 'relevance-analogy']
+      ] },
+    { id: 'c8-02', t: 'set', topic: `Mill's methods`, src: `2018 Q16`, q: `"Some policy makers and politicians contend that the reduction in welfare caseload observed in the early 2000s was caused by the economic growth in the 1990s. Detractors retort that this contention does not hold up to empirical scrutiny because economic expansions in other historical periods did not generate similar degrees of reduction in welfare caseloads. For example, the economic growth in 1980s didn't result in reduction of the total number of welfare recipients. In fact, the economic boom in the mid to late 1960s actually saw a dramatic increase in welfare caseload."`,
+      s: [
+        [`Those who argue that the reduction was caused by 1990s growth use the method of disagreement.`, false, `The passage never shows what argument the politicians used.`, 'unseen-method'],
+        [`The detractors' reasoning is closest to the method of difference.`, false, `Growth occurred without a fall in caseload: that is the disagreement pattern.`, 'deny-causal'],
+        [`The detractors' implicit main conclusion is that economic growth didn't necessarily cause the reduction in welfare caseload.`, true, `Disagreement's conclusion.`],
+        [`The detractors' implicit main conclusion is that economic growth caused increase in welfare caseload.`, false, `The 1960s example hints at this, but it is not their main conclusion.`]
+      ] },
+    { id: 'c8-03', t: 'mcq', topic: `Analogy`, src: `GEX23 Q15`, q: `Which argument is closest to an analogical argument?`,
+      o: [`"If there is an all-powerful, all-knowing, and perfectly good God, then there won't be any suffering in the world. There is suffering in the world. Therefore, there isn't such a God."`,
+        `"Most things true of the types of food in Singapore are true of the types of food in Johor Bahru (JB). Chicken satays are available in Singapore. Chicken satays are also available in JB."`,
+        `"Esther's mother has won many singing competitions. Yet Esther is tone deaf. Therefore, daughters are not always better than their mothers."`,
+        `"Everyone who ate curry chicken at restaurant X last night had diarrhoea... Among those who ate there and didn't have diarrhoea, none ate curry chicken. Thus, one should not eat curry chicken at restaurant X."`],
+      a: 1, why: `B matches the analogy syllogism: most things true of X are true of Y, X has a feature, so Y has it. A is modus tollens, C generalises from one case, D is causal.` },
+    { id: 'c8-04', t: 'mcq', topic: `Mill's methods`, src: `GEX23 Q16`, trap: 'contrapositive', q: `"All who downloaded app S to buy mooncakes are those who have lost money to scammers. All who have not lost money to scammers are those who did not download app S to buy mooncakes. In all these cases, people downloaded the app before losing money to scammers." Which is true?`,
+      o: [`Mill's method of agreement can be applied to infer that downloading app S caused losing money.`, `Mill's method of difference can be applied.`, `Mill's method of variation can be applied.`, `There is no reason to think any of these methods can be applied.`],
+      a: 3, why: `The second sentence is just the contrapositive of the first, so there is no iff and nothing shows downloading is the only additional factor. No two otherwise identical cases, no degrees.` },
+    { id: 'c8-05', t: 'mcq', topic: `Samples`, src: `L8 5.4a:3`, q: `"Italians are generally fat and lazy. How do I know? Well, when I visited Rome for a weekend last year, all the hotel employees were fat and lazy, all six of them." This argument is...`,
+      o: [`strong: the sample was carefully observed`, `weak: the sample is tiny and not varied, and the conclusion is about all Italians`, `a statistical syllogism`, `deductively valid`],
+      a: 1, why: `6 hotel staff in one city over one weekend cannot support a claim about all Italians.` },
+    { id: 'c8-06', t: 'mcq', topic: `Samples`, src: `T5 5.4a:2`, trap: 'too-precise', q: `"I examined every Loyola student whose Social Security number ended in 3. I found that exactly 78.4% of them were born in Chicago. So probably 78.4% of all Loyola students were born in Chicago." What is the problem?`,
+      o: [`The sample is not random.`, `The conclusion is too precise; it should say "roughly 78.4%".`, `Social Security numbers are private.`, `There is no problem.`],
+      a: 1, why: `The tutorial correction: "so probably roughly 78.4% of all Loyola students were born in Chicago".` },
+    { id: 'c8-07', t: 'mcq', topic: `Samples`, src: `T5 5.4a:5`, q: `"The sun has risen every day as long as humans can remember. So the sun will likely rise tomorrow." How does the tutorial put this into standard form?`,
+      o: [`One analogy syllogism`, `A sample projection (all examined days are sunrise days; large, varied sample; so probably all days are), then a deductive step (all days are sunrise days; tomorrow is a day; so tomorrow is a sunrise day)`, `A statistical syllogism only`, `Modus tollens`],
+      a: 1, why: `Two steps: inductive projection, then a deduction. The polar-night slide reminds you "all days are sunrise days" is false at the poles.` },
+    { id: 'c8-08', t: 'set', topic: `Strengthen or weaken`, src: `T5 5.4a:6–9`, q: `"Lucy got an A on the first four logic quizzes, so probably she'll also get an A on the fifth logic quiz." Which statements are correct?`,
+      s: [
+        [`"Lucy has been sick for the last few weeks and has missed most of her classes" weakens the argument.`, true, `Tutorial answer.`],
+        [`"The first four quizzes were on formal logic, while the fifth is on informal logic" strengthens the argument.`, false, `It weakens: a relevant difference.`, 'relevance-analogy'],
+        [`"Lucy has never received less than an A in her life" strengthens the argument.`, true, `Tutorial answer.`],
+        [`"A student in this course gets to drop the lowest of the five quizzes" weakens the argument.`, true, `She may not try on quiz 5.`]
+      ] },
+    { id: 'c8-09', t: 'mcq', topic: `Samples`, src: `T5 5.4a:11`, q: `"The universe is orderly (like a watch that follows complex laws). Most orderly things we've examined have intelligent designers. We've examined a large and varied group of orderly things. (This is all we know.) ∴ The universe probably has an intelligent designer." What does the tutorial say is problematic?`,
+      o: [`The first premise: the universe is not orderly.`, `The second premise: animals and plants are orderly things we have observed, but we do not know whether they have an intelligent designer.`, `The conclusion is too cautious.`, `Nothing; it is cogent.`],
+      a: 1, why: `Tutorial answer: premise 2 is problematic.` },
+    { id: 'c8-10', t: 'set', topic: `Strengthen or weaken`, src: `L8 5.5a:1–3`, q: `"My logic textbook discusses analogical reasoning. So Sarah's book likely does too."`,
+      s: [
+        [`"Sarah's book has a different colour" is irrelevant.`, true, `Colour has nothing to do with content.`],
+        [`"Sarah's book also has chapters on syllogisms, propositional logic, quantificational logic, and meaning and definitions" strengthens the argument.`, true, `Many similar topics.`],
+        [`"Sarah's course is taught by a member of the mathematics department" strengthens the argument.`, false, `It weakens it: a mathematical approach to logic seldom covers analogical reasoning.`, 'relevance-analogy']
+      ] },
+    { id: 'c8-11', t: 'set', topic: `Strengthen or weaken`, src: `T5 5.5a:11, 12, 14`, q: `"Tony's ethics course at another school discussed utilitarianism. So my ethics course next semester likely will too."`,
+      s: [
+        [`"Tony's teacher transferred to your school and will teach your course as well" strengthens the argument.`, true, `Tutorial answer.`],
+        [`"Tony's course was in medical ethics, while yours is in general ethical theory" weakens the argument.`, false, `It strengthens: general ethical theory is even more likely to cover utilitarianism (background knowledge).`, 'relevance-analogy'],
+        [`"Tony's teacher has a good reputation, while yours doesn't" is irrelevant.`, true, `Tutorial answer.`]
+      ] },
+    { id: 'c8-12', t: 'mcq', topic: `Mill's methods`, src: `L8 5.7a:1`, q: `"Experiments show that a person's reaction time is much longer after a few drinks but is relatively uninfluenced by a series of other factors." Which method, and what conclusion?`,
+      o: [`Agreement: drinking caused slower reaction, or the reverse, and both are open`, `Difference: drinking is (or is part of) the cause of slower reaction; the reverse is ruled out because the drinking came first`, `Variation: some C caused both`, `Disagreement: drinking doesn't necessarily cause slower reaction`],
+      a: 1, why: `Otherwise similar cases differing in drinking. Time order rules out the reverse.` },
+    { id: 'c8-13', t: 'mcq', topic: `Mill's methods`, src: `T5 5.7a:3`, trap: 'inseparable', q: `"Whenever Michelle drinks scotch and soda, she has a hangover the next day. Whenever she drinks gin and soda, she gets a hangover. Likewise, whenever she drinks rum and soda, she gets a hangover." Which Mill's method can be used?`,
+      o: [`Agreement: soda causes the hangover`, `Agreement: alcohol causes the hangover`, `Difference`, `None: soda is always present too, and the data never separate soda from alcohol`],
+      a: 3, why: `The data never show soda without alcohol or alcohol without soda, so no method applies.` },
+    { id: 'c8-14', t: 'set', topic: `Mill's methods`, src: `T5 5.7a:6`, q: `"When I sat eating on the rock slab in Grand Gulch, armies of little ants invaded the slab. Later I sat on the slab the same way except that I didn't eat anything. In the second case the ants didn't invade the slab."`,
+      s: [
+        [`This can be analysed with Mill's method of agreement.`, false, `The invasion happened only once; agreement needs it more than once.`, 'agreement-once'],
+        [`This can be analysed with Mill's method of difference.`, true, `Two otherwise similar cases differing in eating.`],
+        [`Eating is (or is part of) the cause of the ant invasion, rather than the reverse, since eating came first.`, true, `Time order.`]
+      ] },
+    { id: 'c8-15', t: 'mcq', topic: `Mill's methods`, src: `T5 5.7a:19`, q: `"After long investigation, we found a close correlation between night and day. If you have night, then invariably, in a few hours, follows day. If you have day, then invariably, in a few hours, there follows night." What is the right analysis?`,
+      o: [`Agreement: night causes day`, `Agreement: day causes night`, `Agreement doesn't apply; there is a common cause, the Earth's rotation relative to the Sun`, `Difference: night is part of the cause of day`],
+      a: 2, why: `No reason to think night is the only additional factor present iff day is. Common cause.` },
+    { id: 'c8-16', t: 'mcq', topic: `Mill's methods`, src: `T5 5.7a:21`, q: `"Whenever Kurt wears his headband, he makes all his field goals. Whenever he doesn't wear it, he misses them all. This has been going on for many years." Using agreement, what does the tutorial conclude?`,
+      o: [`Wearing the headband certainly causes success.`, `Probably wearing the headband caused making field goals, or making field goals caused wearing the headband; the second is possible because success might make Kurt wear it next time.`, `No method applies.`, `Variation: some C caused both.`],
+      a: 1, why: `Agreement gives both options, and reverse causation is live here.` },
+    { id: 'c8-17', t: 'mcq', topic: `Mill's methods`, src: `T5 5.7a:24`, trap: 'variation-common', q: `"When we chart the inflation rate next to the growth in the national debt over several years, we find a close correlation." Which method, and what can be concluded?`,
+      o: [`Agreement: debt caused inflation`, `Variation: changes in debt caused changes in inflation, or the reverse, or something else caused both`, `Difference: debt is part of the cause of inflation`, `Disagreement: debt doesn't necessarily cause inflation`],
+      a: 1, why: `A correlation in degrees is variation, whose conclusion includes the common-cause option.` },
+    { id: 'c8-18', t: 'mcq', topic: `Mill's methods`, src: `T5 5.7a:15`, trap: 'either-method', q: `"Matches that aren't either heated or struck don't light. Matches that are wet don't light. Matches that aren't in the presence of oxygen don't light. Matches that are heated or struck, dry, and in the presence of oxygen do light." How does the tutorial analyse this?`,
+      o: [`No method applies.`, `Combine the factors into (H∨S)·(D·O); present = lights, absent = doesn't. Agreement (or difference): heating or striking a dry match in oxygen causes it to light.`, `Variation: oxygen levels vary with lighting.`, `Disagreement: oxygen doesn't necessarily cause lighting.`],
+      a: 1, why: `Treat the combined condition as one factor. Lighting happened later, which rules out the reverse.` },
+    { id: 'c8-19', t: 'set', topic: `Mill's methods`, src: `Original (L8 data)`, q: `After a kampong makan on Pulau Ubin: Ah Huat ate nasi lemak and satay (no chendol) and fell sick. Bala ate only chendol and was fine. Chloe ate only nasi lemak and was fine. Dewi ate satay and chendol (no nasi lemak) and fell sick.`,
+      s: [
+        [`By the method of agreement, probably eating satay caused the sickness, or the sickness caused eating satay.`, true, `Sickness occurred twice, and satay is the only food eaten by exactly those who got sick.`],
+        [`By the method of disagreement, eating chendol doesn't necessarily cause sickness.`, true, `Bala ate chendol and was not sick.`],
+        [`By the method of disagreement, eating nasi lemak doesn't necessarily cause sickness.`, true, `Chloe ate nasi lemak and was not sick.`],
+        [`By the method of agreement, eating chendol caused the sickness.`, false, `Chendol was not eaten by exactly the sick guests (Ah Huat didn't, Bala did).`]
+      ] },
+    { id: 'c8-20', t: 'mcq', topic: `Samples`, src: `Original`, q: `"A survey of 2,000 Singapore residents, randomly selected across all planning areas and age groups, found that 62% prefer kopi to tea. So probably roughly 62% of Singapore residents prefer kopi to tea." How strong is this?`,
+      o: [`Weak: the sample is too small`, `Strong: large, varied sample and a cautious conclusion`, `Invalid, so worthless`, `A false stereotype`],
+      a: 1, why: `All three factors are satisfied: size, variety, and "probably roughly".` },
+    { id: 'c8-21', t: 'set', topic: `Analogy`, src: `Original`, q: `"Wei Ling's GE module last semester had an open-book final. So her GE module this semester will probably have an open-book final too."`,
+      s: [
+        [`"Both modules are coordinated by the same lecturer, who always sets open-book finals" strengthens the argument.`, true, `A relevant similarity.`],
+        [`"This semester's lectures are held in a different lecture theatre" is irrelevant.`, true, `The venue has nothing to do with the exam format.`],
+        [`"Last semester's module was assessed entirely by essays, while this one has a timed online exam" weakens the argument.`, true, `A relevant difference in assessment design.`]
+      ] },
+    { id: 'c8-22', t: 'mcq', topic: `Mill's methods`, src: `Original`, trap: 'variation-common', q: `"The more cups of kopi Arjun drinks in a day, the later he falls asleep." What does Mill's method of variation allow us to conclude?`,
+      o: [`Kopi certainly causes his late nights.`, `Probably kopi caused the late nights, or the late nights caused the kopi drinking, or something else (e.g. exam stress) caused both.`, `Kopi doesn't necessarily cause late nights.`, `Nothing at all.`],
+      a: 1, why: `Variation's conclusion lists all three options, including a common cause.` },
+    { id: 'c8-23', t: 'mcq', topic: `Samples`, src: `L8 slide`, q: `A survey team makes sure that its sample contains Chinese, Malay, Indian and other residents in the same proportions as the population. This is a...`,
+      o: [`random sample`, `representative (stratified) sample`, `false stereotype`, `statistical syllogism`],
+      a: 1, why: `Subgroups in the right proportions = representative/stratified. Random = equal chance for each member.` }
+  ]
+});
