@@ -35,11 +35,16 @@ async function run(name, viewport) {
   await click('[data-act="enter"][data-n="9"]');
   await page.waitForTimeout(400);
   await snap('lot');
-  // the video lesson: captions voice, a quick check, the end card, then the checkpoint quiz
+  // the video lesson: the recorded natural voice drives the captions, then a quick check, the end card, the checkpoint quiz
   await click('.act[data-act="watch"]');
+  if ((await page.$eval('#v-voice', el => el.value)) !== 'natural') errors.push(name + ': lesson does not default to the natural voice');
+  const cap0 = await page.textContent('.vs-cap-text');
+  await page.locator('.vs-big').click({ force: true });
+  await page.waitForFunction(c => document.querySelector('.vs-cap-text').textContent !== c, cap0, { timeout: 30000 }).catch(() => errors.push(name + ': natural voice never reached the second line'));
+  if ((await page.$eval('#v-voice', el => el.value)) !== 'natural') errors.push(name + ': natural voice fell back to ' + (await page.$eval('#v-voice', el => el.value)));
   await page.selectOption('#v-voice', 'captions');
   await page.selectOption('#v-rate', '1.5');
-  await page.locator('.vs-big').click({ force: true });
+  if (await page.locator('.vs-big').isVisible()) await page.locator('.vs-big').click({ force: true }); // already playing after the voice check
   await page.waitForTimeout(400);
   await snap('watch', false);
   const segs = page.locator('.vseg');

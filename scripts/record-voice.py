@@ -19,9 +19,13 @@ TIMING = os.path.join(ROOT, 'landlah', 'js', 'content', 'voice.js')
 
 # Said as letters. Anything else in capitals is read as a word.
 KEEP_WORDS = {'TRUE', 'FALSE', 'HELD', 'NOT', 'TRAP', 'OK', 'NUS', 'IRAS'}
-SAY = {  # spellings that help the voice with local names
+SAY = {  # spellings that help the voice with names and terms (checked by transcribing the recording back)
     'Punggol': 'Pung-gol',
     'Selamat datang': 'Selamat dahtahng',
+    'mortgagor': 'mortgager',  # otherwise read with a hard g
+    'Mortgagor': 'Mortgager',
+    'mortgagee': 'mortgage-ee',  # stress on the last syllable
+    'Mortgagee': 'Mortgage-ee',
 }
 
 

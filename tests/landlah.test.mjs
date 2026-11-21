@@ -314,3 +314,19 @@ test('Claude explainer videos are validated before they play', () => {
   const c = LL.concepts.build({ ...LL.newSave(), mistakes: { [LL.chapters[6].qs[0].id]: { n: 1, streak: 0, at: 1, traps: [], miss: [], fixed: false } } }).find(x => x.ch === 7);
   if (c) { const p = LL.explainerPrompt(c); assert.match(p, /JSON/); assert.ok(p.includes(c.name)); }
 });
+
+test('every lesson has a natural-voice recording that matches its script', () => {
+  assert.ok(LL.voiceTrack, 'landlah/js/content/voice.js is loaded');
+  for (const ch of LL.chapters) {
+    const v = LL.videos[ch.n], t = LL.voiceFor(v);
+    assert.ok(t, `${ch.code}: script changed since it was recorded; re-run scripts/record-voice.py`);
+    const file = path.join(app, t.src);
+    assert.ok(fs.existsSync(file) && fs.statSync(file).size > 100000, `${ch.code}: ${t.src} exists`);
+    let prev = 0;
+    t.lines.forEach(([a, b], i) => { assert.ok(a >= prev && b > a && b <= t.ms, `${ch.code} line ${i} timing ${a}-${b}`); prev = b; });
+    for (const s of v.scenes.filter(x => x.t === 'quiz')) {
+      for (const right of [true, false]) assert.ok(t.fb[LL.voiceHash(LL.quizFeedback(s._q, right))], `${ch.code} quick check ${s.qi}: ${right ? 'right' : 'wrong'}-answer feedback recorded`);
+    }
+  }
+  assert.equal(LL.voiceFor({ ...LL.videos[1], custom: true }), null, 'Claude explainers have no recording');
+});
