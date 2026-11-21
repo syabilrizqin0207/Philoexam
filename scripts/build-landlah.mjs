@@ -2,6 +2,8 @@
 //   node scripts/build-landlah.mjs                 -> dist/land-lah.html (open it in any browser, works offline)
 //   node scripts/build-landlah.mjs --artifact out  -> also writes a body-only page for publishing as a claude.ai artifact
 //                                                     (publish landlah/audio/*.mp3 beside it as audio/lotNN.mp3)
+//   node scripts/build-landlah.mjs --site dir      -> also writes a static site (index.html + audio/) to host anywhere,
+//                                                     e.g. drag the folder onto app.netlify.com/drop
 // The offline file carries the recorded narration (landlah/audio) inline, so its videos speak without the folder.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,7 +28,8 @@ const inner = `${head}\n<style>\n${css}\n</style>\n${body}\n<script>\n${js}\n</s
 const audioDir = path.join(app, 'audio');
 const audio = fs.existsSync(audioDir) ? fs.readdirSync(audioDir).filter(f => /^lot\d\d\.mp3$/.test(f)).sort() : [];
 const inlineAudio = audio.map(f => `<script type="application/octet-stream" id="lla-${+f.slice(3, 5)}">${fs.readFileSync(path.join(audioDir, f)).toString('base64')}</script>`).join('\n');
-const standalone = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${head}\n<style>\n${css}\n</style>\n</head>\n<body>\n${body}\n${inlineAudio}\n<script>\n${js}\n</script>\n</body>\n</html>\n`;
+const page = (extra) => `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${head}\n<style>\n${css}\n</style>\n</head>\n<body>\n${body}\n${extra}<script>\n${js}\n</script>\n</body>\n</html>\n`;
+const standalone = page(inlineAudio ? inlineAudio + '\n' : '');
 
 fs.mkdirSync(path.join(repo, 'dist'), { recursive: true });
 fs.writeFileSync(path.join(repo, 'dist/land-lah.html'), standalone);
@@ -36,4 +39,13 @@ const k = process.argv.indexOf('--artifact');
 if (k > 0 && process.argv[k + 1]) {
   fs.writeFileSync(process.argv[k + 1], inner);
   console.log('wrote', process.argv[k + 1], (inner.length / 1024).toFixed(1) + ' KB');
+}
+
+const q = process.argv.indexOf('--site');
+if (q > 0 && process.argv[q + 1]) {
+  const dir = process.argv[q + 1];
+  fs.mkdirSync(path.join(dir, 'audio'), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), page(''));
+  for (const f of audio) fs.copyFileSync(path.join(audioDir, f), path.join(dir, 'audio', f));
+  console.log('wrote site', dir, `(index.html + ${audio.length} audio files)`);
 }
