@@ -3,7 +3,7 @@
   'use strict';
   var LL = root.LL, U = LL.util, PX = LL.px, G = LL.grading, CH = LL.cheats;
   var doc = root.document;
-  var S = { save: null, view: 'title', params: {}, run: null, mark: null, tick: null, typer: null, ai: null, dl: null, aiBusy: null };
+  var S = { save: null, view: 'title', params: {}, run: null, mark: null, tick: null, typer: null, ai: null, dl: null, tts: null, player: null, aiBusy: null, vmode: null, vrate: 1 };
   var screen, overlay;
   var esc = U.esc, md = U.md, M = LL.MCQ_MARKS;
 
@@ -59,6 +59,8 @@
   }
   function go(view, params) {
     stopTimers();
+    if (S.player) { try { S.player.stop(); } catch (e) { /* ignore */ } S.player = null; }
+    if (S.vcount) { clearInterval(S.vcount); S.vcount = null; }
     S.view = view; S.params = params || {};
     render();
     try { root.scrollTo(0, 0); } catch (e) { /* ignore */ }
@@ -288,20 +290,20 @@
     var learned = (st.learned || []).length, cs = casesFor(ch.n);
     var gen = LL.extraQs.filter(function (q) { return q.ch === ch.n; }).length;
     h += '<div class="activities five">' +
-      actBtn('1', 'Lesson', learned + ' / ' + cards.length + ' cards read', 'lesson', 'book') +
+      actBtn('1', 'Watch the lesson', (st.watched ? '✓ watched · ' : '') + '~' + LL.videoMinutes(LL.videos[ch.n]) + ' min · narrated', 'watch', 'tv') +
       actBtn('2', 'Training', ch.qs.length + ' MCQs, instant feedback', 'train', 'brain') +
       actBtn('3', 'Lightning', st.lightning ? 'Best ' + st.lightning + ' pts' : '60 s of rapid true/false', 'lightning', 'bolt') +
       actBtn('4', 'Graded test', st.best ? 'Best ' + st.best.letter + ' (' + st.best.pct + '%)' : '10 MCQs · 25 min · /30', 'test', 'hourglass') +
       actBtn('5', 'Case drills', cs.length + ' case studies (ILAC)', 'lot-cases', 'scroll') +
       '</div>';
-    h += '<div class="ai-row">' + (S.ai ? btn(icon('bulb', 2) + ' New question in the prof\'s style (Claude)', 'gen-q', 'data-n="' + ch.n + '"', 'btn-small') : '') +
+    h += '<div class="ai-row">' + btn(icon('book', 2) + ' Read the lesson cards (' + learned + '/' + cards.length + ')', 'lesson', 'data-n="' + ch.n + '"', 'btn-small btn-ghost') + (S.ai ? btn(icon('bulb', 2) + ' New question in the prof\'s style (Claude)', 'gen-q', 'data-n="' + ch.n + '"', 'btn-small') : '') +
       (gen ? btn('Train on ' + gen + ' saved Claude question' + (gen > 1 ? 's' : ''), 'train-gen', 'data-n="' + ch.n + '"', 'btn-small btn-ghost') : '') +
       btn(icon('sheet', 2) + ' One-pager for this lot', 'lot-sheet', 'data-n="' + ch.n + '"', 'btn-small btn-ghost') + '</div>';
     if (st.best) h += '<p class="hub-best">Best result ' + stars(st.stars || 0, 3) + ' <b>' + st.best.letter + '</b> · ' + st.best.pct + '% · ' + st.attempts + ' attempt' + (st.attempts === 1 ? '' : 's') + '</p>';
     h += '<div class="hub-foot">' + btn('◂ Estate plan', 'go', 'data-view="map"', 'btn-small btn-ghost') + '</div></section>';
     return h;
     function actBtn(num, label, sub, act, ic) {
-      return '<button type="button" class="act" data-act="' + act + '" data-n="' + ch.n + '"><span class="act-num">' + num + '</span>' + icon(ic, 4) + '<span class="act-label">' + label + '</span><span class="act-sub">' + esc(sub) + '</span></button>';
+      return '<button type="button" class="act' + (act === 'watch' && !st.watched ? ' act-start' : '') + '" data-act="' + act + '" data-n="' + ch.n + '"> data-n="' + ch.n + '"><span class="act-num">' + num + '</span>' + icon(ic, 4) + '<span class="act-label">' + label + '</span><span class="act-sub">' + esc(sub) + '</span></button>';
     }
   };
   AFTER.lot = function () {
@@ -343,19 +345,20 @@
   }
 
   /* ---------- training ---------- */
-  function startTraining(n, qs, label, back) {
+  function startTraining(n, qs, label, back, extra) {
     var rand = U.rng(Date.now());
     qs = qs || U.shuffle(LL.getChapter(n).qs, rand);
     var p = player();
     var perkUses = p ? ({ hint: 2, eliminate: 2, retry: 2, notes: 3 })[p.perk] || 0 : 0;
     S.run = { kind: 'train', n: n, label: label || null, back: back || null, cs0: LL.concepts.snapshot(S.save), entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, checked: false, eliminated: [], score: 0, done: 0, perk: p ? p.perk : null, perkLeft: perkUses, hintShown: false };
+    if (extra) Object.keys(extra).forEach(function (k) { S.run[k] = extra[k]; });
     go('train');
   }
   VIEWS.train = function () {
     var r = S.run; if (!r || r.kind !== 'train') return VIEWS.map();
     if (r.i >= r.entries.length) return trainSummary(r);
     var e = r.entries[r.i], ch = LL.getChapter(e.q.ch || r.n);
-    var h = '<section class="play"><div class="play-head"><div><span class="stn-code">' + (r.label ? 'NB' : ch.code) + '</span><h2>' + (r.label ? esc(r.label) : 'Training · ' + esc(ch.short)) + '</h2></div>' +
+    var h = '<section class="play"><div class="play-head"><div><span class="stn-code">' + (r.label && !r.checkpoint ? 'NB' : ch.code) + '</span><h2>' + (r.label ? esc(r.label) : 'Training · ' + esc(ch.short)) + '</h2></div>' +
       '<div class="play-progress"><span>' + (r.i + 1) + ' / ' + r.entries.length + '</span><span class="score-chip">' + (r.score * M) + ' marks</span></div></div>';
     h += '<div class="bar"><span style="width:' + (100 * r.i / r.entries.length) + '%"></span></div>';
     h += '<article class="q-card">' + questionHTML(e, { locked: r.checked, showAnswer: r.checked, eliminated: r.eliminated }) + '</article>';
@@ -401,9 +404,106 @@
   function trainSummary(r) {
     var pct = r.entries.length ? Math.round(100 * r.score / r.entries.length) : 0;
     if (!r.label && r.n) { var st = chState(r.n); st.trained = Math.max(st.trained || 0, pct); persist(); }
-    return '<section class="summary"><h2 class="section-title">Training complete</h2>' +
+    if (r.checkpoint) { var cst = chState(r.n); cst.check = Math.max(cst.check || 0, pct); persist(); }
+    return '<section class="summary"><h2 class="section-title">' + (r.checkpoint ? 'Checkpoint complete' : 'Training complete') + '</h2>' +
       '<p class="big-num">' + (r.score * M) + ' <small>/ ' + (r.entries.length * M) + '</small></p><p class="lede">' + pct + '%. Practice only, not graded.</p>' + addedHTML(r.cs0) +
-      '<div class="title-actions">' + (r.label ? btn(r.back === 'mysheet' ? 'Back to my cheat sheet' : 'Back to the Notebook', 'go', 'data-view="' + (r.back || 'notebook') + '"', 'btn-hot') : btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Train again', 'train', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost')) + '</div></section>';
+      '<div class="title-actions">' + (r.checkpoint ? btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Rewatch the lesson', 'watch', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost') : r.label ? btn(r.back === 'mysheet' ? 'Back to my cheat sheet' : 'Back to the Notebook', 'go', 'data-view="' + (r.back || 'notebook') + '"', 'btn-hot') : btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Train again', 'train', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost')) + '</div></section>';
+  }
+
+  /* ---------- video lessons ---------- */
+  function voiceModes() {
+    var out = [];
+    if (S.tts) out.push(['claude', 'Claude voice']);
+    if (root.speechSynthesis && root.SpeechSynthesisUtterance) out.push(['device', 'Device voice']);
+    out.push(['captions', 'Captions only']);
+    return out;
+  }
+  function defaultMode() {
+    var m = voiceModes().map(function (x) { return x[0]; });
+    return S.vmode && m.indexOf(S.vmode) >= 0 ? S.vmode : m[0];
+  }
+  function videoFor(p) { return p.custom || LL.videos[p.n]; }
+  VIEWS.watch = function (p) {
+    var v = videoFor(p); if (!v) return VIEWS.map();
+    var ch = LL.getChapter(v.n), lines = LL.videoLines(v), quizzes = v.scenes.filter(function (s) { return s.t === 'quiz'; }).length;
+    var h = '<section class="watch"><div class="play-head"><div><span class="stn-code">' + esc(ch.code) + '</span><h2>' + (v.custom ? 'Explainer · ' : 'Watch · ') + esc(v.title || ch.title) + '</h2></div>' +
+      '<div class="play-progress"><span>~' + LL.videoMinutes(v) + ' min</span>' + (quizzes ? '<span class="score-chip">' + quizzes + ' quick checks</span>' : '') + '</div></div>';
+    h += '<div class="vplayer" id="vplayer"><div class="vstage">' +
+      '<canvas class="vstage-sky" data-skyline="' + ch.sky + '" aria-hidden="true"></canvas>' +
+      '<div class="vstage-scene" aria-live="polite"></div>' +
+      '<canvas class="vs-mentor" data-portrait="' + esc(ch.mentor[0]) + '" data-scale="4" aria-hidden="true"></canvas>' +
+      '<div class="vs-cap" id="vs-cap"><span class="vs-cap-text"></span></div>' +
+      '<button type="button" class="vs-big" data-act="v-play" aria-label="Play the lesson"><span>▶</span> PLAY</button>' +
+      '<div class="vs-end" id="vs-end" hidden></div>' +
+      '</div>' +
+      '<div class="vprog" id="vprog" role="group" aria-label="Scenes">' + v.scenes.map(function (s, i) {
+        var w = lines.filter(function (l) { return l.si === i; }).reduce(function (a, l) { return a + U.words(l.text); }, 0) || 4;
+        return '<button type="button" class="vseg vseg-' + s.t + '" data-act="v-seek" data-i="' + i + '" style="flex-grow:' + w + '" aria-label="Scene ' + (i + 1) + '"></button>';
+      }).join('') + '</div>' +
+      '<div class="vctrl">' + btn('⏮', 'v-prev', 'aria-label="Previous scene"', 'btn-small btn-ghost') + btn('▶ Play', 'v-toggle', 'id="v-toggle"', 'btn-small btn-hot') + btn('⏭', 'v-next', 'aria-label="Next scene"', 'btn-small btn-ghost') + btn('↺', 'v-restart', 'aria-label="Restart"', 'btn-small btn-ghost') +
+      '<label class="vsel"><span>Voice</span><select id="v-voice">' + voiceModes().map(function (m) { return '<option value="' + m[0] + '"' + (m[0] === defaultMode() ? ' selected' : '') + '>' + m[1] + '</option>'; }).join('') + '</select></label>' +
+      '<label class="vsel"><span>Speed</span><select id="v-rate">' + [0.85, 1, 1.15, 1.3, 1.5].map(function (r) { return '<option value="' + r + '"' + (r === S.vrate ? ' selected' : '') + '>' + r + '×</option>'; }).join('') + '</select></label>' +
+      btn('CC', 'v-cc', 'aria-pressed="true" id="v-cc"', 'btn-small btn-ghost') + '</div></div>';
+    h += '<p class="lede small">Keys: Space to play or pause, ← → to change scene, T or F to answer a quick check. ' + (S.tts ? 'The Claude voice reads it to you; the device voice works offline.' : (inViewer() ? 'If you hear nothing, choose another voice. Captions always show the narration.' : 'This copy uses your device\'s built-in voice; captions always show the narration.')) + '</p>';
+    return h + '<div class="hub-foot">' + (v.custom ? btn('◂ My cheat sheet', 'go', 'data-view="mysheet"', 'btn-small btn-ghost') : btn('◂ Lot', 'enter', 'data-n="' + v.n + '"', 'btn-small btn-ghost') + btn('Read the cards instead', 'lesson', 'data-n="' + v.n + '"', 'btn-small btn-ghost')) + '</div></section>';
+  };
+  AFTER.watch = function (p) {
+    var v = videoFor(p); if (!v) return;
+    var el = doc.getElementById('vplayer'), tbtn = doc.getElementById('v-toggle'), big = el.querySelector('.vs-big');
+    var segs = el.querySelectorAll('.vseg');
+    var player = new LL.Player({
+      video: v, root: el, tts: S.tts, mode: defaultMode(), rate: S.vrate,
+      onState: function (st) {
+        tbtn.textContent = st === 'playing' ? '❚❚ Pause' : (st === 'ended' ? '↺ Replay' : (st === 'quiz' ? 'Answer the check' : '▶ Play'));
+        tbtn.disabled = st === 'quiz';
+        big.hidden = st !== 'ready';
+        el.classList.toggle('is-quiz', st === 'quiz');
+        el.classList.toggle('is-paused', st === 'paused');
+      },
+      onScene: function (si) { Array.prototype.forEach.call(segs, function (sg, i) { sg.classList.toggle('done', i < si); sg.classList.toggle('cur', i === si); }); },
+      onQuiz: function (s, right) {
+        if (s.qi == null || v.custom) return;
+        var lk = v.n + ':' + s.qi, lm = S.save.ltMiss, cur = lm[lk];
+        if (!right) lm[lk] = { ch: v.n, i: s.qi, n: ((cur && cur.n) || 0) + 1, at: Date.now(), streak: 0, fixed: false };
+        else if (cur && !cur.fixed) { cur.streak = (cur.streak || 0) + 1; if (cur.streak >= 2) cur.fixed = true; }
+        persist();
+      },
+      onEnd: function (q) {
+        if (!v.custom) { var st = chState(v.n); st.watched = Date.now(); st.vq = { right: q.right, total: q.total }; persist(); }
+        showEnd(v, q);
+      },
+      onNotice: function (m) { flash(m); },
+      onMode: function (name) { var vs = doc.getElementById('v-voice'); if (vs && vs.querySelector('option[value="' + name + '"]')) vs.value = name; }
+    });
+    S.player = player;
+    player.poster();
+    var sel = doc.getElementById('v-voice'), rsel = doc.getElementById('v-rate');
+    /* hand focus back to the page after a change so Space and T/F keep driving the player */
+    sel.addEventListener('change', function () { S.vmode = sel.value; player.setMode(sel.value); sel.blur(); });
+    rsel.addEventListener('change', function () { S.vrate = +rsel.value; player.setRate(S.vrate); rsel.blur(); });
+  };
+  function showEnd(v, q) {
+    var end = doc.getElementById('vs-end'); if (!end) return;
+    var ch = LL.getChapter(v.n);
+    end.hidden = false;
+    if (v.custom) {
+      end.innerHTML = '<h3>Explainer done</h3><p>Now prove it: drill the questions on this concept.</p><div class="title-actions">' + btn('Drill this concept', 'mysheet-drill', 'data-key="' + esc(v.key || '') + '"', 'btn-hot') + btn('Rewatch', 'v-restart', '', 'btn-ghost') + '</div>';
+      return;
+    }
+    end.innerHTML = '<h3>Lesson complete</h3>' + (q.total ? '<p class="vs-end-score">Quick checks: <b>' + q.right + ' / ' + q.total + '</b>' + (q.right < q.total ? ' · the ones you missed are on your cheat sheet' : '') + '</p>' : '') +
+      '<p>Now let\'s test you: a 5-question checkpoint on ' + esc(ch.short) + ', then the graded test.</p>' +
+      '<div class="title-actions">' + btn('Start the checkpoint <span id="v-count">(10)</span>', 'checkpoint', 'data-n="' + v.n + '"', 'btn-hot') + btn('Rewatch', 'v-restart', '', 'btn-ghost') + btn('Not now', 'v-cancel-count', '', 'btn-ghost') + '</div>';
+    var left = 10;
+    S.vcount = setInterval(function () {
+      left--; var c = doc.getElementById('v-count'); if (c) c.textContent = '(' + left + ')';
+      if (left <= 0) { clearInterval(S.vcount); S.vcount = null; startCheckpoint(v.n); }
+    }, 1000);
+  }
+  function startCheckpoint(n) {
+    var ch = LL.getChapter(n), open = ch.qs.filter(function (q) { var m = S.save.mistakes[q.id]; return m && !m.fixed; });
+    var rest = U.shuffle(ch.qs.filter(function (q) { return open.indexOf(q) < 0; }));
+    var qs = U.shuffle(open).slice(0, 2).concat(rest).slice(0, 5);
+    startTraining(n, qs, 'Checkpoint · ' + ch.short, null, { checkpoint: true });
   }
 
   /* ---------- lightning ---------- */
@@ -970,7 +1070,7 @@
       open.forEach(function (c) { (lots[c.ch] = lots[c.ch] || []).push(c); });
       h += '<div class="sheet-lots">' + Object.keys(lots).sort(function (a, b) { return a - b; }).map(function (n) { var c = LL.getChapter(+n); return '<span class="stn-code small">L' + n + '</span> ' + esc(c ? c.short : '') + ' <b>' + lots[n].length + '</b>'; }).join(' · ') + '</div>';
       h += '<div class="sheet-cards cs-doc">' + open.map(function (c) {
-        return LL.concepts.cardHTML(c, { actions: function (cc) { return '<div class="cs-actions">' + btn('Drill this concept', 'mysheet-drill', 'data-key="' + esc(cc.key) + '"', 'btn-small') + btn('Mark mastered', 'mysheet-learn', 'data-key="' + esc(cc.key) + '"', 'btn-small btn-paper') + '</div>'; } });
+        return LL.concepts.cardHTML(c, { actions: function (cc) { return '<div class="cs-actions">' + (S.ai ? btn('▶ Explain it in a video', 'mysheet-video', 'data-key="' + esc(cc.key) + '"', 'btn-small btn-hot') : '') + btn('Drill this concept', 'mysheet-drill', 'data-key="' + esc(cc.key) + '"', 'btn-small') + btn('Mark mastered', 'mysheet-learn', 'data-key="' + esc(cc.key) + '"', 'btn-small btn-paper') + '</div>'; } });
       }).join('') + '</div>';
     }
     if (done.length) h += '<details class="lib-sec"><summary>Mastered (' + done.length + ')</summary><div class="sheet-cards cs-doc">' + done.map(function (c) { return LL.concepts.cardHTML(c, { compact: true }); }).join('') + '</div></details>';
@@ -1155,6 +1255,34 @@
   A['nb-train'] = function () { var ids = U.shuffle(openMistakes()); if (ids.length) startTraining(null, ids.map(LL.findQuestion), 'Notebook revision'); };
   A['pt-fix'] = function (t) { var p = S.save.casePts[attr(t, 'data-id')]; if (p) { p.fixed = true; persist(); render(); } };
   A.lightning = function (t) { startLightning(+attr(t, 'data-n')); };
+  A.watch = function (t) { go('watch', { n: +attr(t, 'data-n') }); };
+  A['v-play'] = function () { if (S.player) S.player.play(); };
+  A['v-toggle'] = function () { if (S.player) S.player.toggle(); };
+  A['v-next'] = function () { if (S.player) S.player.next(); };
+  A['v-prev'] = function () { if (S.player) S.player.prev(); };
+  A['v-seek'] = function (t) { if (S.player) S.player.seekScene(+attr(t, 'data-i')); };
+  A['v-restart'] = function () { if (S.vcount) { clearInterval(S.vcount); S.vcount = null; } var e = doc.getElementById('vs-end'); if (e) e.hidden = true; if (S.player) S.player.restart(); };
+  A['v-cancel-count'] = function () { if (S.vcount) { clearInterval(S.vcount); S.vcount = null; } var c = doc.getElementById('v-count'); if (c) c.textContent = ''; };
+  A['v-cc'] = function (t) { var el = doc.getElementById('vplayer'), on = el.classList.toggle('no-cc'); t.setAttribute('aria-pressed', String(!on)); };
+  A.vq = function (t) { if (S.player) S.player.answer(attr(t, 'data-v') === '1'); };
+  A.checkpoint = function (t) { if (S.vcount) { clearInterval(S.vcount); S.vcount = null; } startCheckpoint(+attr(t, 'data-n')); };
+  A['mysheet-video'] = function (t) {
+    var c = findConcept(attr(t, 'data-key')); if (!c || !S.ai || S.aiBusy != null) return;
+    S.aiBusy = 'video';
+    showOverlay('<h2>Making your explainer</h2><p>Claude is scripting a short narrated video on <b>' + esc(c.name) + '</b> from your notes. This can take up to a minute.</p><div class="title-actions">' + btn('Cancel', 'ai-stop', '', 'btn-ghost') + '</div>');
+    aiCtl = new AbortController();
+    S.ai.json(LL.explainerPrompt(c), { modelTier: 'default', signal: aiCtl.signal, cache: false }).then(function (d) {
+      var v = LL.validateVideo(d, c.ch);
+      closeOverlay();
+      if (!v) { flash('That explainer did not come back in a usable shape. Try again.'); return; }
+      v.key = c.key;
+      go('watch', { custom: v });
+    }).catch(function (e) {
+      closeOverlay();
+      if (e && (e.code === 'not_granted' || e.code === 'sampling_disabled')) S.ai = null;
+      if (!(e && e.code === 'cancelled')) flash(aiErr(e && e.code));
+    }).then(function () { S.aiBusy = null; aiCtl = null; });
+  };
   A['lt-go'] = function () { S.run.started = true; render(); };
   A.lt = function (t) { lightningAnswer(attr(t, 'data-v') === '1'); };
   A.test = function (t) {
@@ -1311,6 +1439,14 @@
     if (ev.key === 'Escape' && !overlay.hidden) { closeOverlay(); return; }
     if (!overlay.hidden) return;
     var r = S.run;
+    if (S.view === 'watch' && S.player) {
+      if (ev.key === ' ' && ev.target && ev.target.tagName === 'BUTTON' && !ev.target.classList.contains('vseg')) return; /* a focused control handles its own Space */
+      if (ev.key === ' ' || ev.key === 'k') { ev.preventDefault(); if (S.player.state() !== 'quiz') S.player.toggle(); return; }
+      if (ev.key === 'ArrowRight') { ev.preventDefault(); S.player.next(); return; }
+      if (ev.key === 'ArrowLeft') { ev.preventDefault(); S.player.prev(); return; }
+      if (S.player.state() === 'quiz' && /^[tTfF]$/.test(ev.key)) { S.player.answer(/t/i.test(ev.key)); return; }
+      return;
+    }
     if (S.view === 'lightning' && r && r.started && !r.over) {
       if (ev.key === 't' || ev.key === 'T' || ev.key === 'ArrowLeft') { ev.preventDefault(); lightningAnswer(true); }
       if (ev.key === 'f' || ev.key === 'F' || ev.key === 'ArrowRight') { ev.preventDefault(); lightningAnswer(false); }
@@ -1338,6 +1474,15 @@
     var c = root.claude;
     if (!c || typeof c.use !== 'function') return;
     c.use('sample').then(function (s) { if (s) { S.ai = s; if (/^(lot|mark|cases|mysheet)$/.test(S.view)) render(); } }, function () { /* absent */ });
+    c.use('tts').then(function (t) {
+      if (!t) return;
+      S.tts = t;
+      if (S.view === 'watch') {
+        var sel = doc.getElementById('v-voice');
+        if (sel && !sel.querySelector('option[value="claude"]')) { var o = doc.createElement('option'); o.value = 'claude'; o.textContent = 'Claude voice'; sel.insertBefore(o, sel.firstChild); }
+        if (S.player && S.player.state() === 'ready' && !S.vmode) { S.player.setMode('claude'); if (sel) sel.value = 'claude'; }
+      }
+    }, function () { /* absent */ });
     c.use('downloads').then(function (d) { if (d) { S.dl = d; if (/^(cheats|mysheet)$/.test(S.view)) render(); } }, function () { /* absent */ });
   }
   function start(data) {
@@ -1355,6 +1500,7 @@
     root.addEventListener('resize', function () {
       clearTimeout(rt);
       rt = setTimeout(function () {
+        if (S.player) S.player.resize();
         Array.prototype.forEach.call(screen.querySelectorAll('canvas[data-clouds], canvas[data-skyline]'), function (c) {
           if (c.hasAttribute('data-clouds')) PX.clouds(c, +c.getAttribute('data-clouds'), { cell: +c.getAttribute('data-cell') || 6 });
           else PX.skyline(c, +c.getAttribute('data-skyline'));

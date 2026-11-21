@@ -25,8 +25,18 @@ re-themed as a survey-plan blueprint: ten **lots** (one per chapter) and the **E
 | 9 | Newton · Land Registry | L10 | Torrens, caveats, stamp duty |
 | 10 | Toa Payoh | L11 · L12 | Agency and estate agency |
 
-Each lot: **lesson cards** (built from the Context and Case Guide), **training** with per-option explanations,
-a 60-second **lightning round**, a **graded test** (10 MCQs, 25 min, /30) and **case drills**.
+Each lot starts with a **video lesson**: a 3–5 minute narrated, animated lesson (title card, diagrams that draw
+themselves as the story is told, side-by-side comparisons, case cards stamped HELD, trap warnings, a recap) with two
+true/false **quick checks** that pause the video until you answer. When it ends, a 5-question **checkpoint** starts on
+its own (it pulls in MCQs you have got wrong before), then the **graded test** (10 MCQs, 25 min, /30). Then
+**training** with per-option explanations, a 60-second **lightning round**, **case drills**, and the original
+**lesson cards** for reading.
+
+- **Narration:** in the claude.ai artifact on a desktop browser that offers it, Claude reads the lesson aloud; otherwise
+  the browser's built-in voice (works offline); otherwise timed captions. Captions always show the words. Space
+  plays/pauses, ← → change scene, T/F answers a quick check. The video is drawn live in the page, not an MP4 file.
+- **Explainer videos for your weak spots:** on *My cheat sheet*, "Explain it in a video" has Claude script a short
+  narrated explainer for that one concept, from your notes only, then sends you to drill it.
 
 - **151 MCQs** in the practice paper's style (single best answer and "(i) and (iii)" combinations), including the
   paper's own four MCQs with their answers. 149 lightning items, 77 named traps, 29 case studies.

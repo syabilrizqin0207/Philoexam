@@ -249,3 +249,68 @@ test('plan items deep-link to things that exist', () => {
     if (k === 'mock' || k === 'mockA') assert.ok(LL.ref.mocks.some(m => m.id === v), it.id);
   }
 });
+
+test('every lot has a narrated video lesson that is well formed', () => {
+  const TYPES = new Set(['title', 'talk', 'recap', 'steps', 'compare', 'case', 'trap', 'number', 'flow', 'quiz']);
+  for (const ch of LL.chapters) {
+    const v = LL.videos[ch.n];
+    assert.ok(v, `video for ${ch.code}`);
+    const sc = v.scenes;
+    assert.equal(sc[0].t, 'title', `${ch.code} opens with a title`);
+    assert.equal(sc[sc.length - 1].t, 'recap', `${ch.code} ends with a recap`);
+    const quizzes = sc.filter(s => s.t === 'quiz');
+    assert.ok(quizzes.length >= 2, `${ch.code} has ${quizzes.length} quick checks`);
+    sc.forEach((s, i) => {
+      const where = `${ch.code} scene ${i} (${s.t})`;
+      assert.ok(TYPES.has(s.t), where + ' type');
+      if (s.t === 'quiz') { assert.ok(ch.quick[s.qi], where + ' quick-fire item exists'); return; }
+      assert.ok(Array.isArray(s.say) && s.say.length, where + ' has narration');
+      const last = s.say.length - 1;
+      if (s.t === 'flow') {
+        const ids = new Set(s.nodes.map(n => n.id));
+        s.nodes.forEach(n => { assert.ok(n.x >= 5 && n.x <= 95 && n.y >= 5 && n.y <= 95, where + ' node inside the box'); assert.ok((n.at || 0) <= last, where + ' node revealed'); });
+        s.links.forEach(l => { assert.ok(ids.has(l.from) && ids.has(l.to), where + ` link ${l.from}->${l.to}`); assert.ok((l.at || 0) <= last, where + ' link revealed'); });
+      }
+      if (s.t === 'case') { for (const k of ['name', 'facts', 'held']) assert.ok(s[k], where + ' ' + k); }
+      if (s.t === 'compare') s.rows.forEach(r => assert.equal(r.length, 2, where + ' row'));
+      if (s.t === 'trap') assert.ok(s.text, where + ' text');
+      if (s.t === 'number') assert.ok(s.big && s.label, where + ' number');
+    });
+    const lines = LL.videoLines(v);
+    lines.forEach(l => {
+      assert.ok(l.text.trim().length > 0, `${ch.code} empty line`);
+      assert.ok(LL.util.words(l.text) <= 60, `${ch.code} line too long to read aloud: ${l.text.slice(0, 50)}`);
+      if (l.stop) return; // quick-check statements come from the quick-fire bank verbatim
+      assert.ok(!/(^|[\s(])[sS]{1,2} \d/.test(l.text), `${ch.code} narration says "s 23" instead of "section": ${l.text.slice(0, 60)}`);
+      assert.ok(!/ v /.test(l.text), `${ch.code} narration says " v " instead of "versus": ${l.text.slice(0, 60)}`);
+    });
+    const stops = lines.filter(l => l.stop);
+    assert.equal(stops.length, quizzes.length, `${ch.code} every quick check pauses the video`);
+    assert.ok(stops.every(l => l.si < sc.length - 1), `${ch.code} no quick check at the very end`);
+    const mins = LL.videoMinutes(v);
+    assert.ok(mins >= 2 && mins <= 7, `${ch.code} runs ~${mins} min`);
+    sc.forEach((s, i) => assert.equal(typeof LL.sceneHTML(v, s, i), 'string'));
+  }
+});
+
+test('Claude explainer videos are validated before they play', () => {
+  assert.equal(LL.validateVideo(null, 3), null);
+  assert.equal(LL.validateVideo({ scenes: 'nope' }, 3), null);
+  assert.equal(LL.validateVideo({ scenes: [{ t: 'talk', points: ['a'], say: ['x'] }] }, 3), null, 'one scene is not enough');
+  const v = LL.validateVideo({ title: 'Severance basics', scenes: [
+    { t: 'talk', head: 'H', points: ['p1', 'p2'], say: ['intro', 'one', 'two'] },
+    { t: 'script', say: ['<b>bad</b>'] },
+    { t: 'compare', left: 'JT', right: 'TIC', rows: [['a', 'b'], 'junk'], say: ['x'] },
+    { t: 'trap', text: 'A Will does not sever.', say: ['careful'] },
+    { t: 'recap', points: ['done'], say: [''] },
+    { t: 'recap', points: ['done'], say: ['bye'] }
+  ] }, 7);
+  assert.ok(v.custom);
+  assert.equal(v.n, 7);
+  assert.equal(v.scenes[0].t, 'title');
+  assert.deepEqual([...v.scenes.map(s => s.t)], ['title', 'talk', 'compare', 'trap', 'recap']);
+  assert.equal(v.scenes[2].rows.length, 1);
+  assert.ok(LL.videoLines(v).length >= 6);
+  const c = LL.concepts.build({ ...LL.newSave(), mistakes: { [LL.chapters[6].qs[0].id]: { n: 1, streak: 0, at: 1, traps: [], miss: [], fixed: false } } }).find(x => x.ch === 7);
+  if (c) { const p = LL.explainerPrompt(c); assert.match(p, /JSON/); assert.ok(p.includes(c.name)); }
+});

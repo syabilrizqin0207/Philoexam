@@ -790,6 +790,186 @@ textarea.ans:focus { outline: none; box-shadow: 0 0 0 4px var(--ink), 0 0 0 7px 
 .ai-sheet-body ul { margin: 0 0 6px; padding-left: 1.2em; }
 .ai-sheet-meta { font-size: 13px; color: #42606f; column-span: all; }
 
+/* ===================== video lessons ===================== */
+.play, .watch { display: flex; flex-direction: column; gap: 16px; }
+.vplayer { container-type: inline-size; display: flex; flex-direction: column; gap: 10px; }
+.vstage {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto;
+  min-height: max(380px, min(56cqw, 560px));
+  background:
+    linear-gradient(rgba(159, 220, 240, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgba(159, 220, 240, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+    radial-gradient(ellipse at 50% 0%, #11577c 0%, #072a3f 62%, #041521 100%);
+  box-shadow: 0 0 0 4px var(--ink), 0 0 0 7px var(--peach), 0 10px 0 4px rgba(0, 0, 0, 0.35);
+}
+.vstage-sky { position: absolute; left: 0; bottom: 0; width: 100%; height: 34%; opacity: 0.28; z-index: -1; pointer-events: none; }
+.vstage-scene {
+  position: relative; min-width: 0; padding: clamp(14px, 3.2cqw, 34px) clamp(14px, 4cqw, 44px) 12px;
+  display: flex; flex-direction: column; justify-content: center;
+  font-size: clamp(15px, 2.05cqw, 21px); line-height: 1.45;
+}
+.vstage-scene.in > .vs { animation: vsin 0.45s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes vsin { from { opacity: 0; transform: translateX(24px) scale(0.98); } to { opacity: 1; transform: none; } }
+.vs { display: flex; flex-direction: column; gap: clamp(10px, 1.8cqw, 18px); min-width: 0; }
+.vs-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.vs-head h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(12px, 1.9cqw, 18px); line-height: 1.45; color: var(--star); text-shadow: 3px 3px 0 var(--ink); }
+
+/* reveal on narration */
+.rv { opacity: 0; transform: translateY(10px); transition: opacity 0.35s ease, transform 0.35s ease, background-color 0.4s ease; }
+.rv.on { opacity: 1; transform: none; }
+
+/* title */
+.vs-title { flex-direction: row; align-items: center; gap: clamp(14px, 3cqw, 32px); }
+.vt-icon { flex: 0 0 auto; padding: 14px; background: linear-gradient(180deg, #ffe08a, #ffb057); box-shadow: 0 0 0 4px var(--ink), 0 8px 0 0 rgba(0, 0, 0, 0.35); animation: vtbob 2.4s ease-in-out infinite; }
+.vt-icon canvas { display: block; width: clamp(56px, 11cqw, 110px); height: auto; }
+@keyframes vtbob { 50% { transform: translateY(-8px) rotate(-3deg); } }
+.vt-code { font-family: var(--f-num); font-size: clamp(18px, 2.6cqw, 26px); color: var(--peach); }
+.vt-title { margin: 6px 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(18px, 4.2cqw, 40px); line-height: 1.25; color: var(--cream); text-shadow: 4px 4px 0 var(--coral), 8px 8px 0 var(--ink); }
+.vt-sub { margin: 0; font-family: var(--f-label); font-size: clamp(14px, 2cqw, 20px); color: var(--text-dim); }
+
+/* talk / recap */
+.vl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(8px, 1.3cqw, 12px); }
+.vl li { display: flex; gap: 12px; align-items: baseline; background: var(--panel-2); padding: 10px 14px; box-shadow: 0 0 0 3px var(--ink); }
+.vl li.on { animation: vlpop 0.5s ease; }
+@keyframes vlpop { 0% { background: #1f7fae; } 100% { background: var(--panel-2); } }
+.vl-dot { flex: 0 0 auto; font-family: var(--f-display); font-size: 0.7em; color: var(--star); }
+.vs-recap .vl li { background: var(--paper); color: var(--ink); }
+.vs-recap .vl-dot { color: #fff; background: var(--ok); padding: 3px 6px; box-shadow: 0 0 0 2px var(--ink); }
+.vs-recap .vl li.on { animation: none; }
+
+/* steps */
+.vst { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(8px, 1.4cqw, 14px); counter-reset: none; }
+.vst li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; background: var(--paper); color: var(--ink); padding: 10px 14px 10px 10px; box-shadow: 0 0 0 3px var(--ink), 0 5px 0 0 rgba(0, 0, 0, 0.3); }
+.vst-n { font-family: var(--f-display); font-size: clamp(12px, 1.8cqw, 17px); color: var(--ink); background: var(--star); min-width: 2.1em; text-align: center; padding: 8px 6px; box-shadow: 0 0 0 3px var(--ink); }
+.vst li.rv { transform: translateX(-18px); }
+.vst li.rv.on { transform: none; }
+
+/* compare */
+.vc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 12px; }
+.vc-h { font-family: var(--f-display); font-size: clamp(10px, 1.5cqw, 14px); line-height: 1.5; padding: 9px 12px; text-align: center; box-shadow: 0 0 0 3px var(--ink); }
+.vc-h.vc-l { background: var(--ok); color: #fff; }
+.vc-h.vc-r { background: var(--coral); color: var(--ink); }
+.vc-c { background: var(--paper); color: var(--ink); padding: 10px 12px; box-shadow: 0 0 0 3px var(--ink); font-size: 0.92em; }
+.vc-c.vc-l.rv { transform: translateX(-16px); }
+.vc-c.vc-r.rv { transform: translateX(16px); }
+.vc-c.rv.on { transform: none; }
+
+/* case */
+.vcase { position: relative; background: var(--paper); color: var(--ink); padding: clamp(14px, 2.4cqw, 24px); box-shadow: 0 0 0 4px var(--ink), 0 8px 0 0 rgba(0, 0, 0, 0.35); display: flex; flex-direction: column; gap: 10px; }
+.vcase p { margin: 0; }
+.vcase-tag { position: absolute; top: -12px; right: 16px; font-family: var(--f-display); font-size: 10px; background: var(--violet); color: #fff; padding: 5px 8px; box-shadow: 0 0 0 3px var(--ink); }
+.vcase-name { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(12px, 1.9cqw, 18px); line-height: 1.5; color: var(--red); }
+.vcase-held { background: #fff1c9; padding: 8px 10px; box-shadow: 0 0 0 2px var(--part); }
+.vstamp { display: inline-block; font-family: var(--f-display); font-size: 0.66em; color: var(--ink-red); border: 3px solid var(--ink-red); padding: 4px 6px 3px; margin-right: 6px; transform: rotate(-7deg); }
+.vcase-held.on .vstamp { animation: vstamp 0.45s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes vstamp { from { transform: scale(2.6) rotate(-18deg); opacity: 0; } to { transform: rotate(-7deg); opacity: 1; } }
+.vcase-cite { font-size: 0.92em; color: #36505c; }
+
+/* trap */
+.vs-trap { justify-content: center; gap: 0; }
+.vtrap-band { height: 18px; background: repeating-linear-gradient(-45deg, var(--star) 0 16px, var(--ink) 16px 32px); background-size: 45px 45px; animation: vband 1.2s linear infinite; }
+@keyframes vband { to { background-position: 45px 0; } }
+.vtrap { background: var(--bad); color: #fff; padding: clamp(16px, 3cqw, 30px); text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.vtrap p { margin: 0; font-size: 1.08em; font-weight: 700; max-width: 46ch; }
+.vtrap-word { font-family: var(--f-display); font-size: clamp(22px, 5cqw, 46px); color: var(--star); text-shadow: 4px 4px 0 var(--ink); animation: vshake 0.5s steps(4) 2; }
+@keyframes vshake { 25% { transform: translateX(-5px) rotate(-2deg); } 75% { transform: translateX(5px) rotate(2deg); } }
+
+/* number */
+.vs-num { align-items: center; text-align: center; }
+.vnum { font-family: var(--f-num); font-size: clamp(70px, 15cqw, 150px); line-height: 0.9; color: var(--star); text-shadow: 6px 6px 0 var(--ink), 0 0 30px rgba(255, 210, 63, 0.45); animation: vnum 0.6s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes vnum { from { transform: scale(0.3); opacity: 0; } }
+.vnum-l { margin: 0; max-width: 46ch; color: var(--cream); }
+
+/* flow diagram */
+.vf { position: relative; height: clamp(230px, 32cqw, 320px); color: var(--peach); }
+.vf-svg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.vf-line { fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: square; }
+.vf-line.rv { opacity: 0; transform: none; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); transition: stroke-dashoffset 0.7s ease, opacity 0.15s linear; }
+.vf-line.rv.on { opacity: 1; stroke-dashoffset: 0; }
+.vf-line.dash.rv { stroke-dasharray: 8 7; stroke-dashoffset: 0; opacity: 0; transition: opacity 0.5s ease; }
+.vf-line.dash.rv.on { opacity: 1; }
+.vf-line.t-ok { stroke: #6fdc97; } .vf-line.t-bad { stroke: #ff6b6b; }
+.vf-node {
+  position: absolute; transform: translate(-50%, -50%); width: max-content; max-width: 31%;
+  display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;
+  background: var(--paper); color: var(--ink); padding: 10px 12px; box-shadow: 0 0 0 3px var(--ink), 0 6px 0 0 rgba(0, 0, 0, 0.35);
+}
+.vf-node.rv, .vf-node.rv.on { transform: translate(-50%, -50%); }
+.vf-node.rv.on { animation: vnode 0.45s ease; }
+@keyframes vnode { 0% { box-shadow: 0 0 0 3px var(--ink), 0 0 0 9px var(--star); } 100% { box-shadow: 0 0 0 3px var(--ink), 0 6px 0 0 rgba(0, 0, 0, 0.35); } }
+.vf-node canvas { width: auto; height: clamp(22px, 3.6cqw, 34px); }
+.vf-node b { font-family: var(--f-label); font-size: clamp(12px, 1.7cqw, 16px); line-height: 1.25; }
+.vf-node small { font-size: clamp(11px, 1.4cqw, 14px); line-height: 1.3; color: #36505c; }
+.vf-node.t-ok { background: var(--ok-bg); } .vf-node.t-bad { background: var(--bad-bg); } .vf-node.t-hot { background: #fff1c9; }
+.vf-lab { position: absolute; transform: translate(-50%, -50%); font-family: var(--f-num); font-size: clamp(15px, 1.9cqw, 19px); line-height: 1; width: max-content; max-width: 30%; text-align: center; background: var(--ink); color: var(--cream); padding: 3px 6px; box-shadow: 0 0 0 2px var(--peach); }
+.vf-lab.rv, .vf-lab.rv.on { transform: translate(-50%, -50%); }
+.vf-lab.t-ok { box-shadow: 0 0 0 2px #6fdc97; } .vf-lab.t-bad { box-shadow: 0 0 0 2px #ff6b6b; }
+
+/* quick check */
+.vs-quiz { align-items: center; text-align: center; background: var(--paper); color: var(--ink); padding: clamp(16px, 3cqw, 28px); box-shadow: 0 0 0 4px var(--ink), 0 8px 0 0 rgba(0, 0, 0, 0.35); }
+.vq-tag { font-family: var(--f-display); font-size: 10px; background: var(--violet); color: #fff; padding: 6px 9px; box-shadow: 0 0 0 3px var(--ink); }
+.vq-text { margin: 0; font-size: 1.1em; max-width: 52ch; }
+.vq-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: min(100%, 460px); }
+.vq-btns .btn { padding: 14px 10px; }
+.btn.vq-right { box-shadow: 0 0 0 3px var(--ink), 0 0 0 8px #6fdc97; opacity: 1; filter: none; }
+.btn.vq-wrong { box-shadow: 0 0 0 3px var(--ink), 0 0 0 8px #ff6b6b; opacity: 1; filter: none; }
+.vq-res { max-width: 56ch; padding: 10px 12px; text-align: left; font-size: 0.92em; }
+.vq-res.ok { background: var(--ok-bg); box-shadow: 0 0 0 2px var(--ok); }
+.vq-res.no { background: var(--bad-bg); box-shadow: 0 0 0 2px var(--bad); }
+.vplayer.is-quiz .vs-quiz { animation: vqpulse 1.6s ease-in-out infinite; }
+@keyframes vqpulse { 50% { box-shadow: 0 0 0 4px var(--ink), 0 0 0 9px rgba(255, 210, 63, 0.75); } }
+
+/* narrator + captions */
+.vs-mentor { grid-row: 2; grid-column: 1; align-self: end; justify-self: start; margin: 0 0 10px 12px; width: clamp(46px, 8.5cqw, 80px); height: auto; padding: 4px; background: linear-gradient(180deg, #ffe08a, #ffb057); box-shadow: 0 0 0 3px var(--ink); z-index: 2; }
+.vplayer.talking .vs-mentor { animation: vtalk 0.42s steps(2) infinite; }
+@keyframes vtalk { 50% { transform: translateY(-3px); } }
+.vs-cap { grid-row: 2; grid-column: 1; min-height: calc(3 * 1.4em + 20px); display: flex; align-items: center; padding: 10px 16px 10px calc(clamp(46px, 8.5cqw, 80px) + 34px); background: rgba(4, 21, 33, 0.86); border-top: 3px solid var(--ink); font-size: clamp(15px, 1.85cqw, 19px); line-height: 1.4; color: var(--cream); }
+.vplayer.no-cc .vs-cap-text { visibility: hidden; }
+.vs-big { position: absolute; left: 50%; top: 70%; transform: translate(-50%, -50%); z-index: 4; font-family: var(--f-display); font-size: clamp(14px, 2.4cqw, 22px); color: var(--ink); cursor: pointer; border: 0; padding: 18px 28px; display: inline-flex; gap: 12px; align-items: center; background: linear-gradient(180deg, #fff7c9 0 34%, #ffe066 34% 68%, #ffbf1f 68% 100%); box-shadow: 0 0 0 4px var(--ink), 0 9px 0 0 rgba(0, 0, 0, 0.4), 0 0 40px 8px rgba(255, 220, 120, 0.45); animation: vbig 1.6s ease-in-out infinite; }
+.vs-big span { font-size: 1.3em; }
+@keyframes vbig { 50% { transform: translate(-50%, -50%) scale(1.05); } }
+.vstage::after { content: "❚❚ PAUSED"; position: absolute; top: 12px; right: 12px; z-index: 3; font-family: var(--f-display); font-size: 10px; padding: 6px 8px; background: var(--ink); color: var(--star); box-shadow: 0 0 0 2px var(--star); opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.vplayer.is-paused .vstage::after { opacity: 1; animation: blinkp 1.2s steps(2, start) infinite; }
+@keyframes blinkp { 50% { opacity: 0.35; } }
+.vs-end { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; background: rgba(4, 21, 33, 0.97); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); animation: vsin 0.4s ease both; }
+.vs-end h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(16px, 3cqw, 26px); color: var(--star); text-shadow: 4px 4px 0 var(--ink); }
+.vs-end p { margin: 0; max-width: 52ch; color: var(--cream); }
+.vs-end-score b { font-family: var(--f-num); font-size: 1.6em; color: var(--star); }
+
+/* timeline + controls */
+.vprog { display: flex; gap: 3px; height: 14px; }
+.vseg { flex-basis: 0; min-width: 6px; border: 0; padding: 0; cursor: pointer; background: rgba(159, 220, 240, 0.18); box-shadow: 0 0 0 2px var(--ink); }
+.vseg:hover { background: rgba(159, 220, 240, 0.4); }
+.vseg-quiz { background: rgba(255, 210, 63, 0.35); }
+.vseg-trap { background: rgba(255, 107, 107, 0.35); }
+.vseg.done { background: var(--peach); }
+.vseg.cur { background: var(--star); }
+.vctrl { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; }
+.vctrl .btn { min-width: 44px; min-height: 40px; }
+#v-toggle { min-width: 9.5em; }
+.vsel { display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-label); font-size: 13px; color: var(--text-dim); }
+.vsel select { font-family: var(--f-label); font-size: 13px; color: var(--cream); background: var(--ink); border: 0; padding: 8px 8px; box-shadow: 0 0 0 2px var(--peach); min-height: 38px; }
+#v-cc[aria-pressed="false"] { opacity: 0.55; text-decoration: line-through; }
+
+@container (max-width: 560px) {
+  .vs-title { flex-direction: column; text-align: center; }
+  .vc { gap: 6px 8px; }
+  .vc-c { padding: 8px; font-size: 0.86em; }
+  .vc-h { padding: 7px 6px; }
+  .vf { height: 300px; }
+  .vf.vf-tall { height: 430px; }
+  .vf-node { max-width: 28%; padding: 7px 6px; }
+  .vf-tall .vf-node { max-width: 42%; }
+  .vf-node b { font-size: 11px; }
+  .vf-lab { font-size: 14px; max-width: 40%; }
+  .vf:not(.vf-tall) .vf-node small { display: none; }
+  .vs-cap { padding-left: calc(clamp(46px, 8.5cqw, 80px) + 26px); }
+}
+
+.act.act-start { box-shadow: 0 0 0 3px var(--star), 0 0 22px 2px rgba(255, 210, 63, 0.45); }
+.act.act-start .act-num::after { content: " START HERE"; font-family: var(--f-display); font-size: 8px; color: var(--ink); background: var(--star); padding: 3px 5px; margin-left: 6px; vertical-align: 2px; }
+
 </style>
 </head>
 <body>
@@ -1103,7 +1283,9 @@ textarea.ans:focus { outline: none; box-shadow: 0 0 0 4px var(--ink), 0 0 0 7px 
       bad: [[196, 0, 0.18, 'sawtooth', 0.04]],
       combo: [[880, 0, 0.06], [1175, 0.06, 0.06], [1568, 0.12, 0.1]],
       win: [[523, 0, 0.1], [659, 0.1, 0.1], [784, 0.2, 0.1], [1046, 0.3, 0.25]],
-      lose: [[392, 0, 0.15], [330, 0.15, 0.15], [262, 0.3, 0.3]]
+      lose: [[392, 0, 0.15], [330, 0.15, 0.15], [262, 0.3, 0.3]],
+      whoosh: [[320, 0, 0.07, 'triangle', 0.02], [640, 0.05, 0.08, 'triangle', 0.015]],
+      stamp: [[120, 0, 0.1, 'square', 0.05], [70, 0.06, 0.16, 'square', 0.045]]
     };
     return {
       setOn: function (v) { on = !!v; },
@@ -1405,6 +1587,20 @@ textarea.ans:focus { outline: none; box-shadow: 0 0 0 4px var(--ink), 0 0 0 7px 
       'kwkkkkkrrwk',
       'kwwwwwwrrwk',
       'kkkkkkkkkkk'
+    ],
+    tv: [
+      '...k....k...',
+      '....k..k....',
+      'kkkkkkkkkkkk',
+      'kbbbbbbbbbgk',
+      'kbbwbbbbbbgk',
+      'kbbwwbbbbbGk',
+      'kbbwwwbbbbgk',
+      'kbbwwbbbbbGk',
+      'kbbwbbbbbbgk',
+      'kbbbbbbbbbgk',
+      'kkkkkkkkkkkk',
+      '..kk....kk..'
     ],
     calendar: [
       '.kk....kk.',
@@ -4712,24 +4908,24 @@ LL.chapter({
     { day: 'Saturday 21 Nov', theme: 'Diagnose, then the most-tested lots', items: [
       { id: 'p1', t: 'Sit Mock Paper 1, Section A only (20 MCQs, 60 min) for a baseline.', act: 'mockA:m1' },
       { id: 'p2', t: 'Read the Exam Pack: ILAC, timing, the issue spotter and the authority bank.', act: 'view:pack' },
-      { id: 'p3', t: 'Lot 9 Torrens: lesson, training, graded test.', act: 'lot:9' },
-      { id: 'p4', t: 'Lot 8 Sale and OTP: lesson, training, graded test.', act: 'lot:8' },
-      { id: 'p5', t: 'Lot 7 Co-ownership: lesson, training, graded test.', act: 'lot:7' },
+      { id: 'p3', t: 'Lot 9 Torrens: watch the video, checkpoint, graded test.', act: 'lot:9' },
+      { id: 'p4', t: 'Lot 8 Sale and OTP: watch the video, checkpoint, graded test.', act: 'lot:8' },
+      { id: 'p5', t: 'Lot 7 Co-ownership: watch the video, checkpoint, graded test.', act: 'lot:7' },
       { id: 'p6', t: 'Case drill: Mr Ong (Torrens, 20 marks). Mark it, read the model answer.', act: 'case:ong' },
       { id: 'p7', t: 'Case drill: Punggol (10 marks in 15 minutes).', act: 'case:punggol' },
       { id: 'p8', t: 'Notebook: redo every question you missed today.', act: 'view:notebook' }
     ] },
     { day: 'Sunday 22 Nov', theme: 'Mortgages, leases, covenants, agency', items: [
-      { id: 'p9', t: 'Lot 5 Mortgages: lesson, training, graded test.', act: 'lot:5' },
-      { id: 'p10', t: 'Lot 6 Leases: lesson, training, graded test.', act: 'lot:6' },
-      { id: 'p11', t: 'Lot 3 Covenants: lesson, training, graded test.', act: 'lot:3' },
-      { id: 'p12', t: 'Lot 10 Agency: lesson, training, graded test.', act: 'lot:10' },
+      { id: 'p9', t: 'Lot 5 Mortgages: watch the video, checkpoint, graded test.', act: 'lot:5' },
+      { id: 'p10', t: 'Lot 6 Leases: watch the video, checkpoint, graded test.', act: 'lot:6' },
+      { id: 'p11', t: 'Lot 3 Covenants: watch the video, checkpoint, graded test.', act: 'lot:3' },
+      { id: 'p12', t: 'Lot 10 Agency: watch the video, checkpoint, graded test.', act: 'lot:10' },
       { id: 'p13', t: 'Case drills: KFM and Printwell, the two sample questions in your practice paper.', act: 'case:kfm' },
       { id: 'p14', t: 'Full Mock Paper 2 under exam conditions (2 hours).', act: 'mock:m2' },
       { id: 'p15', t: 'Mark Section B (keyword marker, then Prof. Borough if available). Notebook.', act: 'view:notebook' }
     ] },
     { day: 'Monday 23 Nov', theme: 'Close the gaps, one more full paper, print', items: [
-      { id: 'p16', t: 'Lots 1, 2 and 4: skim the lesson, then the graded test.', act: 'lot:1' },
+      { id: 'p16', t: 'Lots 1, 2 and 4: watch the videos (1.3x speed is fine), then the graded tests.', act: 'lot:1' },
       { id: 'p17', t: 'Full Mock Paper 3 (new case) under exam conditions.', act: 'mock:m3' },
       { id: 'p18', t: 'Lightning rounds on your two weakest lots.', act: 'view:map' },
       { id: 'p19', t: 'My cheat sheet: drill every concept still marked "to fix".', act: 'view:mysheet' },
@@ -5381,13 +5577,670 @@ LL.chapter({
   };
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* js/video.js */
+/* Land Lah! — narrated, animated video lessons.
+   A lesson is a list of scenes. Each scene has narration lines (`say`) and visuals that appear as the lines are
+   spoken. The narrator speaks in a Claude voice where the artifact viewer offers it, otherwise in the device's own
+   voice (speechSynthesis), otherwise it runs timed captions. Quick-check scenes pause the video until you answer. */
+(function (root) {
+  'use strict';
+  var LL = root.LL, U = LL.util, esc = U.esc;
+  LL.videos = {};
+  LL.video = function (n, def) { def.n = n; LL.videos[n] = def; };
+
+  /* ---------- flattening a script into narration lines ---------- */
+  function quizItem(n, s) {
+    var ch = LL.getChapter(n), it = s.qi != null && ch ? ch.quick[s.qi] : null;
+    return it ? { text: it[0], a: it[1], why: it[2] } : (s.text ? { text: s.text, a: s.a, why: s.why || '' } : null);
+  }
+  LL.videoLines = function (v) {
+    var lines = [];
+    v.scenes.forEach(function (s, si) {
+      var say = s.say || [];
+      if (s.t === 'quiz') { var q = quizItem(v.n, s); say = (s.say || ['Quick check. True or false?']).concat(q ? [q.text] : []); s._q = q; }
+      say.forEach(function (text, li) { lines.push({ g: lines.length, si: si, li: li, text: text, stop: s.t === 'quiz' && li === say.length - 1 }); });
+    });
+    return lines;
+  };
+  LL.videoMinutes = function (v) {
+    var w = 0; LL.videoLines(v).forEach(function (l) { w += U.words(l.text); });
+    return Math.max(1, Math.round(w / 150 + v.scenes.length * 0.05));
+  };
+
+  /* ---------- narrator backends ---------- */
+  function estimateMs(text, rate) { return Math.max(1800, U.words(text) / 2.6 * 1000) / (rate || 1); }
+
+  function TimerVoice() {
+    var timer = null, token = 0, cur = null;
+    return {
+      name: 'captions',
+      speak: function (lines, rate, hooks) {
+        var my = ++token, i = 0;
+        function step() {
+          if (my !== token) return;
+          if (i >= lines.length) { hooks.done(); return; }
+          cur = { lines: lines, i: i, rate: rate, hooks: hooks };
+          hooks.line(lines[i]);
+          var d = estimateMs(lines[i].text, rate); i++;
+          timer = setTimeout(step, d);
+        }
+        step();
+      },
+      pause: function () { token++; clearTimeout(timer); },
+      resume: function () { if (cur) this.speak(cur.lines.slice(cur.i), cur.rate, cur.hooks); },
+      stop: function () { token++; clearTimeout(timer); cur = null; },
+      setRate: function () { /* applies to the next line */ }
+    };
+  }
+
+  function DeviceVoice() {
+    var synth = root.speechSynthesis, token = 0, cur = null, watchdog = null, voice = null;
+    function pickVoice() {
+      var vs = synth.getVoices() || [], en = vs.filter(function (v) { return /^en/i.test(v.lang); });
+      var pref = ['en-SG', 'en-GB', 'en-AU', 'en-US'];
+      var nice = en.filter(function (v) { return /natural|neural|google|samantha|daniel|serena|karen|libby|sonia/i.test(v.name); });
+      for (var p = 0; p < pref.length && !voice; p++) voice = (nice.filter(function (v) { return v.lang.replace('_', '-') === pref[p]; })[0]) || null;
+      voice = voice || nice[0] || en[0] || vs[0] || null;
+    }
+    return {
+      name: 'device',
+      ok: function () { return !!(synth && root.SpeechSynthesisUtterance); },
+      speak: function (lines, rate, hooks) {
+        var my = ++token, i = 0;
+        if (!voice) pickVoice();
+        try { synth.cancel(); } catch (e) { /* ignore */ }
+        function step() {
+          if (my !== token) return;
+          clearTimeout(watchdog);
+          if (i >= lines.length) { hooks.done(); return; }
+          var line = lines[i], u = new root.SpeechSynthesisUtterance(line.text);
+          cur = { lines: lines, i: i, rate: rate, hooks: hooks };
+          if (voice) u.voice = voice;
+          u.rate = rate || 1; u.lang = voice ? voice.lang : 'en-GB';
+          var advanced = false, started = false, t0 = Date.now(), next = function () { if (advanced || my !== token) return; advanced = true; i++; step(); };
+          u.onstart = function () { started = true; };
+          /* some engines "finish" without making a sound; if a line ends far too fast, hand over to captions */
+          u.onend = function () {
+            if (!advanced && my === token && hooks.fail && U.words(line.text) > 4 && Date.now() - t0 < estimateMs(line.text, rate) * 0.25) { advanced = true; token++; hooks.fail(lines.slice(i)); return; }
+            next();
+          }; u.onerror = function (ev) { if (advanced || my !== token) return; if (!started && hooks.fail && !/interrupted|canceled/.test((ev && ev.error) || '')) { advanced = true; token++; hooks.fail(lines.slice(i)); return; } next(); };
+          hooks.line(line);
+          var limit = estimateMs(line.text, rate);
+          setTimeout(function () { if (my === token && !started && !advanced && hooks.fail) { token++; try { synth.cancel(); } catch (e) { /* ignore */ } hooks.fail(lines.slice(i)); } }, 3500);
+          watchdog = setTimeout(function () { try { synth.cancel(); } catch (e) { /* ignore */ } next(); }, limit * 1.8 + 3000);
+          try { synth.speak(u); } catch (e) { next(); }
+        }
+        step();
+      },
+      pause: function () { token++; clearTimeout(watchdog); try { synth.cancel(); } catch (e) { /* ignore */ } },
+      resume: function () { if (cur) this.speak(cur.lines.slice(cur.i), cur.rate, cur.hooks); },
+      stop: function () { token++; clearTimeout(watchdog); cur = null; try { synth.cancel(); } catch (e) { /* ignore */ } },
+      setRate: function () { /* applies to the next line */ }
+    };
+  }
+
+  function ClaudeVoice(tts) {
+    var token = 0, cur = null, unsub = null, onFail = null, lastIdx = 0;
+    return {
+      name: 'claude',
+      failed: function (cb) { onFail = cb; },
+      speak: function (lines, rate, hooks) {
+        var my = ++token, byId = {};
+        lines.forEach(function (l, k) { byId['l' + k] = l; });
+        cur = { lines: lines, rate: rate, hooks: hooks };
+        if (unsub) { try { unsub(); } catch (e) { /* ignore */ } }
+        unsub = tts.onLine(function (e) {
+          if (my !== token) return;
+          var l = byId[e.id]; if (!l) return;
+          lastIdx = lines.indexOf(l); hooks.line(l);
+        });
+        lastIdx = 0;
+        tts.speak(lines.map(function (l, k) { return { text: l.text, id: 'l' + k }; }), { rate: rate || 1, language: 'en' }).then(function () {
+          if (my === token) hooks.done();
+        }, function (err) {
+          if (my !== token) return;
+          var code = err && err.code, reason = err && err.reason;
+          if (code === 'stopped' && (reason === 'viewer_stopped' || reason === 'hidden' || reason === 'interrupted' || reason === 'time_limit')) { hooks.paused(lines.slice(lastIdx)); return; }
+          if (code === 'stopped') return;
+          if (onFail) onFail(code, lines.slice(lastIdx));
+        });
+      },
+      pause: function () { try { tts.pause().catch(function () { /* ignore */ }); } catch (e) { /* ignore */ } },
+      resume: function () { try { tts.resume().catch(function () { /* ignore */ }); } catch (e) { /* ignore */ } },
+      stop: function () { token++; try { tts.stop().catch(function () { /* ignore */ }); } catch (e) { /* ignore */ } },
+      setRate: function (r) { try { tts.setRate(r).catch(function () { /* ignore */ }); } catch (e) { /* ignore */ } }
+    };
+  }
+
+  /* ---------- scene rendering ---------- */
+  function iconC(name, scale, cls) { return '<canvas class="' + (cls || '') + '" data-icon="' + name + '" data-scale="' + (scale || 3) + '" aria-hidden="true"></canvas>'; }
+  function lead(s, n) { return s.lead != null ? s.lead : ((s.say || []).length > n ? 1 : 0); }
+  function at(s, i, n) { return Math.min(i + lead(s, n), Math.max(0, (s.say || []).length - 1)); }
+  function rv(k, cls) { return ' class="rv ' + (cls || '') + '" data-at="' + k + '"'; }
+
+  LL.sceneHTML = function (v, s, si) {
+    var ch = LL.getChapter(v.n) || {}, h = '';
+    var head = s.head ? '<div class="vs-head"><span class="stn-code">' + esc(ch.code || 'LOT') + '</span><h3>' + esc(s.head) + '</h3></div>' : '';
+    switch (s.t) {
+      case 'title':
+        h = '<div class="vs vs-title"><div class="vt-icon">' + iconC(ch.icon || 'house', 9) + '</div><div class="vt-text"><span class="vt-code">' + esc(ch.code || '') + ' · ' + esc(ch.lec || '') + '</span>' +
+          '<h2 class="vt-title" data-text="' + esc(v.title || ch.title) + '">' + esc(v.title || ch.title) + '</h2><p class="vt-sub">' + esc(v.sub || ch.place || '') + '</p></div></div>';
+        break;
+      case 'talk': case 'recap':
+        h = '<div class="vs vs-list' + (s.t === 'recap' ? ' vs-recap' : '') + '">' + head + '<ul class="vl">' + (s.points || []).map(function (p, i) {
+          return '<li' + rv(at(s, i, s.points.length)) + '><span class="vl-dot">' + (s.t === 'recap' ? '✓' : '▸') + '</span><span>' + esc(p) + '</span></li>';
+        }).join('') + '</ul></div>';
+        break;
+      case 'steps':
+        h = '<div class="vs vs-steps">' + head + '<ol class="vst">' + (s.steps || []).map(function (p, i) {
+          return '<li' + rv(at(s, i, s.steps.length)) + '><span class="vst-n">' + (i + 1) + '</span><span>' + esc(p) + '</span></li>';
+        }).join('') + '</ol></div>';
+        break;
+      case 'compare':
+        h = '<div class="vs vs-cmp">' + head + '<div class="vc"><div class="vc-h vc-l">' + esc(s.left) + '</div><div class="vc-h vc-r">' + esc(s.right) + '</div>' +
+          (s.rows || []).map(function (r, i) { var k = at(s, i, s.rows.length); return '<div' + rv(k, 'vc-c vc-l') + '>' + esc(r[0]) + '</div><div' + rv(k, 'vc-c vc-r') + '>' + esc(r[1]) + '</div>'; }).join('') + '</div></div>';
+        break;
+      case 'case':
+        h = '<div class="vs vs-case">' + head + '<div class="vcase"><span class="vcase-tag">CASE</span><h4 class="vcase-name">' + esc(s.name) + '</h4>' +
+          '<p' + rv(s.at ? s.at[0] : 1) + '><b>Facts.</b> ' + esc(s.facts) + '</p>' +
+          '<p' + rv(s.at ? s.at[1] : 2, 'vcase-held') + '><span class="vstamp">HELD</span> ' + esc(s.held) + '</p>' +
+          (s.cite ? '<p' + rv(s.at ? s.at[2] : Math.min(3, (s.say || []).length - 1), 'vcase-cite') + '><b>Cite it for:</b> ' + esc(s.cite) + '</p>' : '') + '</div></div>';
+        break;
+      case 'trap':
+        h = '<div class="vs vs-trap"><div class="vtrap-band"></div><div class="vtrap"><span class="vtrap-word">TRAP!</span><p>' + esc(s.text) + '</p></div><div class="vtrap-band"></div></div>';
+        break;
+      case 'number':
+        h = '<div class="vs vs-num">' + head + '<div class="vnum">' + esc(s.big) + '</div><p class="vnum-l">' + esc(s.label) + '</p></div>';
+        break;
+      case 'flow':
+        h = '<div class="vs vs-flow">' + head + '<div class="vf" data-si="' + si + '"><svg class="vf-svg" aria-hidden="true"><defs><marker id="vfa' + si + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs></svg>' +
+          (s.nodes || []).map(function (nd) {
+            return '<div' + rv(nd.at || 0, 'vf-node' + (nd.tone ? ' t-' + nd.tone : '')) + ' data-id="' + esc(nd.id) + '" style="left:' + nd.x + '%;top:' + nd.y + '%">' + (nd.icon ? iconC(nd.icon, 3) : '') + '<b>' + esc(nd.label) + '</b>' + (nd.sub ? '<small>' + esc(nd.sub) + '</small>' : '') + '</div>';
+          }).join('') +
+          (s.links || []).map(function (lk, k) { return '<span' + rv(lk.at || 0, 'vf-lab' + (lk.tone ? ' t-' + lk.tone : '')) + ' data-k="' + k + '">' + esc(lk.label || '') + '</span>'; }).join('') + '</div></div>';
+        break;
+      case 'quiz':
+        var q = s._q || {};
+        h = '<div class="vs vs-quiz"><span class="vq-tag">QUICK CHECK</span><p class="vq-text">' + esc(q.text || '') + '</p>' +
+          '<div class="vq-btns"><button type="button" class="btn btn-big lt-t" data-act="vq" data-v="1">TRUE</button><button type="button" class="btn btn-big lt-f" data-act="vq" data-v="0">FALSE</button></div>' +
+          '<div class="vq-res" hidden></div></div>';
+        break;
+      default:
+        h = '<div class="vs">' + head + '</div>';
+    }
+    return h;
+  };
+
+  /* Draw the arrows of a flow scene in pixels, from box edge to box edge. */
+  LL.drawFlow = function (stage, s, si) {
+    var box = stage.querySelector('.vf'); if (!box) return;
+    /* portrait screens: turn the diagram on its side so the boxes stack instead of squeezing */
+    var tall = stage.clientWidth < 520, defs = {};
+    (s.nodes || []).forEach(function (nd) { defs[nd.id] = nd; });
+    box.classList.toggle('vf-tall', tall);
+    Array.prototype.forEach.call(box.querySelectorAll('.vf-node'), function (el) {
+      var nd = defs[el.getAttribute('data-id')]; if (!nd) return;
+      el.style.left = (tall ? nd.y : nd.x) + '%'; el.style.top = (tall ? nd.x : nd.y) + '%';
+    });
+    var svg = box.querySelector('svg'), W = box.clientWidth, H = box.clientHeight;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('width', W); svg.setAttribute('height', H);
+    Array.prototype.forEach.call(svg.querySelectorAll('.vf-line'), function (p) { p.remove(); });
+    var bRect = box.getBoundingClientRect(), nodes = {};
+    Array.prototype.forEach.call(box.querySelectorAll('.vf-node'), function (el) {
+      var r = el.getBoundingClientRect();
+      nodes[el.getAttribute('data-id')] = { x: r.left - bRect.left + r.width / 2, y: r.top - bRect.top + r.height / 2, hw: r.width / 2 + 6, hh: r.height / 2 + 6 };
+    });
+    (s.links || []).forEach(function (lk, k) {
+      var a = nodes[lk.from], b = nodes[lk.to]; if (!a || !b) return;
+      var dx = b.x - a.x, dy = b.y - a.y, len = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / len, uy = dy / len;
+      var rev = (s.links || []).some(function (o) { return o.from === lk.to && o.to === lk.from; });
+      var off = rev ? 9 : 0, px = -uy * off, py = ux * off;
+      var ta = Math.min(a.hw / Math.abs(ux || 1e-6), a.hh / Math.abs(uy || 1e-6)), tb = Math.min(b.hw / Math.abs(ux || 1e-6), b.hh / Math.abs(uy || 1e-6));
+      var x1 = a.x + ux * ta + px, y1 = a.y + uy * ta + py, x2 = b.x - ux * tb + px, y2 = b.y - uy * tb + py;
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', 'M' + x1.toFixed(1) + ',' + y1.toFixed(1) + ' L' + x2.toFixed(1) + ',' + y2.toFixed(1));
+      p.setAttribute('class', 'vf-line rv' + (lk.tone ? ' t-' + lk.tone : '') + (lk.dash ? ' dash' : ''));
+      p.setAttribute('data-at', lk.at || 0);
+      p.setAttribute('marker-end', 'url(#vfa' + si + ')');
+      var L = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+      p.style.setProperty('--len', L.toFixed(0));
+      svg.appendChild(p);
+      var lab = box.querySelector('.vf-lab[data-k="' + k + '"]');
+      if (lab) {
+        /* sit the label beside the arrow, not on it: push it out along the normal, away from the box centre */
+        var mx = (x1 + x2) / 2, my = (y1 + y2) / 2, nx = -uy, ny = ux, cx = W / 2, cy = H / 2;
+        if (!rev && (mx - cx) * nx + (my - cy) * ny < 0) { nx = -nx; ny = -ny; }
+        var push = Math.abs(ny) * (lab.offsetHeight / 2 + 6) + Math.abs(nx) * (lab.offsetWidth / 2 + 6);
+        var lw = lab.offsetWidth / 2 + 2, lh = lab.offsetHeight / 2 + 2;
+        var lx = Math.max(lw, Math.min(W - lw, mx + nx * push)), ly = Math.max(lh, Math.min(H - lh, my + ny * push));
+        lab.style.left = (lx / W * 100) + '%'; lab.style.top = (ly / H * 100) + '%';
+      }
+    });
+  };
+
+  /* ---------- Claude-written explainer for one cheat-sheet concept ---------- */
+  LL.explainerPrompt = function (c) {
+    var lines = ['CONCEPT: ' + c.name + ' (Lot ' + c.ch + ')'];
+    c.traps.forEach(function (k) { lines.push('Trap: ' + LL.TRAPS[k].text); });
+    if (c.rule) lines.push('Rule from the notes: ' + c.rule[0] + ': ' + c.rule[1]);
+    c.items.slice(0, 5).forEach(function (it) { if (it.list) it.list.forEach(function (x) { lines.push('Point: ' + x); }); else lines.push('Point: ' + it.t + (it.why ? ' (' + it.why + ')' : '')); });
+    c.auths.forEach(function (a) { lines.push('Authority: ' + a.name + ': ' + a.cite + '. Held: ' + a.held); });
+    return [
+      'You are a friendly Singapore law tutor making a short narrated explainer video for a student revising NUS RE2702 Land Law. They keep getting this concept wrong.',
+      'Use ONLY the material below. Do not add cases, sections or rules that are not in it. Keep any [check] marks out of the narration.',
+      '', lines.join('\n'), '',
+      'Reply with JSON only, in this shape:',
+      '{"title":"3-6 words","scenes":[',
+      ' {"t":"talk","head":"short heading","points":["2-4 short bullets"],"say":["an intro line","one line per bullet"]},',
+      ' {"t":"steps","head":"...","steps":["2-4 steps"],"say":["intro","one line per step"]},',
+      ' {"t":"compare","head":"...","left":"column title","right":"column title","rows":[["left","right"]],"say":["intro","one line per row"]},',
+      ' {"t":"trap","text":"the trap in one sentence","say":["one line"]},',
+      ' {"t":"recap","points":["2-4 bullets"],"say":["intro","one line per bullet"]}',
+      ']}',
+      'Use 3 to 5 scenes, in any order that teaches well, and end with a recap. Narration lines are spoken aloud: under 30 words each, plain words, "section" not "s", "versus" not "v". Bullets and table cells: under 12 words.'
+    ].join('\n');
+  };
+  var KINDS = { talk: 'points', steps: 'steps', compare: 'rows', trap: null, recap: 'points' };
+  function str(x, n) { return typeof x === 'string' && x.trim() ? x.trim().slice(0, n) : null; }
+  LL.validateVideo = function (d, ch) {
+    if (!d || !Array.isArray(d.scenes)) return null;
+    var scenes = [];
+    d.scenes.slice(0, 6).forEach(function (s) {
+      if (!s || !Object.prototype.hasOwnProperty.call(KINDS, s.t)) return;
+      var say = (Array.isArray(s.say) ? s.say : []).map(function (x) { return str(x, 320); }).filter(Boolean).slice(0, 6);
+      if (!say.length) return;
+      var out = { t: s.t, say: say, head: str(s.head, 60) || undefined };
+      if (s.t === 'trap') { out.text = str(s.text, 220); if (!out.text) return; }
+      else if (s.t === 'compare') {
+        out.left = str(s.left, 40) || 'Yes'; out.right = str(s.right, 40) || 'No';
+        out.rows = (Array.isArray(s.rows) ? s.rows : []).filter(Array.isArray).slice(0, 4).map(function (r) { return [str(r[0], 140) || '', str(r[1], 140) || '']; });
+        if (!out.rows.length) return;
+      } else {
+        var key = KINDS[s.t], arr = (Array.isArray(s[key]) ? s[key] : []).map(function (x) { return str(x, 140); }).filter(Boolean).slice(0, 5);
+        if (!arr.length) return; out[key] = arr;
+      }
+      scenes.push(out);
+    });
+    if (scenes.length < 2) return null;
+    return { n: ch, custom: true, title: str(d.title, 60) || 'Explainer', scenes: [{ t: 'title', say: ['Let\'s fix one concept you keep missing: ' + (str(d.title, 60) || 'this one') + '.'] }].concat(scenes) };
+  };
+
+  /* ---------- the player ---------- */
+  LL.Player = function (opts) {
+    var v = opts.video, root = opts.root, stage = root.querySelector('.vstage-scene'), cap = root.querySelector('.vs-cap-text');
+    var lines = LL.videoLines(v), P = this;
+    var state = 'ready', held = false, voice = null, mode = opts.mode || 'captions', rate = opts.rate || 1, idx = 0, sceneIdx = -1, li = -1;
+    var quiz = { right: 0, total: 0, answered: {} }, pending = null;
+    P.lines = lines;
+
+    function backend(m) {
+      if (m === 'claude' && opts.tts) { var c = ClaudeVoice(opts.tts); c.failed(function (code, rest) { opts.onNotice && opts.onNotice('Claude\'s voice is unavailable just now (' + code + '). Switching to your device\'s voice.'); setMode(DeviceVoice().ok() ? 'device' : 'captions'); play(rest.length ? rest[0].g : idx); }); return c; }
+      if (m === 'device') { var d = DeviceVoice(); if (d.ok()) return d; }
+      return TimerVoice();
+    }
+    function setMode(m) { if (voice) voice.stop(); mode = m; voice = backend(m); if (opts.onMode) opts.onMode(voice.name); }
+    P.setMode = function (m) { var was = state === 'playing'; setMode(m); if (was) play(idx); else if (opts.onState) opts.onState(state); };
+    P.mode = function () { return voice ? voice.name : mode; };
+    P.setRate = function (r) { rate = r; if (voice && voice.setRate) voice.setRate(r); };
+
+    function show(si) {
+      if (si === sceneIdx) return;
+      sceneIdx = si; li = -1;
+      var s = v.scenes[si];
+      stage.classList.remove('in'); void stage.offsetWidth;
+      stage.innerHTML = LL.sceneHTML(v, s, si);
+      stage.classList.add('in');
+      LL.px.hydrate(stage);
+      if (s.t === 'flow') requestAnimationFrame(function () { LL.drawFlow(stage, s, si); reveal(li); });
+      if (s.t === 'trap') LL.sfx.play('bad'); else if (si > 0) LL.sfx.play('whoosh');
+      if (opts.onScene) opts.onScene(si);
+    }
+    function reveal(k) {
+      Array.prototype.forEach.call(stage.querySelectorAll('.rv'), function (el) {
+        var on = +el.getAttribute('data-at') <= k;
+        if (on && !el.classList.contains('on')) { el.classList.add('on'); if (el.classList.contains('vcase-held')) LL.sfx.play('stamp'); }
+      });
+    }
+    var hooks = {
+      line: function (l) {
+        if (l.g == null || l.g < 0) { cap.textContent = l.text; return; }
+        idx = l.g; show(l.si); li = l.li; reveal(l.li);
+        cap.textContent = l.text;
+        root.classList.add('talking');
+        if (opts.onProgress) opts.onProgress(idx, lines.length);
+      },
+      done: function () {
+        root.classList.remove('talking');
+        var l = lines[idx];
+        if (l && l.stop && !quiz.answered[l.si]) { state = 'quiz'; if (opts.onState) opts.onState(state); return; }
+        if (idx >= lines.length - 1) { state = 'ended'; if (opts.onState) opts.onState(state); if (opts.onEnd) opts.onEnd(quiz); return; }
+        play(idx + 1);
+      },
+      fail: function (rest) {
+        if (opts.onNotice) opts.onNotice('Your device\'s voice did not start, so the lesson continues with captions.');
+        setMode('captions'); play(rest && rest[0] && rest[0].g >= 0 ? rest[0].g : idx);
+      },
+      paused: function (rest) { held = false; state = 'paused'; root.classList.remove('talking'); if (rest && rest[0] && rest[0].g >= 0) idx = rest[0].g; if (opts.onState) opts.onState(state); }
+    };
+    function segment(from) {
+      var out = [];
+      for (var i = from; i < lines.length; i++) { out.push(lines[i]); if (lines[i].stop && !quiz.answered[lines[i].si]) break; }
+      return out;
+    }
+    function play(from, prefix) {
+      clearTimeout(pending); pending = null;
+      if (!voice) voice = backend(mode);
+      voice.stop(); held = false;
+      idx = Math.max(0, Math.min(from, lines.length - 1));
+      var seg = (prefix || []).map(function (t) { return { g: -1, text: t }; }).concat(segment(idx));
+      state = 'playing'; if (opts.onState) opts.onState(state);
+      if (!seg.length) { hooks.done(); return; }
+      voice.speak(seg, rate, hooks);
+    }
+    P.play = function () {
+      if (state === 'paused' && held && voice && voice.name === 'claude') { held = false; voice.resume(); state = 'playing'; root.classList.add('talking'); if (opts.onState) opts.onState(state); return; }
+      if (state === 'ended') { P.restart(); return; }
+      if (state === 'quiz') return;
+      play(idx);
+    };
+    P.pause = function () {
+      if (state !== 'playing' || !voice) return;
+      voice.pause(); held = true; state = 'paused'; root.classList.remove('talking'); if (opts.onState) opts.onState(state);
+    };
+    P.toggle = function () { if (state === 'playing') P.pause(); else P.play(); };
+    P.stop = function () { clearTimeout(pending); pending = null; if (voice) voice.stop(); root.classList.remove('talking'); state = 'ready'; };
+    P.restart = function () { quiz = { right: 0, total: 0, answered: {} }; sceneIdx = -1; play(0); };
+    P.seekScene = function (si) {
+      si = Math.max(0, Math.min(v.scenes.length - 1, si));
+      var first = lines.filter(function (l) { return l.si === si; })[0];
+      if (!first) return;
+      show(si);
+      play(first.g);
+    };
+    P.next = function () { P.seekScene(sceneIdx + 1); };
+    P.prev = function () { P.seekScene(Math.max(0, sceneIdx - (li > 0 ? 0 : 1))); };
+    P.scene = function () { return sceneIdx; };
+    P.state = function () { return state; };
+    P.answer = function (val) {
+      var s = v.scenes[sceneIdx]; if (!s || s.t !== 'quiz' || quiz.answered[sceneIdx]) return;
+      var q = s._q, right = q.a === val;
+      quiz.answered[sceneIdx] = true; quiz.total++; if (right) quiz.right++;
+      if (opts.onQuiz) opts.onQuiz(s, right);
+      LL.sfx.play(right ? 'ok' : 'bad');
+      Array.prototype.forEach.call(stage.querySelectorAll('[data-act="vq"]'), function (b) { b.disabled = true; if ((b.getAttribute('data-v') === '1') === q.a) b.classList.add('vq-right'); else if ((b.getAttribute('data-v') === '1') === val) b.classList.add('vq-wrong'); });
+      var res = stage.querySelector('.vq-res');
+      res.hidden = false; res.className = 'vq-res ' + (right ? 'ok' : 'no');
+      res.innerHTML = '<b>' + (right ? 'Correct.' : 'Not quite: it is ' + (q.a ? 'TRUE' : 'FALSE') + '.') + '</b> ' + esc(q.why);
+      var lastQuizLine = lines.filter(function (l) { return l.si === sceneIdx; }).pop();
+      pending = setTimeout(function () { play(lastQuizLine.g + 1 < lines.length ? lastQuizLine.g + 1 : lastQuizLine.g, [(right ? 'Correct. ' : 'Not quite. It\'s ' + (q.a ? 'true. ' : 'false. ')) + q.why]); }, 350);
+    };
+    P.resize = function () { var s = v.scenes[sceneIdx]; if (s && s.t === 'flow') { LL.drawFlow(stage, s, sceneIdx); reveal(li); } };
+    P.poster = function () { show(0); cap.textContent = lines[0] ? lines[0].text : ''; };
+    setMode(mode);
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* js/content/videos.js */
+/* Video lessons: one narrated, animated lesson per lot. Narration is written to be spoken ("section" for s,
+   "versus" for v). Visuals appear line by line. Quiz scenes use the lot's quick-fire statements (qi = index). */
+(function (LL) {
+  'use strict';
+
+  LL.video(1, { title: 'Legal System, Land and Title', sub: 'Kampong Lorong Buangkok', scenes: [
+    { t: 'title', say: ['Selamat datang to Lot 1. I\'m Pak Mat. In the next few minutes you\'ll learn how Singapore\'s legal system works, what counts as land, and what stays with the land when it is sold.', 'I\'ll stop you twice for a quick check, so stay awake.'] },
+    { t: 'talk', head: 'The court ladder (L1)', points: ['Court of Appeal: the final court', 'High Court: General and Appellate Divisions', 'State Courts and Family Justice Courts', 'Privy Council appeals ended in 1994'],
+      say: ['First, the system. Picture a ladder of courts.', 'At the top sits the Court of Appeal, Singapore\'s final court.', 'Below it, the High Court, with its General Division and Appellate Division.', 'Then the State Courts and the Family Justice Courts.', 'Appeals to the Privy Council in London ended in 1994. Check this ladder against your Lecture 1 slides.'] },
+    { t: 'compare', head: 'What binds a judge?', left: 'Binding', right: 'Only persuasive', rows: [['The ratio decidendi of a higher Singapore court', 'Obiter dicta: remarks made in passing'], ['Decisions within the same court hierarchy', 'English and other foreign decisions']],
+      say: ['Now, precedent.', 'A lower court must follow the ratio decidendi, the reason for the decision, of a higher court. Remarks made in passing, obiter dicta, only persuade.', 'English cases persuade too, but never bind. English common law and equity that applied before 12 November 1993 continue under the Application of English Law Act, so far as they suit Singapore.'] },
+    { t: 'compare', head: 'Civil or criminal?', left: 'Civil', right: 'Criminal', rows: [['Claimant versus defendant', 'Public Prosecutor versus accused'], ['Balance of probabilities', 'Beyond reasonable doubt'], ['Damages or an injunction', 'A fine or prison']],
+      say: ['Land disputes are civil, so know the difference.', 'A civil claim is brought by the injured party. A criminal case is brought by the Public Prosecutor.', 'Civil claims are proved on a balance of probabilities. Crimes must be proved beyond reasonable doubt.', 'The outcome is compensation or an injunction, not punishment. And remember: an arbitrator\'s award binds the parties, but a mediator only helps them settle.'] },
+    { t: 'flow', head: 'Three layers of ownership', nodes: [
+        { id: 's', label: 'The State', sub: 'owns all land', icon: 'scales', x: 14, y: 50, at: 0 },
+        { id: 'e', label: 'An estate', sub: '99 or 999-year lease, or perpetuity', icon: 'house', x: 50, y: 50, at: 1 },
+        { id: 't', label: 'Certificate of Title', sub: 'the proof', icon: 'scroll', x: 86, y: 50, at: 2 }],
+      links: [{ from: 's', to: 'e', label: 'grants', at: 1 }, { from: 'e', to: 't', label: 'recorded on', at: 2 }],
+      say: ['Now, land itself. Think in three layers.', 'The State owns all land and grants estates: an estate in perpetuity, or a lease of 99 or 999 years.', 'The Certificate of Title proves who holds the estate. And as a 99-year lease runs down, its value falls. That is lease decay.'] },
+    { t: 'steps', head: 'Fixture or chattel? Two tests', steps: ['Degree of annexation: fixed, or resting on its own weight?', 'Object of annexation: improving the land, or enjoying the item?', 'Today, purpose carries more weight'],
+      say: ['What goes with the land on a sale? Fixtures do, under section 6 of the CLPA. Chattels do not.', 'Test one, from Holland versus Hodgson: the degree of annexation. Fixed to the land suggests a fixture. Resting on its own weight suggests a chattel.', 'Test two: the object. Was it put there to improve the land permanently, or just so the item itself could be enjoyed?', 'Purpose now carries more weight. In D\'Eyncourt versus Gregory, statues resting on their own weight were fixtures, because they completed the design of the house.'] },
+    { t: 'case', head: 'When the item is the building', name: 'Elitestone v Morris [1997]', facts: 'A bungalow rested on concrete pillars, with no foundations.', held: 'It was part and parcel of the land. A building is not a chattel.', cite: 'If the item IS the building, skip the two tests.',
+      say: ['One case to remember.', 'In Elitestone versus Morris, a bungalow sat on concrete pillars with no foundations at all.', 'Held: it was part and parcel of the land. A building is not a chattel.', 'So if the item is the building itself, skip the two tests. The exception is local custom: a removable Malay stilt house was treated as a chattel in Kiah versus Sam.'] },
+    { t: 'quiz', qi: 2 },
+    { t: 'talk', head: 'Tenant\'s fixtures', points: ['Trade, ornamental and domestic fixtures', 'Remove them during the lease, or soon after', 'Make good any damage', 'Left behind after leaving? They are the landlord\'s'],
+      say: ['Tenants get their own rule.', 'A tenant may remove trade, ornamental and domestic fixtures,', 'but only during the lease, or a short time after,', 'and must make good any damage.', 'Leave them behind after giving up possession, and they belong to the landlord.'] },
+    { t: 'compare', head: 'How high? How deep?', left: 'Up', right: 'Down', rows: [['Only the airspace ordinary use needs (Bernstein v Skyviews)', 'If the title is silent: 30 m below the Singapore Height Datum (s 3B State Lands Act)'], ['A low sign or a swinging crane jib is trespass', 'Bocardo v Star Energy is the English rule, not ours']],
+      say: ['Last question: how far up and down does land go?', 'Up: only the airspace you need for ordinary use. A plane taking photos from a reasonable height is no trespass, Bernstein versus Skyviews. Down: if your title is silent, 30 metres below the Singapore Height Datum.', 'But a low signboard, or a crane jib swinging over your roof, is trespass. And Bocardo, the English deep-drilling case, is not the Singapore rule.'] },
+    { t: 'quiz', qi: 5 },
+    { t: 'recap', points: ['Only the ratio of a higher court binds', 'State, then estate, then Certificate of Title', 'Fixtures: degree first, then purpose, and purpose wins', 'Tenants remove fixtures in time, or lose them', 'Airspace: ordinary use. Subsoil: 30 m'],
+      say: ['Let\'s recap.', 'Only the ratio of a higher court binds.', 'Land runs from the State, to your estate, to the title.', 'Fixtures: degree first, then purpose, and purpose usually wins.', 'Tenants must remove their fixtures in time.', 'And ownership stops at ordinary airspace and 30 metres down. Now let\'s see what stuck. Your checkpoint quiz is next.'] }
+  ] });
+
+  LL.video(2, { title: 'Law and Equity', sub: 'Chancery Lane', scenes: [
+    { t: 'title', say: ['Welcome to Chancery Lane. I\'m Madam Chan. This lesson explains why we have two bodies of rules, law and equity, and who is bound by an equitable right.'] },
+    { t: 'flow', head: 'Where equity came from', nodes: [
+        { id: 'c', label: 'A claimant', sub: 'wronged, no remedy', icon: 'house', x: 14, y: 50, at: 0 },
+        { id: 'l', label: 'Common law courts', sub: 'no writ, no remedy', icon: 'gavel', x: 52, y: 22, at: 1 },
+        { id: 'k', label: 'The Lord Chancellor', sub: 'decides by conscience', icon: 'scales', x: 52, y: 78, at: 2 }],
+      links: [{ from: 'c', to: 'l', label: 'no writ fits', tone: 'bad', dash: true, at: 1 }, { from: 'c', to: 'k', label: 'petition', tone: 'ok', at: 2 }],
+      say: ['Centuries ago in England, the common law was rigid.', 'If no writ fitted your claim, you had no remedy. And the usual remedy was only money.', 'So people petitioned the King, who passed the petitions to the Lord Chancellor. His Court of Chancery decided by conscience. That became equity, and it invented the trust.'] },
+    { t: 'talk', head: 'Fusion in Singapore', points: ['One court applies law and equity (s 3 Civil Law Act)', 'Only administration was fused; the doctrines stay separate', 'In a conflict, equity prevails (Earl of Oxford\'s Case)'],
+      say: ['Today in Singapore,', 'one court applies both, under section 3 of the Civil Law Act.', 'But only the administration was fused. The two sets of doctrines stay separate.', 'And where law and equity conflict, equity prevails. That goes back to the Earl of Oxford\'s Case in 1615.'] },
+    { t: 'compare', head: 'Legal v equitable rights', left: 'Legal right', right: 'Equitable right', rows: [['Binds the whole world', 'Binds everyone except Equity\'s Darling'], ['For example, the registered owner', 'For example, a trust beneficiary, or a buyer under a signed contract']],
+      say: ['Here is why this matters for land.', 'A legal right binds the whole world. An equitable right binds everyone except one person: Equity\'s Darling.', 'Who holds equitable rights? A trust beneficiary, or a buyer who has signed a contract but not yet completed.'] },
+    { t: 'steps', head: 'Equity\'s Darling: four boxes', steps: ['Good faith', 'Value (a gift is not value)', 'Acquires the LEGAL estate', 'No notice: actual, constructive or imputed'],
+      say: ['Equity\'s Darling must tick four boxes.', 'Good faith.', 'Value. A gift does not count.', 'The legal estate. This is the mark students drop most often. A buyer with only a contract is not protected.', 'And no notice. Not actual notice, not constructive notice, which is what proper inquiries would have shown, and not imputed notice, which is what your solicitor knew.'] },
+    { t: 'trap', text: 'A buyer who has only a contract, not the legal estate, is not Equity\'s Darling.', say: ['Here\'s the trap. However honest the buyer is, without the legal estate they cannot be Equity\'s Darling.'] },
+    { t: 'quiz', qi: 1 },
+    { t: 'case', head: 'Equity looks at substance', name: 'Walsh v Lonsdale (1882)', facts: 'A written agreement for a 7-year lease, but no deed. The tenant moved in and paid rent.', held: 'Equity treated the agreement as the lease: equity treats as done what ought to be done.', cite: 'A specifically enforceable agreement for a lease is an equitable lease.',
+      say: ['A famous case: Walsh versus Lonsdale.', 'There was a written agreement for a seven-year lease, but no deed. The tenant moved in and paid rent.', 'Equity treated the agreement as if it were the lease, because equity treats as done what ought to be done.', 'So a missing deed means no legal lease, but not no lease at all.'] },
+    { t: 'compare', head: 'Remedies', left: 'Damages (common law)', right: 'Equitable remedies', rows: [['A right once breach is proved', 'Discretionary: specific performance, injunction, rescission'], ['Limited by remoteness (Hadley v Baxendale)', 'Refused for unclean hands or delay']],
+      say: ['Every answer needs a remedy.', 'Damages are a right once breach is proved. Equitable remedies, like specific performance and injunctions, are discretionary.', 'Damages are limited by remoteness, Hadley versus Baxendale. Equity refuses claimants with unclean hands, or who sat on their rights too long.'] },
+    { t: 'talk', head: 'The Torrens twist', points: ['On registered land, the register does the work of notice', 'Knowing of an unregistered interest is not fraud (s 47(2) LTA)', 'So protect an equitable interest with a caveat'],
+      say: ['One more twist for registered land.', 'The register now does the work that notice used to do.', 'Knowing about someone\'s unregistered interest is not fraud, under section 47(2) of the Land Titles Act.', 'So anyone holding an equitable interest should lodge a caveat.'] },
+    { t: 'quiz', qi: 10 },
+    { t: 'recap', points: ['Equity: born in Chancery, acting on conscience', 'Fusion of administration, not doctrine', 'Equity\'s Darling: good faith, value, legal estate, no notice', 'Walsh v Lonsdale: agreement treated as a lease', 'On the register: caveat it'],
+      say: ['Recap.', 'Equity was born in Chancery and acts on conscience.', 'Singapore fused the administration, not the doctrines.', 'Equity\'s Darling needs good faith, value, the legal estate, and no notice.', 'Walsh versus Lonsdale turns an agreement into an equitable lease.', 'And on registered land, protect it with a caveat. Checkpoint quiz coming up.'] }
+  ] });
+
+  LL.video(3, { title: 'Covenants', sub: 'Sunny Avenue, Nos. 11 & 13', scenes: [
+    { t: 'title', say: ['Hello, I\'m Auntie Leong from Sunny Avenue. I sold No. 13 and kept No. 11. Today we find out whether the promises my buyer made can bind whoever owns No. 13 next.'] },
+    { t: 'flow', head: 'The Sunny Avenue story', nodes: [
+        { id: 'a', label: 'Mrs Leong', sub: 'No. 11: the benefit', icon: 'house', x: 14, y: 30, at: 0 },
+        { id: 'g', label: 'Gabby', sub: 'No. 13: the burden', icon: 'house', x: 56, y: 30, at: 1 },
+        { id: 's', label: 'The students', sub: 'tenants of No. 13', icon: 'tower', x: 56, y: 80, at: 2 },
+        { id: 'n', label: 'A future buyer', sub: 'of No. 13', icon: 'sign', x: 88, y: 80, at: 3 }],
+      links: [{ from: 'g', to: 'a', label: '3 covenants', at: 1 }, { from: 'g', to: 's', label: 'lets rooms', at: 2 }, { from: 'g', to: 'n', label: 'sells?', dash: true, at: 3 }],
+      say: ['Here is the story from your past-year paper.', 'Mrs Leong sold No. 13 to Gabby, and Gabby gave three covenants: keep the roof in repair, private dwelling only, and maintain the boundary wall.', 'Then Gabby let rooms to nursing students.', 'The exam question is always the same: who is bound, and who can sue?'] },
+    { t: 'compare', head: 'Positive or negative? Look at the cost', left: 'Positive: costs money', right: 'Negative: restrains use', rows: [['"Not to allow the roof to fall into disrepair"', '"Not to use other than as a private dwelling"'], ['"To maintain the boundary wall"', '"Not to build above two storeys"']],
+      say: ['First, classify each covenant. Ignore the wording and ask what it costs to comply.', '"Not to allow the roof to fall into disrepair" sounds negative, but it costs money, so it is positive. "Private dwelling only" costs nothing. It is negative.', 'Maintaining a wall: positive. No building above two storeys: negative.'] },
+    { t: 'trap', text: '"Not to allow ... to fall into disrepair" is POSITIVE. Classify by cost, not by wording.', say: ['That is the most common trap in this topic. Classify by cost, not by the words used.'] },
+    { t: 'talk', head: 'Original parties: privity of contract', points: ['Mrs Leong and Gabby made the promise: contract decides', 'Gabby stays liable after letting or selling', 'No running rules needed between them'],
+      say: ['Step two: are the original parties still in the picture?', 'Mrs Leong and Gabby made the promise, so privity of contract decides.', 'Gabby stays liable even after she moves out or sells.', 'You don\'t need the running rules between them at all.'] },
+    { t: 'compare', head: 'Does it run to the next owner?', left: 'Common law', right: 'Equity', rows: [['Burden: NEVER (Austerberry; Rhone v Stephens)', 'Burden: negative covenants only, against a buyer with notice (Tulk v Moxhay)'], ['Benefit: if it touches and concerns the land (Swift)', 'Benefit: annexation, assignment or a building scheme']],
+      say: ['Now the successors. Benefit and burden are separate questions.', 'The burden never runs at common law. Austerberry said so, and Rhone versus Stephens confirmed it. In equity, only a negative burden runs, against a buyer with notice. That is Tulk versus Moxhay.', 'The benefit passes more easily: at law if the covenant touches and concerns the land, and in equity by annexation, assignment or a building scheme.'] },
+    { t: 'case', head: 'The equity route', name: 'Tulk v Moxhay (1848)', facts: 'A Leicester Square garden was sold with a promise to keep it open. Moxhay bought later, knew of the promise, and wanted to build.', held: 'Injunction. Buying with notice and ignoring the restriction is unconscionable.', cite: 'A negative covenant binds a successor with notice, in equity.',
+      say: ['The case behind the equity route.', 'A garden in Leicester Square was sold with a promise to keep it open. Years later Moxhay bought it, knew about the promise, and wanted to build.', 'The court granted an injunction. Buying with notice and then ignoring the restriction is unconscionable.', 'On registered land, a covenant entered on the Certificate of Title gives the buyer that notice.'] },
+    { t: 'quiz', qi: 2 },
+    { t: 'steps', head: 'Getting round the positive burden rule', steps: ['Chain of indemnity covenants', 'Halsall v Brizell: take the benefit, bear the burden', 'Management corporation in a strata scheme', 'Sue the original covenantor'],
+      say: ['Positive burdens don\'t run, so how do lawyers cope?', 'A chain of indemnity covenants passes the cost down the line.', 'Halsall versus Brizell: if you use the road, you pay for the road.', 'In strata developments, the management corporation collects contributions from every owner.', 'And you can always sue the original covenantor.'] },
+    { t: 'quiz', qi: 0 },
+    { t: 'recap', points: ['Classify by cost: positive or negative', 'Original parties: privity of contract', 'Burden: never at law; negative only in equity, with notice', 'Benefit: touch and concern, or annexation', 'Positive burdens: use a workaround'],
+      say: ['Recap.', 'Classify every covenant by cost.', 'Between the original parties, privity of contract decides.', 'The burden never runs at law, and in equity only negative covenants run, against buyers with notice.', 'The benefit passes if it touches and concerns the land, or by annexation.', 'And positive burdens need a workaround. On to your checkpoint.'] }
+  ] });
+
+  LL.video(4, { title: 'Easements, Support and Licences', sub: 'Tai Seng Industrial Estate', scenes: [
+    { t: 'title', say: ['I\'m Engineer Rahman, and this is the factory estate at Tai Seng. Today: rights over a neighbour\'s land, what happens when a neighbour digs, and why permission is not the same as a right.'] },
+    { t: 'steps', head: 'Re Ellenborough Park: four tests', steps: ['A dominant and a servient tenement', 'It accommodates the dominant land', 'Different owners', 'Capable of grant: definite, and no ouster'],
+      say: ['An easement is a right over a neighbour\'s land that passes with the land. It must pass four tests from Re Ellenborough Park.', 'One: a dominant tenement that benefits, and a servient tenement that carries the burden.', 'Two: the right must accommodate the dominant land, meaning it benefits the land itself, not just the owner.', 'Three: the two plots must have different owners.', 'Four: it must be capable of forming the subject of a grant. Definite, and not so big that it shuts the owner out.'] },
+    { t: 'compare', head: 'Which test fails?', left: 'Claimed right', right: 'Why it fails', rows: [['Hill v Tupper: a boat-hire monopoly on a canal', 'Accommodation: a business perk, not a benefit to land'], ['Copeland v Greenhalf: storing vehicles; Batchelor v Marlow: all-day parking', 'Ouster: they exclude the servient owner']],
+      say: ['The examiner loves borderline rights.', 'In Hill versus Tupper, a monopoly to hire boats on a canal failed test two. It was a business advantage, not a benefit to land.', 'Storing vehicles on a strip of land, and parking all day on weekdays, failed test four. They shut the owner out. That is ouster.'] },
+    { t: 'quiz', qi: 3 },
+    { t: 'flow', head: 'The basement dig (practice paper)', nodes: [
+        { id: 'p', label: 'Printwell', sub: '4-storey printing factory', icon: 'factory', x: 20, y: 50, at: 0 },
+        { id: 'c', label: 'Costco', sub: 'basement car park dig', icon: 'gavel', x: 80, y: 50, at: 1 }],
+      links: [{ from: 'c', to: 'p', label: 'support removed: cracks!', tone: 'bad', at: 2 }],
+      say: ['Here is the sample question from your practice paper.', 'Costco dug a basement car park right up to the boundary, with sheet piles but no continuous monitoring.', 'The soil settled, and Printwell\'s factory cracked so badly it had to stop operating.'] },
+    { t: 'compare', head: 'The right of support', left: 'England', right: 'Singapore', rows: [['The natural right protects land only', 'Xpress Print v Monocrafts: the duty covers buildings too'], ['A building needs an easement of support (Dalton v Angus)', 'Add negligence for no monitoring; lost profits recoverable']],
+      say: ['Every landowner has a natural right of support from the neighbouring soil.', 'In England, that protects the land only. A building needs an easement of support, as in Dalton versus Angus. In Singapore, Xpress Print versus Monocrafts extended the duty to buildings.', 'Then add negligence. Digging next to a factory with no monitoring is careless, and the lost profits follow the physical damage.'] },
+    { t: 'trap', text: 'State BOTH lines: the English rule, then Xpress Print. Engineers\' advice does not excuse the digging owner.', say: ['Here\'s the trap. State both lines, then Xpress Print. And following your engineers\' advice does not excuse you. Costco can only claim a contribution from them.'] },
+    { t: 'compare', head: 'Easement or licence?', left: 'Easement', right: 'Licence', rows: [['A property right in the land', 'Mere permission'], ['Binds later owners of the servient land', 'A bare licence is revocable and binds no buyer'], ['Created by grant, implication or long use', 'Estoppel if there was a promise, reliance and detriment (Inwards v Baker)']],
+      say: ['Finally, a right versus permission.', 'An easement is a property right. A licence is just permission.', 'An easement binds later owners. A bare licence can be revoked and does not bind a buyer. A contractual licence binds a buyer only through a constructive trust, Ashburn Anstalt.', 'But if someone promised you could stay, and you relied on that to your cost, estoppel may protect you, as in Inwards versus Baker.'] },
+    { t: 'quiz', qi: 9 },
+    { t: 'recap', points: ['Four tests: one fact per test', 'Weak spots: accommodation and ouster', 'Support: England, then Xpress Print, then negligence', 'Easement binds buyers; a bare licence does not'],
+      say: ['Recap.', 'Run all four tests, one fact per test.', 'Borderline rights fail on accommodation or ouster.', 'For support, give the English rule, then Xpress Print, then negligence.', 'And an easement binds buyers, while a bare licence does not. Checkpoint time.'] }
+  ] });
+
+  LL.video(5, { title: 'Mortgages', sub: 'Raffles Place', scenes: [
+    { t: 'title', say: ['Raffles Place. I\'m Mr Ong, a retired credit officer. Every tower here lends against land. Let\'s learn what the borrower can always do, and what the bank may do when things go wrong.'] },
+    { t: 'flow', head: 'Who\'s who', nodes: [
+        { id: 'b', label: 'Mortgagor', sub: 'the borrower', icon: 'house', x: 18, y: 50, at: 0 },
+        { id: 'l', label: 'Mortgagee', sub: 'the lender', icon: 'bank', x: 82, y: 50, at: 0 }],
+      links: [{ from: 'l', to: 'b', label: 'loan', at: 1 }, { from: 'b', to: 'l', label: 'registered charge over the land', at: 1 }],
+      say: ['First, don\'t mix up the names. The mortgagor is the borrower. The mortgagee is the lender.', 'The bank lends money, and takes a registered charge over the land. Under the Land Titles Act it holds a charge, not the legal title.', 'And the borrower always keeps the equity of redemption: the right to pay off the loan and take the land back free. Once a mortgage, always a mortgage.'] },
+    { t: 'steps', head: 'Clogs: how to decide', steps: ['Profile the borrower: advised company, or vulnerable person?', 'Name the category: postponement, option, tie, penalty', 'Is redemption made illusory, or the deal oppressive?', 'Give the remedy: redeem free of the term'],
+      say: ['Terms that shackle the right to redeem are called clogs. Here\'s the method.', 'Profile the borrower first. An advised company is held to its bargain. A vulnerable individual is protected.', 'Name the category of the term.', 'Ask whether it makes redemption illusory, or the bargain oppressive.', 'Then give the remedy: the borrower redeems free of the bad term.'] },
+    { t: 'compare', head: 'Valid or void?', left: 'The term', right: 'The result', rows: [['Fairclough: redeem only 6 weeks before the lease ends', 'VOID: redemption made illusory'], ['Knightsbridge: 40 years; commercial, advised parties', 'VALID: held to their bargain'], ['Samuel v Jarrah: lender\'s option to buy the property', 'VOID: a classic clog'], ['Kreglinger: a separate deal to buy sheepskins', 'VALID: a collateral advantage']],
+      say: ['Four cases you must know.', 'In Fairclough, the borrower could redeem only six weeks before his lease ran out. Void: redemption was worthless.', 'In Knightsbridge, companies agreed to repay over forty years. Valid: commercial, advised parties.', 'In Samuel versus Jarrah, the lender took an option to buy the mortgaged property. Void.', 'In Kreglinger, a separate deal to buy sheepskins survived repayment. Valid, as a collateral advantage.'] },
+    { t: 'case', head: 'Penalty interest', name: 'Hong Leong Finance v Tan Gin Huay [1999]', facts: 'Two elderly, illiterate sisters. Contract rate 5.5 to 6.75%; default rate 18%.', held: 'The 18% default rate was a penalty. "Industry practice" was no answer.', cite: 'Default interest and vulnerable borrowers. Add BOM v BOK: infirmity exploited, burden shifts.',
+      say: ['Now default interest.', 'In Hong Leong Finance, two elderly, illiterate sisters borrowed at about six percent, with eighteen percent on late payments.', 'Held: the eighteen percent was a penalty, out of all proportion to the lender\'s loss. Industry practice was no answer.', 'In your past-year paper the default rate was twenty-eight percent. Apply Hong Leong, and remember BOM versus BOK for unconscionability.'] },
+    { t: 'quiz', qi: 5 },
+    { t: 'steps', head: 'When the borrower defaults', steps: ['Possession: after one month\'s notice (s 75 LTA)', 'Power of sale: arisen AND exercisable (s 25 CLPA)', 'Sell with care for the true market value (Cuckmere)', 'No duty to wait for a better market'],
+      say: ['When the borrower defaults, the bank has remedies.', 'Possession: only after default and one month\'s notice, under section 75 of the Land Titles Act.', 'Sale: the power must have arisen, meaning a deed, money due and no exclusion, and be exercisable, under one of the triggers in section 25 of the CLPA.', 'When it sells, it must take reasonable care to get the true market value. Selling cheaply to its own subsidiary breaches that duty.', 'But it need not wait for a better market. China and South Sea Bank.'] },
+    { t: 'number', head: 'The lease link', big: '3 years', label: 'A mortgagor in possession may grant a lease of up to 3 years (s 23 CLPA); it binds the bank (s 89(1) LTA).',
+      say: ['And the lease link. If the borrower lets the property after mortgaging it, section 23 of the CLPA allows an occupation lease of up to three years, which section 89 of the Land Titles Act treats as authorised. That is why Gabby\'s 24-month lease binds Bestbank.'] },
+    { t: 'trap', text: 'Arisen needs ALL three conditions. Exercisable needs only ONE s 25 trigger.', say: ['The trap: the three conditions for the power to arise are all required, but any one trigger in section 25 makes it exercisable.'] },
+    { t: 'quiz', qi: 6 },
+    { t: 'recap', points: ['Mortgagor borrows; mortgagee lends', 'Profile the borrower, then name the clog', 'Penalty: out of all proportion (Hong Leong)', 'Possession needs notice; sale needs arisen + exercisable', 'Leases up to 3 years bind the bank'],
+      say: ['Recap.', 'The mortgagor borrows and the mortgagee lends.', 'Profile the borrower, then name the clog.', 'A default rate out of all proportion is a penalty.', 'Possession needs a month\'s notice, and sale needs the power arisen and exercisable.', 'And leases of up to three years bind the bank. Your checkpoint is next.'] }
+  ] });
+
+  LL.video(6, { title: 'Leases and Licences', sub: 'Orchard Road', scenes: [
+    { t: 'title', say: ['I\'m Madam Sim. I let shops on Orchard Road. Every tenant thinks the word "licence" on the agreement settles everything. Let me show you why it doesn\'t.'] },
+    { t: 'steps', head: 'Street v Mountford', steps: ['Exclusive possession', 'For a term', 'At a rent'],
+      say: ['If the occupier has three things, it is a lease, whatever the document is called.', 'Exclusive possession: they can keep everyone out, even the landlord.', 'For a term: a fixed or periodic period.', 'At a rent. As Lord Templeman said, a fork is a fork even if you call it a spade.'] },
+    { t: 'compare', head: 'What defeats exclusive possession?', left: 'Fact', right: 'Effect', rows: [['Real services that need access: meals, daily room cleaning', 'Licence: a lodger (Abbeyfield; Marchant)'], ['A clause never meant to be used', 'A sham, so ignored (Antoniades v Villiers)'], ['A spare key "for emergencies"', 'Not enough on its own (Aslan v Murphy)']],
+      say: ['So what can turn it into a licence?', 'Real attendance and services that need the owner to walk in at will. That makes the occupier a lodger.', 'But a clause the parties never meant to use, like a right to move someone else in, is a sham and gets ignored.', 'And a spare key kept for emergencies is not enough on its own. In your past-year paper, Gabby\'s locked room and weekly cleaner didn\'t stop the students having a lease.'] },
+    { t: 'quiz', qi: 1 },
+    { t: 'talk', head: 'Ending a lease', points: ['A fixed term ends when the term ends', 'A notice to quit only ends a periodic tenancy', 'Otherwise you need a break clause, or forfeiture'],
+      say: ['Can the landlord just give notice?', 'A fixed-term lease ends when the term ends.', 'A notice to quit only ends a periodic tenancy.', 'Otherwise the landlord needs a break clause, or must forfeit. So Gabby\'s notice in month 18 of a 24-month lease does nothing.'] },
+    { t: 'steps', head: 'Forfeiture in three steps', steps: ['A right to forfeit: a re-entry clause, or s 93 LTA for registered leases', 'The procedure: a s 18 CLPA notice, or s 18A for unpaid rent', 'No waiver: don\'t accept rent knowing of the breach'],
+      say: ['To end a lease for breach, go through three steps.', 'First, a right to forfeit. Usually an express re-entry clause. Section 93 of the Land Titles Act implies one only in registered leases.', 'Second, the right procedure. For most breaches, a section 18 notice giving the tenant time to remedy. For unpaid rent, section 18A lets the tenant pay the arrears and costs and keep the lease.', 'Third, no waiver.'] },
+    { t: 'trap', text: 'Accepting rent after you know of the breach waives the right to forfeit for that breach.', say: ['If the landlord accepts rent after finding out about the breach, it waives the right to forfeit for that breach.'] },
+    { t: 'compare', head: 'After an assignment: who sues whom?', left: 'Privity of contract', right: 'Privity of estate', rows: [['Original landlord and original tenant', 'Current landlord and current tenant'], ['Lasts for the contractual term (City of London v Fell)', 'Covenants that touch and concern the land (Spencer\'s Case)']],
+      say: ['When a lease is assigned, two kinds of privity matter. Always mention both.', 'Privity of contract links the original landlord and tenant. Privity of estate links the current ones.', 'The original tenant stays liable for the contractual term, City of London versus Fell. The assignee is bound by covenants that touch and concern the land, Spencer\'s Case.'] },
+    { t: 'case', head: 'Quiet enjoyment', name: 'OUE v Three Sixty Degree [2013]', facts: 'A rooftop bar at Mandarin Orchard lost its licence over a fire-safety limit, withheld rent, and was re-entered.', held: 'The no-set-off clause worked. No breach of quiet enjoyment: the landlord does not underwrite profits.', cite: 'Caveat lessee; no-set-off clauses; the limits of quiet enjoyment.',
+      say: ['A Singapore case on Orchard Road itself.', 'A rooftop bar lost its licence because of a fire-safety limit, stopped paying rent, and the landlord re-entered.', 'The court held the no-set-off clause worked, and there was no breach of quiet enjoyment. The landlord does not underwrite the tenant\'s profits.', 'The tenant takes the premises as it finds them: caveat lessee.'] },
+    { t: 'quiz', qi: 12 },
+    { t: 'recap', points: ['Exclusive possession, term, rent: a lease', 'Services, shams and keys: the usual traps', 'Fixed terms end at the end', 'Forfeiture: right, procedure, no waiver', 'Mention privity of contract AND estate'],
+      say: ['Recap.', 'Exclusive possession for a term at a rent makes a lease.', 'Watch for services, shams and spare keys.', 'Fixed terms end at the end.', 'Forfeiture needs a right, the procedure, and no waiver.', 'And mention both kinds of privity. Checkpoint next.'] }
+  ] });
+
+  LL.video(7, { title: 'Co-ownership and Trusts', sub: 'Sentosa Cove', scenes: [
+    { t: 'title', say: ['I\'m Ms Pillai, an estate lawyer. Two names on a title tell you very little. Today: how co-owners hold land, what happens when one dies, and who really owns the benefit.'] },
+    { t: 'compare', head: 'Joint tenancy v tenancy in common', left: 'Joint tenancy', right: 'Tenancy in common', rows: [['Each owns the whole', 'Each owns a separate share'], ['Survivorship: the last one standing takes all', 'Shares pass by Will or intestacy'], ['The default for two names on the title (s 53(1) LTA)', 'Created by words like "in equal shares"']],
+      say: ['First, how do they hold it at law?', 'Joint tenants each own the whole. Tenants in common own separate shares.', 'Joint tenancy carries survivorship: when one dies, the others take everything. A tenant in common\'s share passes by Will.', 'Two names on the title with no words of severance are joint tenants, under section 53(1) of the Land Titles Act.'] },
+    { t: 'flow', head: 'Zen, Belle and the Will', nodes: [
+        { id: 'z', label: 'Zen', sub: 'joint tenant, dies', icon: 'tower', x: 18, y: 40, at: 0 },
+        { id: 'b', label: 'Belle', sub: 'joint tenant', icon: 'house', x: 82, y: 40, at: 0 },
+        { id: 'k', label: 'The children', sub: 'Will: "all my assets"', icon: 'scroll', x: 50, y: 85, at: 1 }],
+      links: [{ from: 'z', to: 'k', label: 'Will?', tone: 'bad', dash: true, at: 1 }, { from: 'z', to: 'b', label: 'survivorship', tone: 'ok', at: 2 }],
+      say: ['Your past-year Case Study 2. Zen and Belle hold a penthouse as joint tenants.', 'Zen\'s Will left all his assets to his children.', 'But survivorship acts at the moment of death, before any Will. So the joint share goes to Belle, not to the children.'] },
+    { t: 'trap', text: 'A Will cannot pass a joint tenant\'s share. Check whether anything severed it BEFORE death.', say: ['Remember: a Will cannot pass a joint share. Always check whether anything severed the joint tenancy before death.'] },
+    { t: 'steps', head: 'Severing by statute', steps: ['A declaration in the approved form', 'Served on every other joint tenant', 'REGISTERED: severance takes effect only then'],
+      say: ['Singapore has a three-step statutory route, in section 53 of the Land Titles Act.', 'Sign a declaration in the approved form.', 'Serve it on every other joint tenant.', 'And register it. Severance happens only on registration. Chan Lung Kien versus Chan Shwe Ching overruled Diaz versus Diaz on this.'] },
+    { t: 'quiz', qi: 3 },
+    { t: 'talk', head: 'Severing in equity (Williams v Hensman)', points: ['Acting on your own share: a sale or mortgage', 'Mutual agreement', 'A mutual course of dealing', 'NOT a Will, and NOT failed negotiations (Burgess v Rawnsley)'],
+      say: ['Equity also recognises three routes.', 'Acting on your own share, for example selling or mortgaging it.', 'A mutual agreement between the co-owners.', 'Or a mutual course of dealing.', 'But a Will doesn\'t sever, and neither do failed buy-out talks, Burgess versus Rawnsley.'] },
+    { t: 'steps', head: 'Who owns the benefit?', steps: ['Look for actual intention first (Goh Swee Fang)', 'No evidence? Presume a resulting trust for the payer', 'Advancement may rebut it: parent to child, husband to wife', 'Shares are fixed at acquisition (Lau Siew Kim)'],
+      say: ['Now the trust behind the title.', 'Start with the evidence of actual intention. Presumptions are a last resort.', 'If there is no evidence, equity presumes a resulting trust for whoever paid. The person asserting the trust carries the burden of proof.', 'The presumption of advancement can rebut it between parent and child, or husband and wife. It does not traditionally help unmarried partners.', 'And the shares are fixed at the time of purchase. Later mortgage payments count only if that was the plan, Chan Yuen Lan.'] },
+    { t: 'talk', head: 'Patricia Khoo: four scenarios', points: ['Benefit intended now: beneficial joint tenancy', 'Benefit only on death: resulting trust until then', 'No benefit intended: resulting trust', 'Unclear: fall back on the presumptions'],
+      say: ['For names added without payment, use Patricia Khoo\'s four scenarios.', 'If the payer meant to benefit the other person right away, they are beneficial joint tenants.', 'If the benefit was only meant on the payer\'s death, there is a resulting trust until then.', 'If no benefit was meant at all, a resulting trust.', 'And if it\'s unclear, fall back on the presumptions. Zen\'s text, "to have and to hold forever", points to scenario one.'] },
+    { t: 'quiz', qi: 7 },
+    { t: 'recap', points: ['Legal title first, then the beneficial interest', 'Survivorship beats the Will', 'Statutory severance: declare, serve, REGISTER', 'Actual intention first; presumptions last', 'Women\'s Charter s 112 is for spouses only'],
+      say: ['Recap.', 'Legal title first, then the beneficial interest.', 'Survivorship beats the Will.', 'Statutory severance needs declaration, service and registration.', 'Actual intention first, presumptions last.', 'And the Women\'s Charter division on divorce is for spouses only. Checkpoint time.'] }
+  ] });
+
+  LL.video(8, { title: 'Sale and Purchase: the Contract', sub: 'Punggol', scenes: [
+    { t: 'title', say: ['Hi, I\'m Marcus. I lost my dream flat in Punggol over a WhatsApp chat. Learn from my mistake: when does a land deal become a binding contract?'] },
+    { t: 'steps', head: 'Three steps for every sale question', steps: ['Is there a valid contract?', 'Is it enforceable: signed writing, or part performance?', 'What remedy? And if no contract, what then?'],
+      say: ['Every sale question runs in three steps.', 'One: is there a valid contract? Offer, acceptance, and an intention to be bound.', 'Two: is it enforceable? Land contracts need signed writing, or part performance.', 'Three: what remedy follows? And if there\'s no contract, what happens to the money and any caveat?'] },
+    { t: 'flow', head: 'My WhatsApp deal', nodes: [
+        { id: 'm', label: 'Marcus', sub: 'buyer', icon: 'pen', x: 16, y: 32, at: 0 },
+        { id: 'l', label: 'Mr Lee', sub: 'seller', icon: 'house', x: 62, y: 32, at: 0 },
+        { id: 'r', label: 'Rival buyer', sub: 'offers $1.25m', icon: 'sign', x: 62, y: 85, at: 2 }],
+      links: [{ from: 'm', to: 'l', label: '$1.18m + $1,000 "goodwill"', at: 1 }, { from: 'l', to: 'm', label: '"subject to contract"', dash: true, at: 1 }, { from: 'l', to: 'r', label: 'grants an OTP', tone: 'bad', at: 2 }],
+      say: ['Here\'s what happened.', 'We agreed a price on WhatsApp and I paid a thousand dollars as a "goodwill deposit". But every message from Mr Lee ended "subject to contract".', 'Then someone offered more, and he granted them an option to purchase.'] },
+    { t: 'compare', head: '"Subject to contract": cite both cases', left: 'Norwest v Newport Mining (2011)', right: 'OCBC v Wong Hua Choon (2012)', rows: [['A strong presumption: no contract yet', 'The label is not decisive'], ['Only strong context rebuts it', 'Look at all the circumstances, objectively']],
+      say: ['Two Court of Appeal cases sit on either side. Always cite both.', 'Norwest says the label creates a strong presumption that there is no contract yet. OCBC says the label is not decisive.', 'Only strong context rebuts the presumption, so look at all the circumstances, objectively. In my case, the repeated label and the promised OTP meant no contract.'] },
+    { t: 'quiz', qi: 4 },
+    { t: 'talk', head: 'Options to purchase', points: ['To the buyer: an irrevocable offer (Spiro v Glencrown)', 'The contract forms when the option is exercised', 'Exercise exactly as the OTP says (JT Chanrai)', 'Option fee about 1%, deposit about 10%, stamp duty within 14 days'],
+      say: ['Most Singapore sales use an option to purchase.', 'To the buyer, it is an irrevocable offer. The seller cannot withdraw during the option period.', 'The contract only forms when the buyer exercises the option.', 'And exercise must follow the OTP exactly, in time and in the right form, JT Chanrai.', 'Typical numbers: an option fee of about one percent, a deposit of about ten percent, and stamp duty within fourteen days of exercise.'] },
+    { t: 'talk', head: 'Writing: s 6(d) Civil Law Act', points: ['Signed by the party being sued', 'The 3 Ps: parties, property, price', 'Emails can count (Joseph Mathew)', 'Or part performance, unequivocally referable (Hu Lee Impex)'],
+      say: ['Enforceability. Under section 6(d) of the Civil Law Act, you can\'t sue on a land contract without signed writing.', 'It must be signed by the party you are suing,', 'and show the three Ps: parties, property and price.', 'Emails have been accepted as writing.', 'Without writing, you need part performance: acts that point clearly to this contract, like moving in and renovating.'] },
+    { t: 'trap', text: 'A small "goodwill" payment is equivocal: not part performance, and not an option fee.', say: ['My thousand-dollar goodwill payment proved nothing. A small payment is equivocal. It is not part performance, and it is not an option fee.'] },
+    { t: 'compare', head: 'Misrepresentation', left: 'Actionable', right: 'Not actionable', rows: [['A false statement of fact: "no seepage"', 'A pure opinion or a sales puff'], ['A half-truth from someone who knows better', 'Silence, as a general rule']],
+      say: ['One more thing: what the seller or agent tells you.', 'A false statement of fact, like "no seepage", is actionable. A pure opinion or sales talk is not.', 'A half-truth from someone who knows the truth is actionable too. Fraudulent misrepresentation follows Derry versus Peek, and negligent misrepresentation falls under section 2(1) of the Misrepresentation Act.'] },
+    { t: 'quiz', qi: 9 },
+    { t: 'recap', points: ['Contract, then enforceability, then remedy', 'Subject to contract: Norwest and OCBC', 'OTP: exercise exactly, in time', 'Signed writing or part performance', 'No contract: no caveat, get the money back'],
+      say: ['Recap.', 'Contract, then enforceability, then remedy.', 'For subject to contract, cite Norwest and OCBC.', 'Exercise an option exactly as it says.', 'Land contracts need signed writing or part performance.', 'And if there\'s no contract, don\'t caveat. Just get your money back. On to the checkpoint.'] }
+  ] });
+
+  LL.video(9, { title: 'Torrens Title, Caveats and Stamp Duty', sub: 'Newton · the Land Registry', scenes: [
+    { t: 'title', say: ['I\'m Mr Lim from the Land Registry. In Singapore, the register is king. Let\'s see who wins when a forger gets involved, and how a caveat protects you.'] },
+    { t: 'talk', head: 'The register is king', points: ['Registration is the source of title (s 45)', 'Once registered, title is indefeasible (s 46(1))', 'Immediate indefeasibility (Frazer v Walker)'],
+      say: ['Three rules first.', 'Registration is what passes title, under section 45 of the Land Titles Act.', 'Once registered, the title is indefeasible, under section 46(1).', 'And Singapore follows immediate indefeasibility, from Frazer versus Walker. An innocent buyer who registers takes good title, even under a forged document.'] },
+    { t: 'flow', head: 'The forged transfer', nodes: [
+        { id: 'o', label: 'Mr Ong', sub: 'true owner', icon: 'house', x: 14, y: 30, at: 0 },
+        { id: 's', label: 'Seng', sub: 'the forger', icon: 'pen', x: 14, y: 82, at: 1 },
+        { id: 'b', label: 'Bobby', sub: 'registered buyer', icon: 'stamp', x: 56, y: 56, at: 1 },
+        { id: 'h', label: 'Harbour Bank', sub: 'registered mortgagee', icon: 'bank', x: 88, y: 56, at: 2 }],
+      links: [{ from: 's', to: 'b', label: 'forged transfer', tone: 'bad', at: 1 }, { from: 'b', to: 'h', label: 'mortgage', at: 2 }],
+      say: ['The case study from your Q and A bank.', 'Seng forged his uncle\'s signature and transferred the house to Bobby, whose own lawyer had warned him the signature looked wrong. Bobby said, "just register it".', 'Then Bobby mortgaged the house to Harbour Bank, which checked the register and suspected nothing.'] },
+    { t: 'compare', head: 'Fraud, or not fraud?', left: 'Fraud (s 46(2)(a))', right: 'Not fraud', rows: [['Actual dishonesty by the proprietor or his agent', 'Carelessness (Assets Co; UOB v Bebe)'], ['Wilful blindness after suspicion (Waimiha)', 'Mere knowledge of an unregistered interest (s 47(2))'], ['A promise never meant to be kept (Loke Yew)', 'A stranger\'s forgery the buyer knew nothing of']],
+      say: ['The main exception is fraud, in section 46(2)(a). But whose fraud, and what counts?', 'It must be actual dishonesty by the registered proprietor or his agent. Carelessness is not enough, as the Court of Appeal said in UOB versus Bebe.', 'Deliberately shutting your eyes after suspicion is aroused counts. That is wilful blindness, and it is Bobby. Merely knowing about someone\'s unregistered interest does not count.', 'A promise never meant to be kept is fraud. But a stranger\'s forgery does not defeat an innocent buyer.'] },
+    { t: 'quiz', qi: 2 },
+    { t: 'talk', head: 'Who else is protected?', points: ['Only purchasers: good faith and value (s 4)', 'A donee takes no better title (s 46(3))', 'Judge each registered person separately'],
+      say: ['Three more rules.', 'Only purchasers, who act in good faith and give value, are protected.', 'Someone who receives the land as a gift takes no better title than the giver.', 'And judge each registered person separately. Bobby\'s title falls, but the innocent bank\'s mortgage stands. Mr Ong gets his house back, still subject to the bank\'s mortgage.'] },
+    { t: 'steps', head: 'Caveats', steps: ['Lodge it for an existing interest in land (s 115)', 'A bare right to money is not enough (Salbiah)', 'Removal: open with s 127(1) or s 127(2), and say why', 'Lapses after 5 years; 30 days once a dealing is lodged'],
+      say: ['Unregistered interests need a caveat.', 'You can lodge one only for an interest in land that exists now, under section 115.', 'A bare right to be paid money is not enough.', 'To remove one, always open by choosing section 127(1) or 127(2), and say why. Where the facts are disputed, the court asks if there is a serious question to be tried.', 'A caveat lapses after five years, or in thirty days once a dealing is lodged and no court order is obtained.'] },
+    { t: 'number', head: 'ABSD', big: '60%', label: 'ABSD for foreigners. Joint buyers with different profiles pay the HIGHER rate on the whole price (slide figures).',
+      say: ['Stamp duty. Buyers also pay ABSD, additional buyer\'s stamp duty. On your lecture figures, a foreigner pays sixty percent. When joint buyers have different profiles, the higher rate applies to the whole price. It is never averaged. That is practice-paper question four: Claire and Andre pay the higher rate.'] },
+    { t: 'quiz', qi: 10 },
+    { t: 'recap', points: ['Registration gives title; immediate indefeasibility', 'Fraud: the proprietor\'s own dishonesty', 'Wilful blindness counts; carelessness does not', 'Each registered person judged separately', 'Caveat: open with s 127(1) or (2)'],
+      say: ['Recap.', 'Registration gives title, and Singapore follows immediate indefeasibility.', 'Fraud means the proprietor\'s own dishonesty.', 'Wilful blindness counts. Carelessness does not.', 'Judge each registered person separately.', 'And for caveats, open with section 127(1) or 127(2). Checkpoint next.'] }
+  ] });
+
+  LL.video(10, { title: 'Agency and Estate Agency', sub: 'Toa Payoh', scenes: [
+    { t: 'title', say: ['I\'m Ms Teo, a compliance officer. Estate agents handle the biggest purchase most people ever make. So the law asks a lot of them. Let\'s see how much.'] },
+    { t: 'steps', head: 'An agent is a fiduciary', steps: ['Good faith and loyalty', 'No conflict of interest', 'No secret profit', 'Disclose everything material, including every offer'],
+      say: ['An agent is a fiduciary. That means four duties.', 'Act in good faith and with loyalty.', 'Avoid conflicts of interest. Selling to a relative without telling the seller is a conflict, McPherson versus Watt.', 'Make no secret profit.', 'And disclose everything material, including every single offer.'] },
+    { t: 'compare', head: 'Honest or dishonest?', left: 'Hippisley v Knee Bros (honest)', right: 'Andrews v Ramsay (dishonest)', rows: [['Kept trade discounts, without realising it was wrong', 'Took a secret commission from the other side'], ['Must account for the profit', 'Must account AND forfeits commission'], ['Keeps the agreed commission', 'A bribe is held on constructive trust (FHR v Cedar)']],
+      say: ['Secret profits come in two flavours.', 'In Hippisley versus Knee Brothers, an honest auctioneer kept trade discounts. In Andrews versus Ramsay, a dishonest agent took money from the other side.', 'Both must account for the profit, but the dishonest agent also loses his commission.', 'The honest one keeps his commission. And a bribe is held on constructive trust for the principal, FHR versus Cedar Capital. That is your practice-paper KFM question: KFM repays the discounts, but keeps its two percent.'] },
+    { t: 'trap', text: 'A trade custom the principal didn\'t know about is no defence to a secret profit.', say: ['The trap: "it\'s the custom of the trade" is no defence if the principal did not know about it.'] },
+    { t: 'quiz', qi: 1 },
+    { t: 'flow', head: 'Kelvin and his cousin', nodes: [
+        { id: 'l', label: 'The Lees', sub: 'sellers', icon: 'house', x: 14, y: 30, at: 0 },
+        { id: 'k', label: 'Kelvin', sub: 'their agent', icon: 'sign', x: 50, y: 30, at: 0 },
+        { id: 'x', label: 'Two buyers', sub: '$1.32m offers', icon: 'pen', x: 86, y: 30, at: 1 },
+        { id: 'o', label: 'Orchid Holdings', sub: 'Kelvin\'s cousin', icon: 'bank', x: 50, y: 85, at: 2 }],
+      links: [{ from: 'l', to: 'k', label: 'appoint, 1%', at: 0 }, { from: 'x', to: 'k', label: 'offers hidden', tone: 'bad', dash: true, at: 1 }, { from: 'o', to: 'k', label: '$4,000 "fee"', tone: 'bad', at: 2 }],
+      say: ['A case study from your Q and A bank. The Lees appointed Kelvin to sell their condo.', 'Two buyers offered 1.32 million dollars. Kelvin never passed those offers on.', 'Instead he steered the sale to his cousin\'s company at 1.18 million, and took a four-thousand-dollar "appreciation fee" from it. That\'s a conflict, suppressed offers, and a bribe.'] },
+    { t: 'steps', head: 'Remedies for a bribe', steps: ['Account for the secret profit', 'Constructive trust over the bribe (FHR)', 'Rescind the tainted contract', 'Forfeit commission and claim damages'],
+      say: ['List the remedies one by one, then pick the ones that fit.', 'The agent accounts for the profit.', 'The bribe is held on constructive trust.', 'The Lees can rescind the sale to Orchid before completion.', 'Kelvin forfeits his commission, and the Lees can claim damages for the lost hundred and forty thousand.'] },
+    { t: 'compare', head: 'Who earns commission?', left: 'Exclusive (CEA form)', right: 'Non-exclusive', rows: [['Any binding sale in the validity period (Clause 6)', 'Only the effective cause of the sale (Grandhome)'], ['Even if the agent never met the buyer', 'Look for a break in the chain: time, price, another agent']],
+      say: ['Finally, commission.', 'Under the exclusive CEA form, Clause 6 makes commission due on any binding sale during the validity period. Under a non-exclusive arrangement, only the agent who was the effective cause of the sale gets paid, Grandhome.', 'That is true even if the exclusive agent never met the buyer. For non-exclusive agents, look for a break in the chain: time passing, a price change, or another agent doing the persuading.'] },
+    { t: 'quiz', qi: 6 },
+    { t: 'recap', points: ['Fiduciary: loyalty, no conflict, no secret profit, disclose', 'Honest agent accounts; dishonest agent also forfeits', 'Bribes: account, trust, rescind, forfeit, damages', 'Exclusive: Clause 6. Non-exclusive: effective cause', 'Apparent authority comes from the principal'],
+      say: ['Recap.', 'Agents are fiduciaries.', 'An honest agent accounts for a secret profit. A dishonest one also forfeits his commission.', 'For bribes, list the remedies.', 'Exclusive agency pays on any sale in the period. Non-exclusive pays the effective cause.', 'And apparent authority must come from the principal, never from the agent alone. That\'s all ten lots. After this checkpoint, the Exam Hall is waiting.'] }
+  ] });
+})(window.LL);
+
 /* js/ui.js */
 /* Land Lah! — screens, game loop and input. */
 (function (root) {
   'use strict';
   var LL = root.LL, U = LL.util, PX = LL.px, G = LL.grading, CH = LL.cheats;
   var doc = root.document;
-  var S = { save: null, view: 'title', params: {}, run: null, mark: null, tick: null, typer: null, ai: null, dl: null, aiBusy: null };
+  var S = { save: null, view: 'title', params: {}, run: null, mark: null, tick: null, typer: null, ai: null, dl: null, tts: null, player: null, aiBusy: null, vmode: null, vrate: 1 };
   var screen, overlay;
   var esc = U.esc, md = U.md, M = LL.MCQ_MARKS;
 
@@ -5443,6 +6296,8 @@ LL.chapter({
   }
   function go(view, params) {
     stopTimers();
+    if (S.player) { try { S.player.stop(); } catch (e) { /* ignore */ } S.player = null; }
+    if (S.vcount) { clearInterval(S.vcount); S.vcount = null; }
     S.view = view; S.params = params || {};
     render();
     try { root.scrollTo(0, 0); } catch (e) { /* ignore */ }
@@ -5672,20 +6527,20 @@ LL.chapter({
     var learned = (st.learned || []).length, cs = casesFor(ch.n);
     var gen = LL.extraQs.filter(function (q) { return q.ch === ch.n; }).length;
     h += '<div class="activities five">' +
-      actBtn('1', 'Lesson', learned + ' / ' + cards.length + ' cards read', 'lesson', 'book') +
+      actBtn('1', 'Watch the lesson', (st.watched ? '✓ watched · ' : '') + '~' + LL.videoMinutes(LL.videos[ch.n]) + ' min · narrated', 'watch', 'tv') +
       actBtn('2', 'Training', ch.qs.length + ' MCQs, instant feedback', 'train', 'brain') +
       actBtn('3', 'Lightning', st.lightning ? 'Best ' + st.lightning + ' pts' : '60 s of rapid true/false', 'lightning', 'bolt') +
       actBtn('4', 'Graded test', st.best ? 'Best ' + st.best.letter + ' (' + st.best.pct + '%)' : '10 MCQs · 25 min · /30', 'test', 'hourglass') +
       actBtn('5', 'Case drills', cs.length + ' case studies (ILAC)', 'lot-cases', 'scroll') +
       '</div>';
-    h += '<div class="ai-row">' + (S.ai ? btn(icon('bulb', 2) + ' New question in the prof\'s style (Claude)', 'gen-q', 'data-n="' + ch.n + '"', 'btn-small') : '') +
+    h += '<div class="ai-row">' + btn(icon('book', 2) + ' Read the lesson cards (' + learned + '/' + cards.length + ')', 'lesson', 'data-n="' + ch.n + '"', 'btn-small btn-ghost') + (S.ai ? btn(icon('bulb', 2) + ' New question in the prof\'s style (Claude)', 'gen-q', 'data-n="' + ch.n + '"', 'btn-small') : '') +
       (gen ? btn('Train on ' + gen + ' saved Claude question' + (gen > 1 ? 's' : ''), 'train-gen', 'data-n="' + ch.n + '"', 'btn-small btn-ghost') : '') +
       btn(icon('sheet', 2) + ' One-pager for this lot', 'lot-sheet', 'data-n="' + ch.n + '"', 'btn-small btn-ghost') + '</div>';
     if (st.best) h += '<p class="hub-best">Best result ' + stars(st.stars || 0, 3) + ' <b>' + st.best.letter + '</b> · ' + st.best.pct + '% · ' + st.attempts + ' attempt' + (st.attempts === 1 ? '' : 's') + '</p>';
     h += '<div class="hub-foot">' + btn('◂ Estate plan', 'go', 'data-view="map"', 'btn-small btn-ghost') + '</div></section>';
     return h;
     function actBtn(num, label, sub, act, ic) {
-      return '<button type="button" class="act" data-act="' + act + '" data-n="' + ch.n + '"><span class="act-num">' + num + '</span>' + icon(ic, 4) + '<span class="act-label">' + label + '</span><span class="act-sub">' + esc(sub) + '</span></button>';
+      return '<button type="button" class="act' + (act === 'watch' && !st.watched ? ' act-start' : '') + '" data-act="' + act + '" data-n="' + ch.n + '"> data-n="' + ch.n + '"><span class="act-num">' + num + '</span>' + icon(ic, 4) + '<span class="act-label">' + label + '</span><span class="act-sub">' + esc(sub) + '</span></button>';
     }
   };
   AFTER.lot = function () {
@@ -5727,19 +6582,20 @@ LL.chapter({
   }
 
   /* ---------- training ---------- */
-  function startTraining(n, qs, label, back) {
+  function startTraining(n, qs, label, back, extra) {
     var rand = U.rng(Date.now());
     qs = qs || U.shuffle(LL.getChapter(n).qs, rand);
     var p = player();
     var perkUses = p ? ({ hint: 2, eliminate: 2, retry: 2, notes: 3 })[p.perk] || 0 : 0;
     S.run = { kind: 'train', n: n, label: label || null, back: back || null, cs0: LL.concepts.snapshot(S.save), entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, checked: false, eliminated: [], score: 0, done: 0, perk: p ? p.perk : null, perkLeft: perkUses, hintShown: false };
+    if (extra) Object.keys(extra).forEach(function (k) { S.run[k] = extra[k]; });
     go('train');
   }
   VIEWS.train = function () {
     var r = S.run; if (!r || r.kind !== 'train') return VIEWS.map();
     if (r.i >= r.entries.length) return trainSummary(r);
     var e = r.entries[r.i], ch = LL.getChapter(e.q.ch || r.n);
-    var h = '<section class="play"><div class="play-head"><div><span class="stn-code">' + (r.label ? 'NB' : ch.code) + '</span><h2>' + (r.label ? esc(r.label) : 'Training · ' + esc(ch.short)) + '</h2></div>' +
+    var h = '<section class="play"><div class="play-head"><div><span class="stn-code">' + (r.label && !r.checkpoint ? 'NB' : ch.code) + '</span><h2>' + (r.label ? esc(r.label) : 'Training · ' + esc(ch.short)) + '</h2></div>' +
       '<div class="play-progress"><span>' + (r.i + 1) + ' / ' + r.entries.length + '</span><span class="score-chip">' + (r.score * M) + ' marks</span></div></div>';
     h += '<div class="bar"><span style="width:' + (100 * r.i / r.entries.length) + '%"></span></div>';
     h += '<article class="q-card">' + questionHTML(e, { locked: r.checked, showAnswer: r.checked, eliminated: r.eliminated }) + '</article>';
@@ -5785,9 +6641,106 @@ LL.chapter({
   function trainSummary(r) {
     var pct = r.entries.length ? Math.round(100 * r.score / r.entries.length) : 0;
     if (!r.label && r.n) { var st = chState(r.n); st.trained = Math.max(st.trained || 0, pct); persist(); }
-    return '<section class="summary"><h2 class="section-title">Training complete</h2>' +
+    if (r.checkpoint) { var cst = chState(r.n); cst.check = Math.max(cst.check || 0, pct); persist(); }
+    return '<section class="summary"><h2 class="section-title">' + (r.checkpoint ? 'Checkpoint complete' : 'Training complete') + '</h2>' +
       '<p class="big-num">' + (r.score * M) + ' <small>/ ' + (r.entries.length * M) + '</small></p><p class="lede">' + pct + '%. Practice only, not graded.</p>' + addedHTML(r.cs0) +
-      '<div class="title-actions">' + (r.label ? btn(r.back === 'mysheet' ? 'Back to my cheat sheet' : 'Back to the Notebook', 'go', 'data-view="' + (r.back || 'notebook') + '"', 'btn-hot') : btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Train again', 'train', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost')) + '</div></section>';
+      '<div class="title-actions">' + (r.checkpoint ? btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Rewatch the lesson', 'watch', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost') : r.label ? btn(r.back === 'mysheet' ? 'Back to my cheat sheet' : 'Back to the Notebook', 'go', 'data-view="' + (r.back || 'notebook') + '"', 'btn-hot') : btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Train again', 'train', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost')) + '</div></section>';
+  }
+
+  /* ---------- video lessons ---------- */
+  function voiceModes() {
+    var out = [];
+    if (S.tts) out.push(['claude', 'Claude voice']);
+    if (root.speechSynthesis && root.SpeechSynthesisUtterance) out.push(['device', 'Device voice']);
+    out.push(['captions', 'Captions only']);
+    return out;
+  }
+  function defaultMode() {
+    var m = voiceModes().map(function (x) { return x[0]; });
+    return S.vmode && m.indexOf(S.vmode) >= 0 ? S.vmode : m[0];
+  }
+  function videoFor(p) { return p.custom || LL.videos[p.n]; }
+  VIEWS.watch = function (p) {
+    var v = videoFor(p); if (!v) return VIEWS.map();
+    var ch = LL.getChapter(v.n), lines = LL.videoLines(v), quizzes = v.scenes.filter(function (s) { return s.t === 'quiz'; }).length;
+    var h = '<section class="watch"><div class="play-head"><div><span class="stn-code">' + esc(ch.code) + '</span><h2>' + (v.custom ? 'Explainer · ' : 'Watch · ') + esc(v.title || ch.title) + '</h2></div>' +
+      '<div class="play-progress"><span>~' + LL.videoMinutes(v) + ' min</span>' + (quizzes ? '<span class="score-chip">' + quizzes + ' quick checks</span>' : '') + '</div></div>';
+    h += '<div class="vplayer" id="vplayer"><div class="vstage">' +
+      '<canvas class="vstage-sky" data-skyline="' + ch.sky + '" aria-hidden="true"></canvas>' +
+      '<div class="vstage-scene" aria-live="polite"></div>' +
+      '<canvas class="vs-mentor" data-portrait="' + esc(ch.mentor[0]) + '" data-scale="4" aria-hidden="true"></canvas>' +
+      '<div class="vs-cap" id="vs-cap"><span class="vs-cap-text"></span></div>' +
+      '<button type="button" class="vs-big" data-act="v-play" aria-label="Play the lesson"><span>▶</span> PLAY</button>' +
+      '<div class="vs-end" id="vs-end" hidden></div>' +
+      '</div>' +
+      '<div class="vprog" id="vprog" role="group" aria-label="Scenes">' + v.scenes.map(function (s, i) {
+        var w = lines.filter(function (l) { return l.si === i; }).reduce(function (a, l) { return a + U.words(l.text); }, 0) || 4;
+        return '<button type="button" class="vseg vseg-' + s.t + '" data-act="v-seek" data-i="' + i + '" style="flex-grow:' + w + '" aria-label="Scene ' + (i + 1) + '"></button>';
+      }).join('') + '</div>' +
+      '<div class="vctrl">' + btn('⏮', 'v-prev', 'aria-label="Previous scene"', 'btn-small btn-ghost') + btn('▶ Play', 'v-toggle', 'id="v-toggle"', 'btn-small btn-hot') + btn('⏭', 'v-next', 'aria-label="Next scene"', 'btn-small btn-ghost') + btn('↺', 'v-restart', 'aria-label="Restart"', 'btn-small btn-ghost') +
+      '<label class="vsel"><span>Voice</span><select id="v-voice">' + voiceModes().map(function (m) { return '<option value="' + m[0] + '"' + (m[0] === defaultMode() ? ' selected' : '') + '>' + m[1] + '</option>'; }).join('') + '</select></label>' +
+      '<label class="vsel"><span>Speed</span><select id="v-rate">' + [0.85, 1, 1.15, 1.3, 1.5].map(function (r) { return '<option value="' + r + '"' + (r === S.vrate ? ' selected' : '') + '>' + r + '×</option>'; }).join('') + '</select></label>' +
+      btn('CC', 'v-cc', 'aria-pressed="true" id="v-cc"', 'btn-small btn-ghost') + '</div></div>';
+    h += '<p class="lede small">Keys: Space to play or pause, ← → to change scene, T or F to answer a quick check. ' + (S.tts ? 'The Claude voice reads it to you; the device voice works offline.' : (inViewer() ? 'If you hear nothing, choose another voice. Captions always show the narration.' : 'This copy uses your device\'s built-in voice; captions always show the narration.')) + '</p>';
+    return h + '<div class="hub-foot">' + (v.custom ? btn('◂ My cheat sheet', 'go', 'data-view="mysheet"', 'btn-small btn-ghost') : btn('◂ Lot', 'enter', 'data-n="' + v.n + '"', 'btn-small btn-ghost') + btn('Read the cards instead', 'lesson', 'data-n="' + v.n + '"', 'btn-small btn-ghost')) + '</div></section>';
+  };
+  AFTER.watch = function (p) {
+    var v = videoFor(p); if (!v) return;
+    var el = doc.getElementById('vplayer'), tbtn = doc.getElementById('v-toggle'), big = el.querySelector('.vs-big');
+    var segs = el.querySelectorAll('.vseg');
+    var player = new LL.Player({
+      video: v, root: el, tts: S.tts, mode: defaultMode(), rate: S.vrate,
+      onState: function (st) {
+        tbtn.textContent = st === 'playing' ? '❚❚ Pause' : (st === 'ended' ? '↺ Replay' : (st === 'quiz' ? 'Answer the check' : '▶ Play'));
+        tbtn.disabled = st === 'quiz';
+        big.hidden = st !== 'ready';
+        el.classList.toggle('is-quiz', st === 'quiz');
+        el.classList.toggle('is-paused', st === 'paused');
+      },
+      onScene: function (si) { Array.prototype.forEach.call(segs, function (sg, i) { sg.classList.toggle('done', i < si); sg.classList.toggle('cur', i === si); }); },
+      onQuiz: function (s, right) {
+        if (s.qi == null || v.custom) return;
+        var lk = v.n + ':' + s.qi, lm = S.save.ltMiss, cur = lm[lk];
+        if (!right) lm[lk] = { ch: v.n, i: s.qi, n: ((cur && cur.n) || 0) + 1, at: Date.now(), streak: 0, fixed: false };
+        else if (cur && !cur.fixed) { cur.streak = (cur.streak || 0) + 1; if (cur.streak >= 2) cur.fixed = true; }
+        persist();
+      },
+      onEnd: function (q) {
+        if (!v.custom) { var st = chState(v.n); st.watched = Date.now(); st.vq = { right: q.right, total: q.total }; persist(); }
+        showEnd(v, q);
+      },
+      onNotice: function (m) { flash(m); },
+      onMode: function (name) { var vs = doc.getElementById('v-voice'); if (vs && vs.querySelector('option[value="' + name + '"]')) vs.value = name; }
+    });
+    S.player = player;
+    player.poster();
+    var sel = doc.getElementById('v-voice'), rsel = doc.getElementById('v-rate');
+    /* hand focus back to the page after a change so Space and T/F keep driving the player */
+    sel.addEventListener('change', function () { S.vmode = sel.value; player.setMode(sel.value); sel.blur(); });
+    rsel.addEventListener('change', function () { S.vrate = +rsel.value; player.setRate(S.vrate); rsel.blur(); });
+  };
+  function showEnd(v, q) {
+    var end = doc.getElementById('vs-end'); if (!end) return;
+    var ch = LL.getChapter(v.n);
+    end.hidden = false;
+    if (v.custom) {
+      end.innerHTML = '<h3>Explainer done</h3><p>Now prove it: drill the questions on this concept.</p><div class="title-actions">' + btn('Drill this concept', 'mysheet-drill', 'data-key="' + esc(v.key || '') + '"', 'btn-hot') + btn('Rewatch', 'v-restart', '', 'btn-ghost') + '</div>';
+      return;
+    }
+    end.innerHTML = '<h3>Lesson complete</h3>' + (q.total ? '<p class="vs-end-score">Quick checks: <b>' + q.right + ' / ' + q.total + '</b>' + (q.right < q.total ? ' · the ones you missed are on your cheat sheet' : '') + '</p>' : '') +
+      '<p>Now let\'s test you: a 5-question checkpoint on ' + esc(ch.short) + ', then the graded test.</p>' +
+      '<div class="title-actions">' + btn('Start the checkpoint <span id="v-count">(10)</span>', 'checkpoint', 'data-n="' + v.n + '"', 'btn-hot') + btn('Rewatch', 'v-restart', '', 'btn-ghost') + btn('Not now', 'v-cancel-count', '', 'btn-ghost') + '</div>';
+    var left = 10;
+    S.vcount = setInterval(function () {
+      left--; var c = doc.getElementById('v-count'); if (c) c.textContent = '(' + left + ')';
+      if (left <= 0) { clearInterval(S.vcount); S.vcount = null; startCheckpoint(v.n); }
+    }, 1000);
+  }
+  function startCheckpoint(n) {
+    var ch = LL.getChapter(n), open = ch.qs.filter(function (q) { var m = S.save.mistakes[q.id]; return m && !m.fixed; });
+    var rest = U.shuffle(ch.qs.filter(function (q) { return open.indexOf(q) < 0; }));
+    var qs = U.shuffle(open).slice(0, 2).concat(rest).slice(0, 5);
+    startTraining(n, qs, 'Checkpoint · ' + ch.short, null, { checkpoint: true });
   }
 
   /* ---------- lightning ---------- */
@@ -6354,7 +7307,7 @@ LL.chapter({
       open.forEach(function (c) { (lots[c.ch] = lots[c.ch] || []).push(c); });
       h += '<div class="sheet-lots">' + Object.keys(lots).sort(function (a, b) { return a - b; }).map(function (n) { var c = LL.getChapter(+n); return '<span class="stn-code small">L' + n + '</span> ' + esc(c ? c.short : '') + ' <b>' + lots[n].length + '</b>'; }).join(' · ') + '</div>';
       h += '<div class="sheet-cards cs-doc">' + open.map(function (c) {
-        return LL.concepts.cardHTML(c, { actions: function (cc) { return '<div class="cs-actions">' + btn('Drill this concept', 'mysheet-drill', 'data-key="' + esc(cc.key) + '"', 'btn-small') + btn('Mark mastered', 'mysheet-learn', 'data-key="' + esc(cc.key) + '"', 'btn-small btn-paper') + '</div>'; } });
+        return LL.concepts.cardHTML(c, { actions: function (cc) { return '<div class="cs-actions">' + (S.ai ? btn('▶ Explain it in a video', 'mysheet-video', 'data-key="' + esc(cc.key) + '"', 'btn-small btn-hot') : '') + btn('Drill this concept', 'mysheet-drill', 'data-key="' + esc(cc.key) + '"', 'btn-small') + btn('Mark mastered', 'mysheet-learn', 'data-key="' + esc(cc.key) + '"', 'btn-small btn-paper') + '</div>'; } });
       }).join('') + '</div>';
     }
     if (done.length) h += '<details class="lib-sec"><summary>Mastered (' + done.length + ')</summary><div class="sheet-cards cs-doc">' + done.map(function (c) { return LL.concepts.cardHTML(c, { compact: true }); }).join('') + '</div></details>';
@@ -6539,6 +7492,34 @@ LL.chapter({
   A['nb-train'] = function () { var ids = U.shuffle(openMistakes()); if (ids.length) startTraining(null, ids.map(LL.findQuestion), 'Notebook revision'); };
   A['pt-fix'] = function (t) { var p = S.save.casePts[attr(t, 'data-id')]; if (p) { p.fixed = true; persist(); render(); } };
   A.lightning = function (t) { startLightning(+attr(t, 'data-n')); };
+  A.watch = function (t) { go('watch', { n: +attr(t, 'data-n') }); };
+  A['v-play'] = function () { if (S.player) S.player.play(); };
+  A['v-toggle'] = function () { if (S.player) S.player.toggle(); };
+  A['v-next'] = function () { if (S.player) S.player.next(); };
+  A['v-prev'] = function () { if (S.player) S.player.prev(); };
+  A['v-seek'] = function (t) { if (S.player) S.player.seekScene(+attr(t, 'data-i')); };
+  A['v-restart'] = function () { if (S.vcount) { clearInterval(S.vcount); S.vcount = null; } var e = doc.getElementById('vs-end'); if (e) e.hidden = true; if (S.player) S.player.restart(); };
+  A['v-cancel-count'] = function () { if (S.vcount) { clearInterval(S.vcount); S.vcount = null; } var c = doc.getElementById('v-count'); if (c) c.textContent = ''; };
+  A['v-cc'] = function (t) { var el = doc.getElementById('vplayer'), on = el.classList.toggle('no-cc'); t.setAttribute('aria-pressed', String(!on)); };
+  A.vq = function (t) { if (S.player) S.player.answer(attr(t, 'data-v') === '1'); };
+  A.checkpoint = function (t) { if (S.vcount) { clearInterval(S.vcount); S.vcount = null; } startCheckpoint(+attr(t, 'data-n')); };
+  A['mysheet-video'] = function (t) {
+    var c = findConcept(attr(t, 'data-key')); if (!c || !S.ai || S.aiBusy != null) return;
+    S.aiBusy = 'video';
+    showOverlay('<h2>Making your explainer</h2><p>Claude is scripting a short narrated video on <b>' + esc(c.name) + '</b> from your notes. This can take up to a minute.</p><div class="title-actions">' + btn('Cancel', 'ai-stop', '', 'btn-ghost') + '</div>');
+    aiCtl = new AbortController();
+    S.ai.json(LL.explainerPrompt(c), { modelTier: 'default', signal: aiCtl.signal, cache: false }).then(function (d) {
+      var v = LL.validateVideo(d, c.ch);
+      closeOverlay();
+      if (!v) { flash('That explainer did not come back in a usable shape. Try again.'); return; }
+      v.key = c.key;
+      go('watch', { custom: v });
+    }).catch(function (e) {
+      closeOverlay();
+      if (e && (e.code === 'not_granted' || e.code === 'sampling_disabled')) S.ai = null;
+      if (!(e && e.code === 'cancelled')) flash(aiErr(e && e.code));
+    }).then(function () { S.aiBusy = null; aiCtl = null; });
+  };
   A['lt-go'] = function () { S.run.started = true; render(); };
   A.lt = function (t) { lightningAnswer(attr(t, 'data-v') === '1'); };
   A.test = function (t) {
@@ -6695,6 +7676,14 @@ LL.chapter({
     if (ev.key === 'Escape' && !overlay.hidden) { closeOverlay(); return; }
     if (!overlay.hidden) return;
     var r = S.run;
+    if (S.view === 'watch' && S.player) {
+      if (ev.key === ' ' && ev.target && ev.target.tagName === 'BUTTON' && !ev.target.classList.contains('vseg')) return; /* a focused control handles its own Space */
+      if (ev.key === ' ' || ev.key === 'k') { ev.preventDefault(); if (S.player.state() !== 'quiz') S.player.toggle(); return; }
+      if (ev.key === 'ArrowRight') { ev.preventDefault(); S.player.next(); return; }
+      if (ev.key === 'ArrowLeft') { ev.preventDefault(); S.player.prev(); return; }
+      if (S.player.state() === 'quiz' && /^[tTfF]$/.test(ev.key)) { S.player.answer(/t/i.test(ev.key)); return; }
+      return;
+    }
     if (S.view === 'lightning' && r && r.started && !r.over) {
       if (ev.key === 't' || ev.key === 'T' || ev.key === 'ArrowLeft') { ev.preventDefault(); lightningAnswer(true); }
       if (ev.key === 'f' || ev.key === 'F' || ev.key === 'ArrowRight') { ev.preventDefault(); lightningAnswer(false); }
@@ -6722,6 +7711,15 @@ LL.chapter({
     var c = root.claude;
     if (!c || typeof c.use !== 'function') return;
     c.use('sample').then(function (s) { if (s) { S.ai = s; if (/^(lot|mark|cases|mysheet)$/.test(S.view)) render(); } }, function () { /* absent */ });
+    c.use('tts').then(function (t) {
+      if (!t) return;
+      S.tts = t;
+      if (S.view === 'watch') {
+        var sel = doc.getElementById('v-voice');
+        if (sel && !sel.querySelector('option[value="claude"]')) { var o = doc.createElement('option'); o.value = 'claude'; o.textContent = 'Claude voice'; sel.insertBefore(o, sel.firstChild); }
+        if (S.player && S.player.state() === 'ready' && !S.vmode) { S.player.setMode('claude'); if (sel) sel.value = 'claude'; }
+      }
+    }, function () { /* absent */ });
     c.use('downloads').then(function (d) { if (d) { S.dl = d; if (/^(cheats|mysheet)$/.test(S.view)) render(); } }, function () { /* absent */ });
   }
   function start(data) {
@@ -6739,6 +7737,7 @@ LL.chapter({
     root.addEventListener('resize', function () {
       clearTimeout(rt);
       rt = setTimeout(function () {
+        if (S.player) S.player.resize();
         Array.prototype.forEach.call(screen.querySelectorAll('canvas[data-clouds], canvas[data-skyline]'), function (c) {
           if (c.hasAttribute('data-clouds')) PX.clouds(c, +c.getAttribute('data-clouds'), { cell: +c.getAttribute('data-cell') || 6 });
           else PX.skyline(c, +c.getAttribute('data-skyline'));

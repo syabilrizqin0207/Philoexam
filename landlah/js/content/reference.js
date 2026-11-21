@@ -134,24 +134,24 @@
     { day: 'Saturday 21 Nov', theme: 'Diagnose, then the most-tested lots', items: [
       { id: 'p1', t: 'Sit Mock Paper 1, Section A only (20 MCQs, 60 min) for a baseline.', act: 'mockA:m1' },
       { id: 'p2', t: 'Read the Exam Pack: ILAC, timing, the issue spotter and the authority bank.', act: 'view:pack' },
-      { id: 'p3', t: 'Lot 9 Torrens: lesson, training, graded test.', act: 'lot:9' },
-      { id: 'p4', t: 'Lot 8 Sale and OTP: lesson, training, graded test.', act: 'lot:8' },
-      { id: 'p5', t: 'Lot 7 Co-ownership: lesson, training, graded test.', act: 'lot:7' },
+      { id: 'p3', t: 'Lot 9 Torrens: watch the video, checkpoint, graded test.', act: 'lot:9' },
+      { id: 'p4', t: 'Lot 8 Sale and OTP: watch the video, checkpoint, graded test.', act: 'lot:8' },
+      { id: 'p5', t: 'Lot 7 Co-ownership: watch the video, checkpoint, graded test.', act: 'lot:7' },
       { id: 'p6', t: 'Case drill: Mr Ong (Torrens, 20 marks). Mark it, read the model answer.', act: 'case:ong' },
       { id: 'p7', t: 'Case drill: Punggol (10 marks in 15 minutes).', act: 'case:punggol' },
       { id: 'p8', t: 'Notebook: redo every question you missed today.', act: 'view:notebook' }
     ] },
     { day: 'Sunday 22 Nov', theme: 'Mortgages, leases, covenants, agency', items: [
-      { id: 'p9', t: 'Lot 5 Mortgages: lesson, training, graded test.', act: 'lot:5' },
-      { id: 'p10', t: 'Lot 6 Leases: lesson, training, graded test.', act: 'lot:6' },
-      { id: 'p11', t: 'Lot 3 Covenants: lesson, training, graded test.', act: 'lot:3' },
-      { id: 'p12', t: 'Lot 10 Agency: lesson, training, graded test.', act: 'lot:10' },
+      { id: 'p9', t: 'Lot 5 Mortgages: watch the video, checkpoint, graded test.', act: 'lot:5' },
+      { id: 'p10', t: 'Lot 6 Leases: watch the video, checkpoint, graded test.', act: 'lot:6' },
+      { id: 'p11', t: 'Lot 3 Covenants: watch the video, checkpoint, graded test.', act: 'lot:3' },
+      { id: 'p12', t: 'Lot 10 Agency: watch the video, checkpoint, graded test.', act: 'lot:10' },
       { id: 'p13', t: 'Case drills: KFM and Printwell, the two sample questions in your practice paper.', act: 'case:kfm' },
       { id: 'p14', t: 'Full Mock Paper 2 under exam conditions (2 hours).', act: 'mock:m2' },
       { id: 'p15', t: 'Mark Section B (keyword marker, then Prof. Borough if available). Notebook.', act: 'view:notebook' }
     ] },
     { day: 'Monday 23 Nov', theme: 'Close the gaps, one more full paper, print', items: [
-      { id: 'p16', t: 'Lots 1, 2 and 4: skim the lesson, then the graded test.', act: 'lot:1' },
+      { id: 'p16', t: 'Lots 1, 2 and 4: watch the videos (1.3x speed is fine), then the graded tests.', act: 'lot:1' },
       { id: 'p17', t: 'Full Mock Paper 3 (new case) under exam conditions.', act: 'mock:m3' },
       { id: 'p18', t: 'Lightning rounds on your two weakest lots.', act: 'view:map' },
       { id: 'p19', t: 'My cheat sheet: drill every concept still marked "to fix".', act: 'view:mysheet' },

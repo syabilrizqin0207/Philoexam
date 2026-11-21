@@ -35,6 +35,31 @@ async function run(name, viewport) {
   await click('[data-act="enter"][data-n="9"]');
   await page.waitForTimeout(400);
   await snap('lot');
+  // the video lesson: captions voice, a quick check, the end card, then the checkpoint quiz
+  await click('.act[data-act="watch"]');
+  await page.selectOption('#v-voice', 'captions');
+  await page.selectOption('#v-rate', '1.5');
+  await page.locator('.vs-big').click({ force: true });
+  await page.waitForTimeout(400);
+  await snap('watch', false);
+  const segs = page.locator('.vseg');
+  const quizAt = await page.$$eval('.vseg', els => els.findIndex(e => e.classList.contains('vseg-quiz')));
+  await segs.nth(quizAt).click();
+  await page.waitForSelector('.vplayer.is-quiz', { timeout: 20000 });
+  await page.keyboard.press('t');
+  await page.waitForSelector('.vq-res:not([hidden])');
+  await snap('watch-quiz', false);
+  const flowAt = await page.$$eval('.vseg', els => els.findIndex(e => e.classList.contains('vseg-flow')));
+  if (flowAt >= 0) { await segs.nth(flowAt).click(); await page.waitForTimeout(1200); await snap('watch-flow', false); }
+  await segs.nth((await segs.count()) - 1).click();
+  await page.waitForSelector('#vs-end:not([hidden])', { timeout: 60000 });
+  await snap('watch-end', false);
+  await click('[data-act="checkpoint"]');
+  for (let i = 0; i < 5; i++) { await click('.q-card [data-act="pick"]'); await click('[data-act="next"]'); }
+  if (!(await page.locator('[data-act="test"]').count())) errors.push(name + ': checkpoint summary does not offer the graded test');
+  await snap('checkpoint');
+  await click('[data-act="enter"]');
+  if (!(await page.locator('.act[data-act="watch"] .act-sub:has-text("watched")').count())) errors.push(name + ': lot hub does not show the lesson as watched');
   await click('[data-act="lesson"]');
   await click('[data-act="card"][data-learn]');
   await snap('lesson');

@@ -284,6 +284,20 @@
       'kwwwwwwrrwk',
       'kkkkkkkkkkk'
     ],
+    tv: [
+      '...k....k...',
+      '....k..k....',
+      'kkkkkkkkkkkk',
+      'kbbbbbbbbbgk',
+      'kbbwbbbbbbgk',
+      'kbbwwbbbbbGk',
+      'kbbwwwbbbbgk',
+      'kbbwwbbbbbGk',
+      'kbbwbbbbbbgk',
+      'kbbbbbbbbbgk',
+      'kkkkkkkkkkkk',
+      '..kk....kk..'
+    ],
     calendar: [
       '.kk....kk.',
       'kkkkkkkkkk',
