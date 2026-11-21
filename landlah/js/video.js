@@ -22,6 +22,34 @@
     });
     return lines;
   };
+  /* What the narrator says after a quick-check answer (also recorded in the voice track). */
+  LL.quizFeedback = function (q, right) { return (right ? 'Correct. ' : 'Not quite. It\'s ' + (q.a ? 'true. ' : 'false. ')) + (q.why || ''); };
+  /* The recorded natural-voice track (js/content/voice.js + audio/lotNN.mp3), used only when every line
+     still matches the script it was recorded from. */
+  LL.voiceHash = function (s) { var x = 0x811c9dc5; for (var i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 0x01000193) >>> 0; } return x.toString(36); };
+  LL.voiceFor = function (v) {
+    var vt = LL.voiceTrack, t = v && !v.custom && vt && vt.lots && vt.lots[v.n];
+    if (!t) return null;
+    var lines = LL.videoLines(v);
+    if (lines.length !== t.lines.length) return null;
+    for (var i = 0; i < lines.length; i++) if (t.lines[i][2] !== LL.voiceHash(lines[i].text)) return null;
+    return t;
+  };
+  var blobs = {};
+  LL.voiceSrc = function (n, t) {
+    /* the single-file offline build carries the audio inline; the app and the artifact load it next to the page */
+    var el = root.document && root.document.getElementById('lla-' + n);
+    if (el && root.Blob && root.URL && root.atob) {
+      if (!blobs[n]) {
+        var b = root.atob(el.textContent.replace(/\s+/g, '')), u = new Uint8Array(b.length);
+        for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+        blobs[n] = root.URL.createObjectURL(new root.Blob([u], { type: 'audio/mpeg' }));
+      }
+      return blobs[n];
+    }
+    return t.src;
+  };
+  LL.CLAUDE_VOICES = ['buttery', 'airy', 'glassy', 'rounded'];
   LL.videoMinutes = function (v) {
     var w = 0; LL.videoLines(v).forEach(function (l) { w += U.words(l.text); });
     return Math.max(1, Math.round(w / 150 + v.scenes.length * 0.05));
@@ -99,10 +127,70 @@
     };
   }
 
-  function ClaudeVoice(tts) {
+  function StudioVoice(n, track) {
+    var audio = new root.Audio(), token = 0, tick = null, onFail = null, broken = false, run = null;
+    audio.preload = 'auto';
+    audio.src = LL.voiceSrc(n, track);
+    if ('preservesPitch' in audio) audio.preservesPitch = true;
+    function clipFor(l) {
+      if (l.g != null && l.g >= 0) { var c = track.lines[l.g]; return c ? [c[0], c[1]] : null; }
+      return track.fb[LL.voiceHash(l.text)] || null;
+    }
+    function halt() { clearInterval(tick); tick = null; }
+    audio.addEventListener('error', function () {
+      broken = true; halt();
+      if (run && onFail) { var r = run; run = null; token++; onFail('load', r.lines.slice(r.i)); }
+    });
+    return {
+      name: 'natural', resumable: true,
+      failed: function (cb) { onFail = cb; },
+      speak: function (lines, rate, hooks) {
+        var my = ++token; halt();
+        var clips = lines.map(clipFor);
+        if (broken || clips.some(function (c) { return !c; })) { if (onFail) onFail('missing', lines); return; }
+        var r = run = { lines: lines, i: 0, phase: 'line', hooks: hooks };
+        audio.playbackRate = rate || 1;
+        function begin(i) {
+          r.i = i; r.phase = 'line';
+          var want = clips[i][0] / 1000;
+          if (Math.abs(audio.currentTime - want) > 0.25) { try { audio.currentTime = want; } catch (e) { /* not seekable yet */ } }
+          hooks.line(lines[i]);
+        }
+        function step() {
+          if (my !== token) return halt();
+          var t = audio.currentTime * 1000;
+          if (r.phase === 'gap' && t >= clips[r.i][0] - 30) { r.phase = 'line'; hooks.line(lines[r.i]); return; }
+          if (r.phase === 'line' && (t >= clips[r.i][1] || audio.ended)) {
+            var k = r.i + 1;
+            if (k >= lines.length) { halt(); audio.pause(); run = null; hooks.done(); return; }
+            var gap = clips[k][0] - clips[r.i][1];
+            if (gap >= 0 && gap < 1500 && !audio.ended) { r.i = k; r.phase = 'gap'; } else begin(k);
+          }
+        }
+        this.go = function () {
+          var p = audio.play();
+          if (p && p.catch) p.catch(function (e) {
+            if (my !== token) return;
+            halt();
+            if (e && e.name === 'NotAllowedError') hooks.paused(lines.slice(r.i));
+            else if (onFail && !broken) { token++; onFail('play', lines.slice(r.i)); }
+          });
+          halt(); tick = setInterval(step, 40);
+        };
+        begin(0);
+        this.go();
+      },
+      pause: function () { halt(); audio.pause(); },
+      resume: function () { if (run && !broken) this.go(); },
+      stop: function () { token++; halt(); run = null; audio.pause(); },
+      setRate: function (x) { audio.playbackRate = x || 1; }
+    };
+  }
+
+  function ClaudeVoice(tts, voiceName) {
     var token = 0, cur = null, unsub = null, onFail = null, lastIdx = 0;
     return {
-      name: 'claude',
+      name: 'claude-' + (voiceName || 'buttery'), resumable: true,
       failed: function (cb) { onFail = cb; },
       speak: function (lines, rate, hooks) {
         var my = ++token, byId = {};
@@ -115,14 +203,14 @@
           lastIdx = lines.indexOf(l); hooks.line(l);
         });
         lastIdx = 0;
-        tts.speak(lines.map(function (l, k) { return { text: l.text, id: 'l' + k }; }), { rate: rate || 1, language: 'en' }).then(function () {
+        tts.speak(lines.map(function (l, k) { return { text: l.text, id: 'l' + k }; }), { rate: rate || 1, language: 'en', voice: voiceName || 'buttery' }).then(function () {
           if (my === token) hooks.done();
         }, function (err) {
           if (my !== token) return;
           var code = err && err.code, reason = err && err.reason;
           if (code === 'stopped' && (reason === 'viewer_stopped' || reason === 'hidden' || reason === 'interrupted' || reason === 'time_limit')) { hooks.paused(lines.slice(lastIdx)); return; }
           if (code === 'stopped') return;
-          if (onFail) onFail(code, lines.slice(lastIdx));
+          if (onFail) onFail(code || reason || 'upstream_error', lines.slice(lastIdx));
         });
       },
       pause: function () { try { tts.pause().catch(function () { /* ignore */ }); } catch (e) { /* ignore */ } },
@@ -293,8 +381,25 @@
     var quiz = { right: 0, total: 0, answered: {} }, pending = null;
     P.lines = lines;
 
+    var track = LL.voiceFor(v);
+    P.hasNatural = !!track;
+    function resumeFrom(rest) { return rest && rest.length && rest[0].g >= 0 ? rest[0].g : idx; }
     function backend(m) {
-      if (m === 'claude' && opts.tts) { var c = ClaudeVoice(opts.tts); c.failed(function (code, rest) { opts.onNotice && opts.onNotice('Claude\'s voice is unavailable just now (' + code + '). Switching to your device\'s voice.'); setMode(DeviceVoice().ok() ? 'device' : 'captions'); play(rest.length ? rest[0].g : idx); }); return c; }
+      if (m === 'natural' && track) {
+        var a = StudioVoice(v.n, track);
+        a.failed(function (why, rest) { opts.onNotice && opts.onNotice('The recorded voice did not load' + (why === 'load' ? '' : ' (' + why + ')') + ', so the lesson switches to ' + (DeviceVoice().ok() ? 'your device\'s voice.' : 'captions.')); setMode(DeviceVoice().ok() ? 'device' : 'captions'); play(resumeFrom(rest)); });
+        return a;
+      }
+      if (/^claude/.test(m) && opts.tts) {
+        var c = ClaudeVoice(opts.tts, m.split('-')[1]);
+        c.failed(function (code, rest) {
+          /* reading aloud switched off by the viewer: respect it and carry on in captions */
+          var next = code === 'not_granted' ? 'captions' : (track ? 'natural' : (DeviceVoice().ok() ? 'device' : 'captions'));
+          opts.onNotice && opts.onNotice(code === 'not_granted' ? 'Reading aloud is turned off for this page, so the lesson continues with captions.' : 'Claude\'s voice is unavailable just now (' + code + '). Switching to ' + (next === 'natural' ? 'the natural voice.' : next === 'device' ? 'your device\'s voice.' : 'captions.'));
+          setMode(next); play(resumeFrom(rest));
+        });
+        return c;
+      }
       if (m === 'device') { var d = DeviceVoice(); if (d.ok()) return d; }
       return TimerVoice();
     }
@@ -358,7 +463,7 @@
       voice.speak(seg, rate, hooks);
     }
     P.play = function () {
-      if (state === 'paused' && held && voice && voice.name === 'claude') { held = false; voice.resume(); state = 'playing'; root.classList.add('talking'); if (opts.onState) opts.onState(state); return; }
+      if (state === 'paused' && held && voice && voice.resumable) { held = false; voice.resume(); state = 'playing'; root.classList.add('talking'); if (opts.onState) opts.onState(state); return; }
       if (state === 'ended') { P.restart(); return; }
       if (state === 'quiz') return;
       play(idx);
@@ -392,7 +497,7 @@
       res.hidden = false; res.className = 'vq-res ' + (right ? 'ok' : 'no');
       res.innerHTML = '<b>' + (right ? 'Correct.' : 'Not quite: it is ' + (q.a ? 'TRUE' : 'FALSE') + '.') + '</b> ' + esc(q.why);
       var lastQuizLine = lines.filter(function (l) { return l.si === sceneIdx; }).pop();
-      pending = setTimeout(function () { play(lastQuizLine.g + 1 < lines.length ? lastQuizLine.g + 1 : lastQuizLine.g, [(right ? 'Correct. ' : 'Not quite. It\'s ' + (q.a ? 'true. ' : 'false. ')) + q.why]); }, 350);
+      pending = setTimeout(function () { play(lastQuizLine.g + 1 < lines.length ? lastQuizLine.g + 1 : lastQuizLine.g, [LL.quizFeedback(q, right)]); }, 350);
     };
     P.resize = function () { var s = v.scenes[sceneIdx]; if (s && s.t === 'flow') { LL.drawFlow(stage, s, sceneIdx); reveal(li); } };
     P.poster = function () { show(0); cap.textContent = lines[0] ? lines[0].text : ''; };

@@ -411,17 +411,20 @@
   }
 
   /* ---------- video lessons ---------- */
-  function voiceModes() {
+  function claudeModes() { return LL.CLAUDE_VOICES.map(function (n) { return ['claude-' + n, 'Claude · ' + n.charAt(0).toUpperCase() + n.slice(1)]; }); }
+  function voiceModes(v) {
     var out = [];
-    if (S.tts) out.push(['claude', 'Claude voice']);
+    if (LL.voiceFor(v)) out.push(['natural', 'Natural voice']);
+    if (S.tts) out = out.concat(claudeModes());
     if (root.speechSynthesis && root.SpeechSynthesisUtterance) out.push(['device', 'Device voice']);
     out.push(['captions', 'Captions only']);
     return out;
   }
-  function defaultMode() {
-    var m = voiceModes().map(function (x) { return x[0]; });
-    return S.vmode && m.indexOf(S.vmode) >= 0 ? S.vmode : m[0];
+  function defaultMode(v) {
+    var m = voiceModes(v).map(function (x) { return x[0]; }), pick = S.vmode || (S.save && S.save.voice);
+    return pick && m.indexOf(pick) >= 0 ? pick : m[0];
   }
+  function rememberVoice(m) { S.vmode = m; if (S.save) { S.save.voice = m; persist(); } }
   function videoFor(p) { return p.custom || LL.videos[p.n]; }
   VIEWS.watch = function (p) {
     var v = videoFor(p); if (!v) return VIEWS.map();
@@ -441,10 +444,10 @@
         return '<button type="button" class="vseg vseg-' + s.t + '" data-act="v-seek" data-i="' + i + '" style="flex-grow:' + w + '" aria-label="Scene ' + (i + 1) + '"></button>';
       }).join('') + '</div>' +
       '<div class="vctrl">' + btn('⏮', 'v-prev', 'aria-label="Previous scene"', 'btn-small btn-ghost') + btn('▶ Play', 'v-toggle', 'id="v-toggle"', 'btn-small btn-hot') + btn('⏭', 'v-next', 'aria-label="Next scene"', 'btn-small btn-ghost') + btn('↺', 'v-restart', 'aria-label="Restart"', 'btn-small btn-ghost') +
-      '<label class="vsel"><span>Voice</span><select id="v-voice">' + voiceModes().map(function (m) { return '<option value="' + m[0] + '"' + (m[0] === defaultMode() ? ' selected' : '') + '>' + m[1] + '</option>'; }).join('') + '</select></label>' +
+      '<label class="vsel"><span>Voice</span><select id="v-voice">' + voiceModes(v).map(function (m) { return '<option value="' + m[0] + '"' + (m[0] === defaultMode(v) ? ' selected' : '') + '>' + m[1] + '</option>'; }).join('') + '</select></label>' +
       '<label class="vsel"><span>Speed</span><select id="v-rate">' + [0.85, 1, 1.15, 1.3, 1.5].map(function (r) { return '<option value="' + r + '"' + (r === S.vrate ? ' selected' : '') + '>' + r + '×</option>'; }).join('') + '</select></label>' +
       btn('CC', 'v-cc', 'aria-pressed="true" id="v-cc"', 'btn-small btn-ghost') + '</div></div>';
-    h += '<p class="lede small">Keys: Space to play or pause, ← → to change scene, T or F to answer a quick check. ' + (S.tts ? 'The Claude voice reads it to you; the device voice works offline.' : (inViewer() ? 'If you hear nothing, choose another voice. Captions always show the narration.' : 'This copy uses your device\'s built-in voice; captions always show the narration.')) + '</p>';
+    h += '<p class="lede small">Keys: Space to play or pause, ← → to change scene, T or F to answer a quick check. ' + (LL.voiceFor(v) ? 'Narrated in a natural recorded voice; try the other voices in the Voice menu.' : S.tts ? 'Claude reads it to you; pick a Claude voice in the Voice menu.' : 'If you hear nothing, choose another voice.') + ' Captions always show the narration.' + '</p>';
     return h + '<div class="hub-foot">' + (v.custom ? btn('◂ My cheat sheet', 'go', 'data-view="mysheet"', 'btn-small btn-ghost') : btn('◂ Lot', 'enter', 'data-n="' + v.n + '"', 'btn-small btn-ghost') + btn('Read the cards instead', 'lesson', 'data-n="' + v.n + '"', 'btn-small btn-ghost')) + '</div></section>';
   };
   AFTER.watch = function (p) {
@@ -452,7 +455,7 @@
     var el = doc.getElementById('vplayer'), tbtn = doc.getElementById('v-toggle'), big = el.querySelector('.vs-big');
     var segs = el.querySelectorAll('.vseg');
     var player = new LL.Player({
-      video: v, root: el, tts: S.tts, mode: defaultMode(), rate: S.vrate,
+      video: v, root: el, tts: S.tts, mode: defaultMode(v), rate: S.vrate,
       onState: function (st) {
         tbtn.textContent = st === 'playing' ? '❚❚ Pause' : (st === 'ended' ? '↺ Replay' : (st === 'quiz' ? 'Answer the check' : '▶ Play'));
         tbtn.disabled = st === 'quiz';
@@ -479,7 +482,7 @@
     player.poster();
     var sel = doc.getElementById('v-voice'), rsel = doc.getElementById('v-rate');
     /* hand focus back to the page after a change so Space and T/F keep driving the player */
-    sel.addEventListener('change', function () { S.vmode = sel.value; player.setMode(sel.value); sel.blur(); });
+    sel.addEventListener('change', function () { rememberVoice(sel.value); player.setMode(sel.value); sel.blur(); });
     rsel.addEventListener('change', function () { S.vrate = +rsel.value; player.setRate(S.vrate); rsel.blur(); });
   };
   function showEnd(v, q) {
@@ -1479,8 +1482,15 @@
       S.tts = t;
       if (S.view === 'watch') {
         var sel = doc.getElementById('v-voice');
-        if (sel && !sel.querySelector('option[value="claude"]')) { var o = doc.createElement('option'); o.value = 'claude'; o.textContent = 'Claude voice'; sel.insertBefore(o, sel.firstChild); }
-        if (S.player && S.player.state() === 'ready' && !S.vmode) { S.player.setMode('claude'); if (sel) sel.value = 'claude'; }
+        if (sel && !sel.querySelector('option[value^="claude"]')) {
+          var before = sel.querySelector('option[value="device"], option[value="captions"]');
+          claudeModes().forEach(function (m) { var o = doc.createElement('option'); o.value = m[0]; o.textContent = m[1]; sel.insertBefore(o, before); });
+        }
+        var want = S.vmode || (S.save && S.save.voice);
+        if (sel && S.player && S.player.state() === 'ready') {
+          if (want && /^claude/.test(want)) { S.player.setMode(want); sel.value = want; }
+          else if (!want && !S.player.hasNatural) { S.player.setMode('claude-buttery'); sel.value = 'claude-buttery'; }
+        }
       }
     }, function () { /* absent */ });
     c.use('downloads').then(function (d) { if (d) { S.dl = d; if (/^(cheats|mysheet)$/.test(S.view)) render(); } }, function () { /* absent */ });

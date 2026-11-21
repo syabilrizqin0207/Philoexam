@@ -32,9 +32,16 @@ its own (it pulls in MCQs you have got wrong before), then the **graded test** (
 **training** with per-option explanations, a 60-second **lightning round**, **case drills**, and the original
 **lesson cards** for reading.
 
-- **Narration:** in the claude.ai artifact on a desktop browser that offers it, Claude reads the lesson aloud; otherwise
-  the browser's built-in voice (works offline); otherwise timed captions. Captions always show the words. Space
-  plays/pauses, ← → change scene, T/F answers a quick check. The video is drawn live in the page, not an MP4 file.
+- **Narration:** every lesson is pre-recorded in a natural male voice (the open-source Kokoro-82M neural voice,
+  "am_fenrir"), one MP3 per lot in `landlah/audio/`, so it sounds the same on every device, phones and Safari
+  included, and offline. The animation follows the recording line by line (`landlah/js/content/voice.js` holds each
+  line's start and end). The Voice menu also offers the four Claude voices (Buttery, Airy, Glassy, Rounded; claude.ai
+  artifact on desktop Chrome/Edge only), the browser's own voice, and captions only. Captions always show the words.
+  Space plays/pauses, ← → change scene, T/F answers a quick check. The video is drawn live in the page, not an MP4.
+- **Re-recording** after editing a script in `landlah/js/content/videos.js`:
+  `node scripts/export-narration.mjs > narration.json && python3 scripts/record-voice.py narration.json MODEL_DIR`
+  (MODEL_DIR holds `kokoro-v1.0.onnx` and `voices-v1.0.bin` from the kokoro-onnx GitHub release `model-files-v1.0`).
+  A lesson whose script no longer matches its recording falls back to the other voices until it is re-recorded.
 - **Explainer videos for your weak spots:** on *My cheat sheet*, "Explain it in a video" has Claude script a short
   narrated explainer for that one concept, from your notes only, then sends you to drill it.
 

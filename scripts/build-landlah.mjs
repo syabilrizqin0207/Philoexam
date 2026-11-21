@@ -1,6 +1,8 @@
 // Bundle Land Lah! into one self-contained HTML file.
 //   node scripts/build-landlah.mjs                 -> dist/land-lah.html (open it in any browser, works offline)
 //   node scripts/build-landlah.mjs --artifact out  -> also writes a body-only page for publishing as a claude.ai artifact
+//                                                     (publish landlah/audio/*.mp3 beside it as audio/lotNN.mp3)
+// The offline file carries the recorded narration (landlah/audio) inline, so its videos speak without the folder.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,11 +23,14 @@ const js = srcs.map(s => `/* ${s} */\n` + fs.readFileSync(path.join(app, s), 'ut
 const css = fs.readFileSync(path.join(app, 'css/style.css'), 'utf8');
 
 const inner = `${head}\n<style>\n${css}\n</style>\n${body}\n<script>\n${js}\n</script>\n`;
-const standalone = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${head}\n<style>\n${css}\n</style>\n</head>\n<body>\n${body}\n<script>\n${js}\n</script>\n</body>\n</html>\n`;
+const audioDir = path.join(app, 'audio');
+const audio = fs.existsSync(audioDir) ? fs.readdirSync(audioDir).filter(f => /^lot\d\d\.mp3$/.test(f)).sort() : [];
+const inlineAudio = audio.map(f => `<script type="application/octet-stream" id="lla-${+f.slice(3, 5)}">${fs.readFileSync(path.join(audioDir, f)).toString('base64')}</script>`).join('\n');
+const standalone = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${head}\n<style>\n${css}\n</style>\n</head>\n<body>\n${body}\n${inlineAudio}\n<script>\n${js}\n</script>\n</body>\n</html>\n`;
 
 fs.mkdirSync(path.join(repo, 'dist'), { recursive: true });
 fs.writeFileSync(path.join(repo, 'dist/land-lah.html'), standalone);
-console.log('wrote dist/land-lah.html', (standalone.length / 1024).toFixed(1) + ' KB');
+console.log('wrote dist/land-lah.html', (standalone.length / 1024).toFixed(1) + ' KB', audio.length ? `(narration for ${audio.length} lots inline)` : '');
 
 const k = process.argv.indexOf('--artifact');
 if (k > 0 && process.argv[k + 1]) {
