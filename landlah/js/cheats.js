@@ -23,51 +23,12 @@
 
   C.counts = function (save) {
     var q = Object.keys(save.mistakes).filter(function (id) { return LL.findQuestion(id); }).length;
-    var p = Object.keys(save.casePts || {}).length;
-    return { q: q, p: p, total: q + p };
+    var p = Object.keys(save.casePts || {}).length, k = LL.concepts.counts(save);
+    return { q: q, p: p, total: q + p, concepts: k.total, open: k.open, mastered: k.mastered };
   };
 
-  function mistakesHTML(save, includeFixed) {
-    var byLot = {}, trapCount = {};
-    Object.keys(save.mistakes).forEach(function (id) {
-      var m = save.mistakes[id], q = LL.findQuestion(id);
-      if (!q || (m.fixed && !includeFixed)) return;
-      (byLot[q.ch] = byLot[q.ch] || { qs: [], pts: [] }).qs.push({ q: q, m: m });
-      var keys = (m.traps && m.traps.length) ? m.traps : (q.trap ? [q.trap] : []);
-      keys.forEach(function (k) { if (LL.TRAPS[k]) trapCount[k] = (trapCount[k] || 0) + m.n; });
-    });
-    Object.keys(save.casePts || {}).forEach(function (id) {
-      var p = save.casePts[id];
-      if (p.fixed && !includeFixed) return;
-      (byLot[p.ch] = byLot[p.ch] || { qs: [], pts: [] }).pts.push(p);
-    });
-    var lots = Object.keys(byLot).map(Number).sort(function (a, c) { return a - c; });
-    if (!lots.length) return '<section class="cs-sec"><h2>My mistakes</h2><p class="cs-empty">No mistakes recorded yet. Take some graded tests, training runs or case drills first; everything you miss lands here.</p></section>';
-    var h = '<section class="cs-sec cs-mistakes"><h2>My mistakes</h2>';
-    var traps = Object.keys(trapCount).sort(function (a, c) { return trapCount[c] - trapCount[a]; });
-    if (traps.length) {
-      h += '<h3>Traps I fell for</h3><ol class="cs-traps">' + traps.map(function (k) {
-        var T = LL.TRAPS[k]; return '<li><span class="cs-lot">L' + T.ch + '</span> ' + esc(T.text) + (trapCount[k] > 1 ? ' <span class="cs-n">×' + trapCount[k] + '</span>' : '') + '</li>';
-      }).join('') + '</ol>';
-    }
-    lots.forEach(function (n) {
-      var g = byLot[n];
-      h += '<h3>' + esc(lotName(n)) + '</h3><ul class="cs-list">';
-      g.qs.sort(function (a, c) { return c.m.n - a.m.n; }).slice(0, 10).forEach(function (x) {
-        var q = x.q, ans;
-        if (q.t === 'mcq') ans = '<b>Answer:</b> ' + esc(clip(q.o[q.a], 200));
-        else {
-          var tr = q.s.map(function (s, i) { return s[1] ? '(' + U.roman(i) + ')' : null; }).filter(Boolean);
-          ans = '<b>True:</b> ' + (tr.length ? tr.join(', ') : 'none') + '. ' + (x.m.miss || []).map(function (i) { var s = q.s[i]; return s ? '<i>(' + U.roman(i) + ') ' + (s[1] ? 'TRUE' : 'FALSE') + ':</i> ' + esc(clip(s[2], 140)) : ''; }).join(' ');
-        }
-        h += '<li><span class="cs-topic">' + esc(q.topic) + '</span> ' + ans + (q.t === 'mcq' ? ' <span class="cs-why">' + esc(clip(q.why, 220)) + '</span>' : '') + '</li>';
-      });
-      g.pts.forEach(function (p) {
-        h += '<li class="cs-pt"><span class="cs-topic">Case point</span> ' + esc(p.t) + ' <span class="cs-why">(' + esc(p.title || '') + ', ' + p.m + ' mark' + (p.m === 1 ? '' : 's') + ')</span></li>';
-      });
-      h += '</ul>';
-    });
-    return h + '</section>';
+  function mistakesHTML(save, includeFixed, ai) {
+    return LL.concepts.sectionHTML(save, { mastered: includeFixed, ai: ai });
   }
 
   function packHTML() {
@@ -116,13 +77,20 @@
     '.cs-t th{background:#eef6fa;font-weight:700;width:32%}.cs-scores th,.cs-scores td{text-align:center;width:auto}',
     '.cs-dl{margin:0}.cs-dl dt{font-weight:700;color:#0e4a6b}.cs-dl dd{margin:0 0 4px 10px}.cs-idea{background:#fff6d6;padding:3px 6px}',
     '.cs-m{break-inside:avoid}.cs-empty{color:#43606f;font-style:italic}.cs-foot{color:#43606f;font-size:10.5px;margin-top:8px}',
+    '.cs-card{break-inside:avoid;border:1px solid #c8dde8;border-left:4px solid #b3261e;padding:4px 7px;margin:0 0 6px;background:#fff}',
+    '.cs-card.mastered{border-left-color:#2f9e5e;background:#f6fbf8}.cs-card-h{display:flex;flex-wrap:wrap;gap:3px 6px;align-items:baseline;margin-bottom:2px}',
+    '.cs-cname{color:#0b3550}.cs-kind{font-size:10px;color:#6a55d6;text-transform:uppercase;letter-spacing:.04em}.cs-meta2{margin-left:auto;font-size:10.5px;color:#b3261e;font-weight:700}',
+    '.cs-card.mastered .cs-meta2{color:#2f9e5e}.cs-card ul{margin:1px 0 3px;padding-left:15px}.cs-card li{margin:0 0 2px}.cs-card li.fx{color:#5d7480}',
+    '.cs-rule{background:#fff6d6;padding:2px 5px;margin:2px 0}.cs-rule ul{margin:0}.cs-notes{background:#eef6fa;padding:2px 5px;margin:2px 0}',
+    '.cs-cite{margin:2px 0 0;font-size:11.5px}.cs-line{margin:0;color:#2b4a5a}.cs-ai{border:1px dashed #6a55d6;padding:4px 8px;margin:0 0 8px;background:#f7f5ff;break-inside:avoid}',
+    '.cs-ai h5{margin:6px 0 2px;font-size:12px;color:#0b3550}.cs-ai ul{margin:0 0 3px;padding-left:15px}.cs-ai p{margin:2px 0}',
     '@media print{@page{size:A4;margin:9mm}.cs-doc{font-size:10px}.cs-cols{column-count:2;column-gap:7mm}.cs-doc h2{font-size:11.5px}.cs-doc h3{font-size:10.5px}.cs-t{font-size:9.5px}.cs-doc{-webkit-print-color-adjust:exact;print-color-adjust:exact}}'
   ].join('\n');
 
   /* opts: {mistakes, fixed, pack, lots:[n]} */
   C.build = function (save, opts, who) {
     var parts = [];
-    if (opts.mistakes) parts.push(mistakesHTML(save, opts.fixed !== false));
+    if (opts.mistakes) parts.push(mistakesHTML(save, opts.fixed !== false, opts.ai !== false));
     if (opts.pack) parts.push(packHTML());
     (opts.lots || []).slice().sort(function (a, c) { return a - c; }).forEach(function (n) { parts.push(lotHTML(n)); });
     var date = new Date().toLocaleString('en-SG', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });

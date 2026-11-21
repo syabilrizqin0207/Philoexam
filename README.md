@@ -36,15 +36,18 @@ a 60-second **lightning round**, a **graded test** (10 MCQs, 25 min, /30) and **
   each part and can write new questions in the prof's style.
 - **Exam Hall:** six fixed mock papers (no MCQ repeats across papers) plus a random paper. Full 2-hour sitting,
   Section A only, or Section B only. Paste is blocked in Section B, as in the real paper.
-- **Notebook and cheat sheets:** every wrong MCQ (with its trap) and every case point scored under half becomes a line
-  on your **My Mistakes** cheat sheet. Add the Exam Pack and one-pagers for weak lots, then save or print it.
+- **Automatic cheat sheet (My cheat sheet):** every MCQ, case-study point and lightning fact you get wrong is grouped
+  into a concept card that rebuilds after each attempt: the rule and the trap, the matching rule from your notes, what to
+  remember, and the cases and sections to cite (looked up in the case guide). Each results screen shows what was just
+  added. A concept is mastered after two right answers in a row. Drill any concept, print or save the sheet, and in the
+  claude.ai artifact ask Claude to condense it to one page. The sheet builder adds the Exam Pack and lot one-pagers.
 - **3-day plan** with deep links, and searchable open-book notes with an A–Z case index.
 
 Grading: 3 marks per MCQ, all or nothing, no penalty assumed. Letter grades use fixed bands for feedback only.
 Points marked **[check]** come from the source notes and need confirming against the lecture slides.
 
 ```
-npm run test:land    # answer keys, combinations, traps, marking schemes (every model answer must pass its own scheme), mock papers
+npm run test:land    # answer keys, combinations, traps, marking schemes (every model answer must pass its own scheme), mock papers, concept cards
 npm run build:land   # bundles landlah/ into dist/land-lah.html
 npm run smoke:land   # plays every screen in headless Chromium at desktop and phone widths
 ```

@@ -53,6 +53,7 @@ async function run(name, viewport) {
   await snap('exam');
   await click('[data-act="submit"]');
   await click('[data-act="do-submit"]');
+  if (!(await page.locator('.auto-sheet').count())) errors.push(name + ': report has no cheat-sheet panel');
   await snap('report');
   await click('[data-act="toggle-review"]');
   // a case drill
@@ -84,6 +85,16 @@ async function run(name, viewport) {
   await click('#btn-home');
   await click('[data-act="go"][data-view="notebook"]');
   await snap('notebook');
+  await click('[data-act="go"][data-view="mysheet"]');
+  if ((await page.locator('.sheet-cards .cs-card').count()) < 1) errors.push(name + ': my cheat sheet has no concept cards');
+  await snap('mysheet');
+  await click('[data-act="mysheet-drill"]');
+  await click('.q-card [data-act="pick"]');
+  if (!(await page.locator('.auto-note').count()) && !(await page.locator('.v-ok').count())) errors.push(name + ': no cheat-sheet note after an answer');
+  await snap('drill');
+  await click('[data-act="quit-train"]');
+  await click('[data-act="mysheet-learn"]');
+  await click('#btn-home');
   await click('[data-act="go"][data-view="cheats"]');
   await page.waitForTimeout(200);
   await snap('cheats');

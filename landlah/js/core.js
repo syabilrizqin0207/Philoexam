@@ -206,7 +206,7 @@
   LL.newSave = function () {
     return {
       v: 1, char: null, created: Date.now(), updated: 0, sound: true, unlockAll: true,
-      ch: {}, mocks: {}, cases: {}, mistakes: {}, casePts: {}, plan: {}, gen: []
+      ch: {}, mocks: {}, cases: {}, mistakes: {}, casePts: {}, ltMiss: {}, aiSheet: null, plan: {}, gen: []
     };
   };
 

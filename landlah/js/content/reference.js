@@ -154,12 +154,12 @@
       { id: 'p16', t: 'Lots 1, 2 and 4: skim the lesson, then the graded test.', act: 'lot:1' },
       { id: 'p17', t: 'Full Mock Paper 3 (new case) under exam conditions.', act: 'mock:m3' },
       { id: 'p18', t: 'Lightning rounds on your two weakest lots.', act: 'view:map' },
-      { id: 'p19', t: 'Notebook: clear every item.', act: 'view:notebook' },
-      { id: 'p20', t: 'Build and print your cheat sheets: My Mistakes, the Exam Pack, and one-pagers for weak lots.', act: 'view:cheats' },
+      { id: 'p19', t: 'My cheat sheet: drill every concept still marked "to fix".', act: 'view:mysheet' },
+      { id: 'p20', t: 'Print your automatic cheat sheet, plus the Exam Pack and one-pagers for weak lots.', act: 'view:cheats' },
       { id: 'p21', t: 'Pack: printed notes, laptop charged, charger, student card. Sleep by 11 pm.' }
     ] },
     { day: 'Tuesday 24 Nov', theme: 'Exam day', items: [
-      { id: 'p22', t: '7:30 am: read your My Mistakes sheet once. No new material.', act: 'view:cheats' },
+      { id: 'p22', t: '7:30 am: read your cheat sheet once. No new material.', act: 'view:mysheet' },
       { id: 'p23', t: '8:30 am: at Biz2, 05-11. Paper runs 9:00 to 11:00.' }
     ] }
   ];

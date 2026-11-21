@@ -758,6 +758,38 @@ textarea.ans:focus { outline: none; box-shadow: 0 0 0 4px var(--ink), 0 0 0 7px 
 .chip-static { cursor: default; box-shadow: 0 0 0 2px var(--line); color: var(--text-dim); }
 .chip-static:hover { background: var(--panel); }
 
+/* ---------- automatic cheat sheet ---------- */
+.auto-sheet { background: var(--panel); padding: 14px 16px; box-shadow: 0 0 0 3px var(--star); display: flex; flex-direction: column; gap: 10px; }
+.auto-sheet.clean { box-shadow: 0 0 0 2px var(--line); flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+.auto-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.auto-head h3 { font-family: var(--f-display); font-size: 12px; color: var(--star); line-height: 1.5; }
+.auto-head span { font-family: var(--f-num); font-size: 20px; color: var(--cream); }
+.auto-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 8px; color: #0b1d2a; font-size: 14px; }
+.auto-cards .cs-card { margin: 0; }
+.auto-more { font-size: 14px; color: var(--text-dim); }
+.auto-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.auto-note { display: flex; gap: 8px; align-items: center; font-size: 14px; color: #3b2a8c; background: #f0edff; padding: 6px 10px; }
+.sheet-stats { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--f-num); font-size: 22px; color: var(--text-dim); }
+.sheet-stats b { color: var(--star); font-size: 28px; }
+.sheet-lots { font-family: var(--f-num); font-size: 18px; color: var(--text-dim); line-height: 1.8; }
+.sheet-lots b { color: var(--star); }
+.sheet-cards.cs-doc { font-size: 14.5px; background: transparent; }
+.sheet-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 12px; align-items: start; background: transparent !important; font-size: 14.5px; }
+.sheet-cards .cs-card { margin: 0; padding: 10px 12px; box-shadow: 0 0 0 3px var(--ink); }
+.lib-sec .sheet-cards { padding-bottom: 6px; }
+.cs-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.btn-paper { --b1: #ffffff; --b2: #eef5f8; --b3: #d4e4ec; color: var(--ink); }
+.ai-sheet { background: var(--paper); color: var(--ink); padding: 14px 16px; box-shadow: 0 0 0 4px var(--ink), 0 0 0 6px var(--violet-2); display: flex; flex-direction: column; gap: 10px; }
+.ai-sheet-head { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.ai-sheet-head > div { flex: 1 1 260px; min-width: 0; }
+.ai-sheet-head h3 { font-family: var(--f-display); font-size: 12px; color: var(--violet); line-height: 1.5; }
+.ai-sheet-head p { font-size: 14px; color: #42606f; }
+.ai-sheet .ai-busy { color: var(--ink); background: #fff7d6; box-shadow: 0 0 0 2px var(--part); }
+.ai-sheet-body { font-size: 15px; line-height: 1.55; columns: 2 320px; column-gap: 28px; }
+.ai-sheet-body h5 { break-after: avoid; margin: 8px 0 2px; font-family: var(--f-label); font-size: 13px; color: var(--red); }
+.ai-sheet-body ul { margin: 0 0 6px; padding-left: 1.2em; }
+.ai-sheet-meta { font-size: 13px; color: #42606f; column-span: all; }
+
 </style>
 </head>
 <body>
@@ -1003,7 +1035,7 @@ textarea.ans:focus { outline: none; box-shadow: 0 0 0 4px var(--ink), 0 0 0 7px 
   LL.newSave = function () {
     return {
       v: 1, char: null, created: Date.now(), updated: 0, sound: true, unlockAll: true,
-      ch: {}, mocks: {}, cases: {}, mistakes: {}, casePts: {}, plan: {}, gen: []
+      ch: {}, mocks: {}, cases: {}, mistakes: {}, casePts: {}, ltMiss: {}, aiSheet: null, plan: {}, gen: []
     };
   };
 
@@ -4401,12 +4433,12 @@ LL.chapter({
       { id: 'p16', t: 'Lots 1, 2 and 4: skim the lesson, then the graded test.', act: 'lot:1' },
       { id: 'p17', t: 'Full Mock Paper 3 (new case) under exam conditions.', act: 'mock:m3' },
       { id: 'p18', t: 'Lightning rounds on your two weakest lots.', act: 'view:map' },
-      { id: 'p19', t: 'Notebook: clear every item.', act: 'view:notebook' },
-      { id: 'p20', t: 'Build and print your cheat sheets: My Mistakes, the Exam Pack, and one-pagers for weak lots.', act: 'view:cheats' },
+      { id: 'p19', t: 'My cheat sheet: drill every concept still marked "to fix".', act: 'view:mysheet' },
+      { id: 'p20', t: 'Print your automatic cheat sheet, plus the Exam Pack and one-pagers for weak lots.', act: 'view:cheats' },
       { id: 'p21', t: 'Pack: printed notes, laptop charged, charger, student card. Sleep by 11 pm.' }
     ] },
     { day: 'Tuesday 24 Nov', theme: 'Exam day', items: [
-      { id: 'p22', t: '7:30 am: read your My Mistakes sheet once. No new material.', act: 'view:cheats' },
+      { id: 'p22', t: '7:30 am: read your cheat sheet once. No new material.', act: 'view:mysheet' },
       { id: 'p23', t: '8:30 am: at Biz2, 05-11. Paper runs 9:00 to 11:00.' }
     ] }
   ];
@@ -4690,6 +4722,252 @@ LL.chapter({
   };
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* js/concepts.js */
+/* Land Lah! — auto cheat sheet: groups everything you get wrong into concept cards.
+   A concept is a topic within a lot (MCQs), an issue within a case study (case points), or the lot's quick facts
+   (lightning misses). Each card collects the trap behind the mistake, the matching rule from the lot's notes, what to
+   remember, and the cases and sections to cite (looked up in the lot's case guide). It rebuilds from the save every
+   time, so it is always current. */
+(function (root) {
+  'use strict';
+  var LL = root.LL, U = LL.util, esc = U.esc;
+  var K = LL.concepts = {};
+
+  /* ---------- authority index: every case in every lot's case guide ---------- */
+  var STOP_PARTY = ('street national provincial attorney general singapore finance insurance estates properties holdings investment investments ' +
+    'capital london corporation council mortgage services garage brewery timber petroleum assurance residuary theatre theatres systems ventures ' +
+    'partners enterprises realty chief assessor house energy tobacco imperial refinery marine stores store combined english homes lodge credit ' +
+    'chinatown people park bank plantations consolidated hotels trustee electronic mobil holding mining development bookbinding quadrant housing ' +
+    'trust cupid jewels central orchard storage chancery court three sixty degree ludgate picture millennium winter garden great yarmouth argyll ' +
+    'operative matterhorn homely industries elevator chain asia commercial offshore standard chartered union overseas sawmilling waione port ' +
+    'swettenham european flexible residence realty peck teck kian services others limited company mutual assets brothers leong choon terence ' +
+    'emmanuel mohammad fatimah eunice christina sisters mother father daughter family').split(' ');
+  var authIndex = null;
+  function buildIndex() {
+    authIndex = [];
+    LL.chapters.forEach(function (ch) {
+      ch.cases.forEach(function (row) {
+        row[0].split(';').forEach(function (seg) {
+          var name = seg.replace(/\[[^\]]*\]|\([^)]*\)/g, ' ').replace(/\b(HL|CA|PC|SGCA|UKSC|Aus HC|check)\b/g, ' ').replace(/\s\d.*$/, '').replace(/\s+/g, ' ').trim().replace(/[.,]$/, '');
+          if (!name || name.length < 4) return;
+          var keys = [name.toLowerCase()];
+          var parties = name.split(/\s+v\.?\s+/i);
+          parties.forEach(function (p) {
+            p.toLowerCase().replace(/[^a-z'& -]/g, ' ').split(/\s+/).forEach(function (w) {
+              w = w.replace(/'s$/, '');
+              if (w.length >= 5 && STOP_PARTY.indexOf(w) < 0) keys.push(w);
+            });
+          });
+          var two = parties[0].toLowerCase().split(/\s+/).slice(0, 2).join(' ');
+          if (two.length >= 9 && two.indexOf(' ') > 0 && STOP_PARTY.indexOf(two.split(' ')[0]) < 0) keys.push(two);
+          if (/^bebe\b|\bbebe\b/i.test(name)) keys.push('bebe');
+          authIndex.push({ name: name, keys: keys, row: row, ch: ch.n });
+        });
+      });
+    });
+    /* Drop one-word keys that point at more than one case (shared surnames). */
+    var freq = {};
+    authIndex.forEach(function (a) { a.keys.forEach(function (k) { if (k.indexOf(' ') < 0) freq[k] = (freq[k] || 0) + 1; }); });
+    authIndex.forEach(function (a) { a.keys = a.keys.filter(function (k, i) { return i === 0 || k.indexOf(' ') > 0 || freq[k] === 1; }); });
+  }
+  function norm(s) { return ' ' + String(s || '').toLowerCase().replace(/[‘’]/g, "'").replace(/\bvs?\.?\s/g, 'v ').replace(/[^a-z0-9'& ]+/g, ' ').replace(/\s+/g, ' ') + ' '; }
+  function findAuths(text) {
+    if (!authIndex) buildIndex();
+    var t = norm(text), out = [], seen = {};
+    authIndex.forEach(function (a) {
+      if (seen[a.name]) return;
+      for (var i = 0; i < a.keys.length; i++) {
+        if (t.indexOf(' ' + a.keys[i] + ' ') >= 0 || t.indexOf(' ' + a.keys[i] + "'") >= 0) { seen[a.name] = 1; out.push(a); return; }
+      }
+    });
+    return out;
+  }
+  var SEC_RE = /\b(?:ss?\.?|section)\s?\d+[A-Z]?(?:\(\d+\))*(?:\([a-z]\))?(?:\s?(?:LTA|CLPA|CLA|Civil Law Act|Women's Charter|State Lands Act|Misrepresentation Act|Distress Act))?/g;
+  function findSecs(text) {
+    var m = String(text || '').match(SEC_RE) || [], out = [];
+    m.forEach(function (s) { s = s.replace(/\s+/g, ' ').trim(); if (out.indexOf(s) < 0) out.push(s); });
+    return out.slice(0, 6);
+  }
+
+  /* ---------- matching a concept to the lot's notes ---------- */
+  var STOP_W = ('this that with from which under their there must only have been will into then than when where does other more each such also ' +
+    'case cases court held rule rules owner party parties right rights would could should about what your they them were being after before ' +
+    'because whether between these those here only same some like most made make given gives give said says just even still both either ' +
+    'answer option statement true false following most suitable').split(' ');
+  function tokens(s) {
+    var out = {};
+    norm(s).split(' ').forEach(function (w) { w = w.replace(/'s$/, ''); if (w.length >= 4 && STOP_W.indexOf(w) < 0) out[w] = 1; });
+    return out;
+  }
+  function bestRule(ch, topic, extra, auths) {
+    var tt = tokens(topic), et = tokens(extra), best = null, bestScore = 0;
+    /* authorities the mistake turns on weigh most, then the topic, then the trap */
+    ch.rules.forEach(function (r) {
+      var title = tokens(r[0]), body = tokens(r[1]), nr = norm(r[0] + ' ' + r[1]), sc = 0;
+      Object.keys(tt).forEach(function (w) { if (title[w]) sc += 3; else if (body[w]) sc += 1; });
+      Object.keys(et).forEach(function (w) { if (title[w] || body[w]) sc += 0.5; });
+      auths.forEach(function (a) { for (var i = 0; i < a.keys.length; i++) if (nr.indexOf(' ' + a.keys[i] + ' ') >= 0) { sc += 5; break; } });
+      if (sc > bestScore) { bestScore = sc; best = r; }
+    });
+    return bestScore >= 3 ? best : null;
+  }
+
+  /* ---------- building the cards ---------- */
+  function issueOf(id) {
+    var m = /^(.*):(\d+)\.(\d+)\.(\d+)$/.exec(id); if (!m) return null;
+    var cs = LL.getCase(m[1]); if (!cs) return null;
+    var part = cs.parts[+m[2]]; if (!part) return null;
+    var iss = part.issues[+m[3]]; if (!iss) return null;
+    return { name: iss.name.replace(/\s*\([^)]*\)\s*$/, ''), ch: iss.ch, cs: cs };
+  }
+  function clip(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; }
+
+  K.build = function (save) {
+    var map = {}, list = [];
+    function get(key, ch, name, kind) {
+      if (!map[key]) { map[key] = { key: key, ch: ch, name: name, kind: kind, items: [], traps: [], text: '', misses: 0, lastAt: 0, open: 0, qids: [], pids: [], lids: [] }; list.push(map[key]); }
+      return map[key];
+    }
+    Object.keys(save.mistakes || {}).forEach(function (id) {
+      var m = save.mistakes[id], q = LL.findQuestion(id); if (!q) return;
+      var c = get(q.ch + '|' + q.topic, q.ch, q.topic, 'mcq');
+      var rem;
+      if (q.t === 'mcq') rem = { t: q.o[q.a], why: q.why, fixed: !!m.fixed };
+      else {
+        var miss = (m.miss && m.miss.length ? m.miss : q.s.map(function (_, i) { return i; }));
+        rem = { list: miss.map(function (i) { var s = q.s[i]; return s ? (s[1] ? 'TRUE: ' : 'FALSE: ') + s[0] + ' ' + s[2] : ''; }).filter(Boolean), fixed: !!m.fixed };
+      }
+      c.items.push(rem); c.qids.push(id);
+      c.misses += m.n || 1; c.lastAt = Math.max(c.lastAt, m.at || 0); if (!m.fixed) c.open++;
+      var traps = m.traps && m.traps.length ? m.traps : (q.trap ? [q.trap] : []);
+      traps.forEach(function (k) { if (LL.TRAPS[k] && c.traps.indexOf(k) < 0) c.traps.push(k); });
+      c.text += ' ' + q.q + ' ' + (q.t === 'mcq' ? q.o[q.a] + ' ' + q.why : q.s.map(function (s) { return s[0] + ' ' + s[2]; }).join(' '));
+    });
+    Object.keys(save.casePts || {}).forEach(function (id) {
+      var p = save.casePts[id], iss = issueOf(id);
+      var name = iss ? iss.name : (p.title || 'Case study');
+      var c = get((p.ch || 0) + '|case|' + name, p.ch || (iss && iss.ch) || 0, name, 'case');
+      c.items.push({ t: p.t, fixed: !!p.fixed, from: p.title, m: p.m }); c.pids.push(id);
+      c.misses += p.n || 1; c.lastAt = Math.max(c.lastAt, p.lastAt || 0); if (!p.fixed) c.open++;
+      c.text += ' ' + p.t;
+    });
+    Object.keys(save.ltMiss || {}).forEach(function (id) {
+      var x = save.ltMiss[id], ch = LL.getChapter(x.ch); if (!ch) return;
+      var it = ch.quick[x.i]; if (!it) return;
+      var c = get(x.ch + '|quick', x.ch, 'Quick facts', 'quick');
+      c.items.push({ t: (it[1] ? 'TRUE: ' : 'FALSE: ') + it[0], why: it[2], fixed: !!x.fixed }); c.lids.push(id);
+      c.misses += x.n || 1; c.lastAt = Math.max(c.lastAt, x.at || 0); if (!x.fixed) c.open++;
+      c.text += ' ' + it[0] + ' ' + it[2];
+    });
+    list.forEach(function (c) {
+      var ch = LL.getChapter(c.ch);
+      var trapText = c.traps.map(function (k) { return LL.TRAPS[k].text; }).join(' ');
+      var all = c.text + ' ' + trapText;
+      c.auths = findAuths(all).slice(0, 5).map(function (a) { return { name: a.name, cite: a.row[3], held: a.row[2], ch: a.ch }; });
+      c.secs = findSecs(all);
+      c.rule = ch && c.kind !== 'quick' ? bestRule(ch, c.name, trapText, findAuths(all)) : null;
+      c.mastered = c.open === 0;
+      c.lot = ch ? ch.code : '';
+    });
+    list.sort(function (a, b) {
+      if (a.mastered !== b.mastered) return a.mastered ? 1 : -1;
+      if (b.misses !== a.misses) return b.misses - a.misses;
+      return b.lastAt - a.lastAt;
+    });
+    return list;
+  };
+
+  /* Concept keys -> misses, to see what an attempt added. */
+  K.snapshot = function (save) {
+    var out = {};
+    K.build(save).forEach(function (c) { out[c.key] = c.misses; });
+    return out;
+  };
+  K.added = function (before, save) {
+    before = before || {};
+    return K.build(save).filter(function (c) { return !c.mastered && (before[c.key] == null || c.misses > before[c.key]); });
+  };
+  K.counts = function (save) {
+    var l = K.build(save), open = l.filter(function (c) { return !c.mastered; }).length;
+    return { total: l.length, open: open, mastered: l.length - open };
+  };
+
+  /* ---------- rendering (shared by the app screen and the printable sheet) ---------- */
+  K.cardHTML = function (c, opts) {
+    opts = opts || {};
+    var lotName = (LL.getChapter(c.ch) || {}).short || '';
+    var h = '<article class="cs-card' + (c.mastered ? ' mastered' : '') + '" data-key="' + esc(c.key) + '">';
+    h += '<header class="cs-card-h"><span class="cs-lot">L' + c.ch + '</span><b class="cs-cname">' + esc(c.kind === 'quick' ? 'Quick facts · ' + lotName : c.name) + '</b>' +
+      (c.kind === 'case' ? '<span class="cs-kind">from your case studies: ' + esc(c.items.map(function (it) { return it.from; }).filter(function (f, i, a) { return f && a.indexOf(f) === i; }).join('; ')) + '</span>' : '') +
+      '<span class="cs-meta2">' + (c.mastered ? 'mastered' : 'missed ×' + c.misses) + (c.lastAt ? ' · ' + new Date(c.lastAt).toLocaleDateString('en-SG', { day: 'numeric', month: 'short' }) : '') + '</span></header>';
+    if (opts.compact) {
+      var line = c.traps.length ? LL.TRAPS[c.traps[0]].text : (c.rule ? c.rule[1] : (c.items[0] && (c.items[0].t || (c.items[0].list || [])[0])) || '');
+      return h + '<p class="cs-line">' + esc(clip(line, 220)) + '</p></article>';
+    }
+    if (c.traps.length) h += '<div class="cs-rule"><b>Rule / trap:</b><ul>' + c.traps.map(function (k) { return '<li>' + esc(LL.TRAPS[k].text) + '</li>'; }).join('') + '</ul></div>';
+    if (c.rule) h += '<p class="cs-notes"><b>From your notes, ' + esc(c.rule[0]) + ':</b> ' + esc(clip(c.rule[1], 420)) + '</p>';
+    var rem = [];
+    c.items.forEach(function (it) {
+      if (it.list) it.list.forEach(function (s) { rem.push('<li' + (it.fixed ? ' class="fx"' : '') + '>' + esc(clip(s, 260)) + '</li>'); });
+      else rem.push('<li' + (it.fixed ? ' class="fx"' : '') + '>' + (c.kind === 'mcq' ? '<b>Answer:</b> ' : '') + esc(clip(it.t, 260)) + (it.why && c.kind !== 'mcq' ? ' <span class="cs-why">' + esc(clip(it.why, 160)) + '</span>' : '') + (it.why && c.kind === 'mcq' ? ' <span class="cs-why">' + esc(clip(it.why, 200)) + '</span>' : '') + '</li>');
+    });
+    h += '<div class="cs-rem"><b>Remember:</b><ul>' + rem.slice(0, 6).join('') + '</ul></div>';
+    if (c.auths.length || c.secs.length) {
+      h += '<p class="cs-cite"><b>Cite:</b> ' + c.auths.map(function (a) { return '<span class="cs-auth"><b>' + esc(a.name) + '</b>: ' + esc(clip(a.cite, 90)) + '</span>'; }).join(' · ') +
+        (c.secs.length ? (c.auths.length ? ' · ' : '') + c.secs.map(esc).join(', ') : '') + '</p>';
+    }
+    if (opts.actions) h += opts.actions(c);
+    return h + '</article>';
+  };
+
+  /* The "My concepts to fix" section of the printable sheet. */
+  K.sectionHTML = function (save, opts) {
+    opts = opts || {};
+    var l = K.build(save), open = l.filter(function (c) { return !c.mastered; }), done = l.filter(function (c) { return c.mastered; });
+    if (!l.length) return '<section class="cs-sec"><h2>My concepts to fix</h2><p class="cs-empty">Nothing yet. Every MCQ, case-study point and quick fact you get wrong is added here automatically.</p></section>';
+    var h = '<section class="cs-sec cs-concepts"><h2>My concepts to fix <small>' + open.length + ' to fix · ' + done.length + ' mastered</small></h2>';
+    if (opts.ai && save.aiSheet && save.aiSheet.text) h += '<div class="cs-ai"><h3>Claude\'s one-page summary</h3>' + U.md(save.aiSheet.text) + '</div>';
+    h += open.map(function (c) { return K.cardHTML(c); }).join('');
+    if (done.length && opts.mastered !== false) h += '<h3>Mastered (one line each)</h3>' + done.map(function (c) { return K.cardHTML(c, { compact: true }); }).join('');
+    return h + '</section>';
+  };
+
+  /* Text Claude condenses into a one-page summary. */
+  K.digest = function (save) {
+    return K.build(save).filter(function (c) { return !c.mastered; }).slice(0, 18).map(function (c) {
+      var lines = ['CONCEPT: ' + c.name + ' (Lot ' + c.ch + ', missed ' + c.misses + 'x)'];
+      c.traps.forEach(function (k) { lines.push('Trap: ' + LL.TRAPS[k].text); });
+      if (c.rule) lines.push('Notes: ' + c.rule[0] + ': ' + c.rule[1]);
+      c.items.slice(0, 4).forEach(function (it) { if (it.list) it.list.forEach(function (s) { lines.push('Point: ' + s); }); else lines.push('Point: ' + it.t + (it.why ? ' (' + it.why + ')' : '')); });
+      c.auths.forEach(function (a) { lines.push('Authority: ' + a.name + ': ' + a.cite); });
+      if (c.secs.length) lines.push('Sections: ' + c.secs.join(', '));
+      return lines.join('\n');
+    }).join('\n\n');
+  };
+  K.aiPrompt = function (save) {
+    return [
+      'A student is revising for a Singapore university Land Law exam (NUS RE2702, open book, 20 MCQs and a 40-mark ILAC case study).',
+      'Below are the concepts they keep getting wrong, with the rules, traps and authorities taken from their own course notes.',
+      'Write a one-page exam cheat sheet from this material only. For each concept, most-missed first: a "## " heading with the concept name, then 2 to 4 terse "- " bullets: the rule in one line, the trap to avoid, and the case or section to cite.',
+      'Do not add any case, section or rule that is not in the material. Keep anything marked [check]. No introduction or closing remarks. At most 450 words. Plain text with only "## " headings, "- " bullets and **bold** for authorities.',
+      '',
+      K.digest(save)
+    ].join('\n');
+  };
+
+  /* Questions to drill a concept: the ones you missed first, then others on the same topic. */
+  K.drillQs = function (c) {
+    if (c.kind === 'quick' || c.kind === 'case') {
+      var ch = LL.getChapter(c.ch);
+      var related = ch ? ch.qs.filter(function (q) { var t = norm(q.topic + ' ' + q.q); return Object.keys(tokens(c.name)).some(function (w) { return t.indexOf(' ' + w) >= 0; }); }) : [];
+      return U.shuffle(related).slice(0, 6);
+    }
+    var missed = c.qids.map(LL.findQuestion).filter(Boolean);
+    var more = LL.allQuestions().filter(function (q) { return q.ch === c.ch && q.topic === c.name && c.qids.indexOf(q.id) < 0; });
+    return missed.concat(U.shuffle(more)).slice(0, 8);
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
 /* js/cheats.js */
 /* Land Lah! — cheat sheets: "My Mistakes" (built from the notebook), the Exam Pack, and one-pagers per lot.
    build() returns an HTML fragment for the in-app preview and a complete A4 document for printing or saving. */
@@ -4716,51 +4994,12 @@ LL.chapter({
 
   C.counts = function (save) {
     var q = Object.keys(save.mistakes).filter(function (id) { return LL.findQuestion(id); }).length;
-    var p = Object.keys(save.casePts || {}).length;
-    return { q: q, p: p, total: q + p };
+    var p = Object.keys(save.casePts || {}).length, k = LL.concepts.counts(save);
+    return { q: q, p: p, total: q + p, concepts: k.total, open: k.open, mastered: k.mastered };
   };
 
-  function mistakesHTML(save, includeFixed) {
-    var byLot = {}, trapCount = {};
-    Object.keys(save.mistakes).forEach(function (id) {
-      var m = save.mistakes[id], q = LL.findQuestion(id);
-      if (!q || (m.fixed && !includeFixed)) return;
-      (byLot[q.ch] = byLot[q.ch] || { qs: [], pts: [] }).qs.push({ q: q, m: m });
-      var keys = (m.traps && m.traps.length) ? m.traps : (q.trap ? [q.trap] : []);
-      keys.forEach(function (k) { if (LL.TRAPS[k]) trapCount[k] = (trapCount[k] || 0) + m.n; });
-    });
-    Object.keys(save.casePts || {}).forEach(function (id) {
-      var p = save.casePts[id];
-      if (p.fixed && !includeFixed) return;
-      (byLot[p.ch] = byLot[p.ch] || { qs: [], pts: [] }).pts.push(p);
-    });
-    var lots = Object.keys(byLot).map(Number).sort(function (a, c) { return a - c; });
-    if (!lots.length) return '<section class="cs-sec"><h2>My mistakes</h2><p class="cs-empty">No mistakes recorded yet. Take some graded tests, training runs or case drills first; everything you miss lands here.</p></section>';
-    var h = '<section class="cs-sec cs-mistakes"><h2>My mistakes</h2>';
-    var traps = Object.keys(trapCount).sort(function (a, c) { return trapCount[c] - trapCount[a]; });
-    if (traps.length) {
-      h += '<h3>Traps I fell for</h3><ol class="cs-traps">' + traps.map(function (k) {
-        var T = LL.TRAPS[k]; return '<li><span class="cs-lot">L' + T.ch + '</span> ' + esc(T.text) + (trapCount[k] > 1 ? ' <span class="cs-n">×' + trapCount[k] + '</span>' : '') + '</li>';
-      }).join('') + '</ol>';
-    }
-    lots.forEach(function (n) {
-      var g = byLot[n];
-      h += '<h3>' + esc(lotName(n)) + '</h3><ul class="cs-list">';
-      g.qs.sort(function (a, c) { return c.m.n - a.m.n; }).slice(0, 10).forEach(function (x) {
-        var q = x.q, ans;
-        if (q.t === 'mcq') ans = '<b>Answer:</b> ' + esc(clip(q.o[q.a], 200));
-        else {
-          var tr = q.s.map(function (s, i) { return s[1] ? '(' + U.roman(i) + ')' : null; }).filter(Boolean);
-          ans = '<b>True:</b> ' + (tr.length ? tr.join(', ') : 'none') + '. ' + (x.m.miss || []).map(function (i) { var s = q.s[i]; return s ? '<i>(' + U.roman(i) + ') ' + (s[1] ? 'TRUE' : 'FALSE') + ':</i> ' + esc(clip(s[2], 140)) : ''; }).join(' ');
-        }
-        h += '<li><span class="cs-topic">' + esc(q.topic) + '</span> ' + ans + (q.t === 'mcq' ? ' <span class="cs-why">' + esc(clip(q.why, 220)) + '</span>' : '') + '</li>';
-      });
-      g.pts.forEach(function (p) {
-        h += '<li class="cs-pt"><span class="cs-topic">Case point</span> ' + esc(p.t) + ' <span class="cs-why">(' + esc(p.title || '') + ', ' + p.m + ' mark' + (p.m === 1 ? '' : 's') + ')</span></li>';
-      });
-      h += '</ul>';
-    });
-    return h + '</section>';
+  function mistakesHTML(save, includeFixed, ai) {
+    return LL.concepts.sectionHTML(save, { mastered: includeFixed, ai: ai });
   }
 
   function packHTML() {
@@ -4809,13 +5048,20 @@ LL.chapter({
     '.cs-t th{background:#eef6fa;font-weight:700;width:32%}.cs-scores th,.cs-scores td{text-align:center;width:auto}',
     '.cs-dl{margin:0}.cs-dl dt{font-weight:700;color:#0e4a6b}.cs-dl dd{margin:0 0 4px 10px}.cs-idea{background:#fff6d6;padding:3px 6px}',
     '.cs-m{break-inside:avoid}.cs-empty{color:#43606f;font-style:italic}.cs-foot{color:#43606f;font-size:10.5px;margin-top:8px}',
+    '.cs-card{break-inside:avoid;border:1px solid #c8dde8;border-left:4px solid #b3261e;padding:4px 7px;margin:0 0 6px;background:#fff}',
+    '.cs-card.mastered{border-left-color:#2f9e5e;background:#f6fbf8}.cs-card-h{display:flex;flex-wrap:wrap;gap:3px 6px;align-items:baseline;margin-bottom:2px}',
+    '.cs-cname{color:#0b3550}.cs-kind{font-size:10px;color:#6a55d6;text-transform:uppercase;letter-spacing:.04em}.cs-meta2{margin-left:auto;font-size:10.5px;color:#b3261e;font-weight:700}',
+    '.cs-card.mastered .cs-meta2{color:#2f9e5e}.cs-card ul{margin:1px 0 3px;padding-left:15px}.cs-card li{margin:0 0 2px}.cs-card li.fx{color:#5d7480}',
+    '.cs-rule{background:#fff6d6;padding:2px 5px;margin:2px 0}.cs-rule ul{margin:0}.cs-notes{background:#eef6fa;padding:2px 5px;margin:2px 0}',
+    '.cs-cite{margin:2px 0 0;font-size:11.5px}.cs-line{margin:0;color:#2b4a5a}.cs-ai{border:1px dashed #6a55d6;padding:4px 8px;margin:0 0 8px;background:#f7f5ff;break-inside:avoid}',
+    '.cs-ai h5{margin:6px 0 2px;font-size:12px;color:#0b3550}.cs-ai ul{margin:0 0 3px;padding-left:15px}.cs-ai p{margin:2px 0}',
     '@media print{@page{size:A4;margin:9mm}.cs-doc{font-size:10px}.cs-cols{column-count:2;column-gap:7mm}.cs-doc h2{font-size:11.5px}.cs-doc h3{font-size:10.5px}.cs-t{font-size:9.5px}.cs-doc{-webkit-print-color-adjust:exact;print-color-adjust:exact}}'
   ].join('\n');
 
   /* opts: {mistakes, fixed, pack, lots:[n]} */
   C.build = function (save, opts, who) {
     var parts = [];
-    if (opts.mistakes) parts.push(mistakesHTML(save, opts.fixed !== false));
+    if (opts.mistakes) parts.push(mistakesHTML(save, opts.fixed !== false, opts.ai !== false));
     if (opts.pack) parts.push(packHTML());
     (opts.lots || []).slice().sort(function (a, c) { return a - c; }).forEach(function (n) { parts.push(lotHTML(n)); });
     var date = new Date().toLocaleString('en-SG', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -5081,8 +5327,9 @@ LL.chapter({
       btn(icon('calendar', 2) + ' 3-day plan', 'go', 'data-view="plan"', 'btn-small') +
       btn(icon('gavel', 2) + ' Exam Hall', 'go', 'data-view="hall"', 'btn-small btn-hot') +
       btn(icon('scroll', 2) + ' Case library', 'go', 'data-view="cases"', 'btn-small') +
+      btn(icon('sheet', 2) + ' My cheat sheet (' + LL.concepts.counts(S.save).open + ')', 'go', 'data-view="mysheet"', 'btn-small btn-hot') +
       btn(icon('lock', 2) + ' Notebook (' + nb + ')', 'go', 'data-view="notebook"', 'btn-small') +
-      btn(icon('sheet', 2) + ' Cheat sheets', 'go', 'data-view="cheats"', 'btn-small') +
+      btn('Sheet builder', 'go', 'data-view="cheats"', 'btn-small') +
       btn(icon('book', 2) + ' Notes', 'go', 'data-view="library"', 'btn-small') +
       btn('Settings', 'go', 'data-view="settings"', 'btn-small btn-ghost') + '</nav>';
     h += '<h2 class="section-title">The estate plan</h2><p class="lede">One lot per chapter, in lecture order. A C (' + G.PASS + '%) on a lot\'s graded test clears it.' + (S.save.unlockAll ? ' Crunch mode is on: every lot is open.' : '') + '</p>';
@@ -5161,13 +5408,29 @@ LL.chapter({
     return h;
   };
 
+  /* ---------- auto cheat sheet ---------- */
+  function addedHTML(cs0) {
+    if (!cs0) return '';
+    var add = LL.concepts.added(cs0, S.save);
+    if (!add.length) return '<div class="auto-sheet clean"><p><b>Your cheat sheet:</b> nothing new from this attempt.</p>' + btn('Open my cheat sheet', 'go', 'data-view="mysheet"', 'btn-small btn-ghost') + '</div>';
+    return '<div class="auto-sheet"><div class="auto-head">' + icon('sheet', 3) + '<h3>Added to your cheat sheet</h3><span>' + add.length + ' concept' + (add.length > 1 ? 's' : '') + '</span></div>' +
+      '<div class="auto-cards">' + add.slice(0, 6).map(function (c) { return LL.concepts.cardHTML(c, { compact: true }); }).join('') + '</div>' +
+      (add.length > 6 ? '<p class="auto-more">+ ' + (add.length - 6) + ' more on your sheet.</p>' : '') +
+      '<div class="auto-btns">' + btn('Open my cheat sheet', 'go', 'data-view="mysheet"', 'btn-small btn-hot') + btn('Save it to print', 'mysheet-save', '', 'btn-small') + '</div></div>';
+  }
+  function findConcept(key) {
+    var l = LL.concepts.build(S.save);
+    for (var i = 0; i < l.length; i++) if (l[i].key === key) return l[i];
+    return null;
+  }
+
   /* ---------- training ---------- */
-  function startTraining(n, qs, label) {
+  function startTraining(n, qs, label, back) {
     var rand = U.rng(Date.now());
     qs = qs || U.shuffle(LL.getChapter(n).qs, rand);
     var p = player();
     var perkUses = p ? ({ hint: 2, eliminate: 2, retry: 2, notes: 3 })[p.perk] || 0 : 0;
-    S.run = { kind: 'train', n: n, label: label || null, entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, checked: false, eliminated: [], score: 0, done: 0, perk: p ? p.perk : null, perkLeft: perkUses, hintShown: false };
+    S.run = { kind: 'train', n: n, label: label || null, back: back || null, cs0: LL.concepts.snapshot(S.save), entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, checked: false, eliminated: [], score: 0, done: 0, perk: p ? p.perk : null, perkLeft: perkUses, hintShown: false };
     go('train');
   }
   VIEWS.train = function () {
@@ -5186,7 +5449,10 @@ LL.chapter({
       if (r.perk === 'retry' && r.perkLeft > 0 && G.scoreEntry(e).earned < 1) h += btn('Second Shot: retry (' + r.perkLeft + ')', 'perk', '', 'btn-ghost');
     }
     h += btn('Quit', 'quit-train', '', 'btn-ghost btn-small') + '</div>';
-    if (r.checked) h += '<div class="explain" aria-live="polite">' + explainHTML(e) + '</div>';
+    if (r.checked) {
+      var wrong = G.scoreEntry(e).earned < 1;
+      h += '<div class="explain" aria-live="polite">' + explainHTML(e) + (wrong ? '<p class="auto-note">' + icon('sheet', 2) + ' Saved to your cheat sheet under <b>' + esc(e.q.topic) + '</b> (' + esc((LL.getChapter(e.q.ch) || {}).code || '') + ').</p>' : '') + '</div>';
+    }
     return h + '</section>';
   };
   function perkButton(r, e) {
@@ -5218,14 +5484,14 @@ LL.chapter({
     var pct = r.entries.length ? Math.round(100 * r.score / r.entries.length) : 0;
     if (!r.label && r.n) { var st = chState(r.n); st.trained = Math.max(st.trained || 0, pct); persist(); }
     return '<section class="summary"><h2 class="section-title">Training complete</h2>' +
-      '<p class="big-num">' + (r.score * M) + ' <small>/ ' + (r.entries.length * M) + '</small></p><p class="lede">' + pct + '%. Practice only, not graded. Anything you missed went into your Notebook and your mistake cheat sheet.</p>' +
-      '<div class="title-actions">' + (r.label ? btn('Back to the Notebook', 'go', 'data-view="notebook"', 'btn-hot') : btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Train again', 'train', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost')) + '</div></section>';
+      '<p class="big-num">' + (r.score * M) + ' <small>/ ' + (r.entries.length * M) + '</small></p><p class="lede">' + pct + '%. Practice only, not graded.</p>' + addedHTML(r.cs0) +
+      '<div class="title-actions">' + (r.label ? btn(r.back === 'mysheet' ? 'Back to my cheat sheet' : 'Back to the Notebook', 'go', 'data-view="' + (r.back || 'notebook') + '"', 'btn-hot') : btn('Take the graded test', 'test', 'data-n="' + r.n + '"', 'btn-hot') + btn('Train again', 'train', 'data-n="' + r.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost')) + '</div></section>';
   }
 
   /* ---------- lightning ---------- */
   function startLightning(n) {
     var ch = LL.getChapter(n);
-    S.run = { kind: 'lightning', n: n, pool: U.shuffle(ch.quick), k: 0, left: 60, total: 60, score: 0, combo: 0, answered: 0, correct: 0, misses: [], over: false, flash: null, started: false };
+    S.run = { kind: 'lightning', n: n, cs0: LL.concepts.snapshot(S.save), pool: U.shuffle(ch.quick), k: 0, left: 60, total: 60, score: 0, combo: 0, answered: 0, correct: 0, misses: [], over: false, flash: null, started: false };
     go('lightning');
   }
   function mult(r) { return Math.min(5, 1 + Math.floor(r.combo / 3)); }
@@ -5257,8 +5523,14 @@ LL.chapter({
     var r = S.run; if (!r || r.over || !r.started) return;
     var it = r.pool[r.k % r.pool.length];
     r.answered++;
-    if (v === it[1]) { r.correct++; r.combo++; r.score += 100 * mult(r); LL.sfx.play(r.combo % 3 === 0 ? 'combo' : 'ok'); r.flash = 'ok'; }
-    else { r.combo = 0; r.misses.push(it); LL.sfx.play('bad'); r.flash = 'no'; }
+    var qi = LL.getChapter(r.n).quick.indexOf(it), lk = r.n + ':' + qi, lm = S.save.ltMiss, cur = lm[lk];
+    if (v === it[1]) {
+      r.correct++; r.combo++; r.score += 100 * mult(r); LL.sfx.play(r.combo % 3 === 0 ? 'combo' : 'ok'); r.flash = 'ok';
+      if (cur && !cur.fixed) { cur.streak = (cur.streak || 0) + 1; if (cur.streak >= 2) cur.fixed = true; }
+    } else {
+      r.combo = 0; r.misses.push(it); LL.sfx.play('bad'); r.flash = 'no';
+      if (qi >= 0) lm[lk] = { ch: r.n, i: qi, n: ((cur && cur.n) || 0) + 1, at: Date.now(), streak: 0, fixed: false };
+    }
     r.k++;
     if (r.k % r.pool.length === 0) r.pool = U.shuffle(r.pool);
     var card = doc.getElementById('lt-card'), next = r.pool[r.k % r.pool.length];
@@ -5286,6 +5558,7 @@ LL.chapter({
       r.misses.forEach(function (m) { if (seen[m[0]]) return; seen[m[0]] = 1; h += '<li><span class="st-tv ' + (m[1] ? 'is-t' : 'is-f') + '">' + (m[1] ? 'TRUE' : 'FALSE') + '</span> ' + esc(m[0]) + '<div class="why">' + md(m[2]) + '</div></li>'; });
       h += '</ul>';
     }
+    h += addedHTML(r.cs0);
     return h + '<div class="title-actions">' + btn('Play again', 'lightning', 'data-n="' + r.n + '"', 'btn-hot') + btn('◂ Lot', 'enter', 'data-n="' + r.n + '"', 'btn-ghost') + '</div></section>';
   }
 
@@ -5318,7 +5591,7 @@ LL.chapter({
       var mock = opts.mockId === 'random' ? null : findMock(opts.mockId);
       qs = mock ? mockMCQs(mock) : randomMCQs(rand); limit = 60 * 60; title = (mock ? mock.title : 'Random paper') + ' · Section A';
     }
-    S.run = { kind: 'exam', scope: scope, n: opts.n, mockId: opts.mockId, title: title, seed: seed, entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, limit: limit, started: Date.now(), submitted: false };
+    S.run = { kind: 'exam', cs0: LL.concepts.snapshot(S.save), scope: scope, n: opts.n, mockId: opts.mockId, title: title, seed: seed, entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, limit: limit, started: Date.now(), submitted: false };
     go('exam');
   }
   function findMock(id) { for (var i = 0; i < LL.ref.mocks.length; i++) if (LL.ref.mocks[i].id === id) return LL.ref.mocks[i]; return null; }
@@ -5385,7 +5658,7 @@ LL.chapter({
     r.entries.forEach(noteResult);
     persist();
     LL.sfx.play(rep.pass ? 'win' : 'lose');
-    go('report', { rep: rep, scope: r.scope, n: r.n, unlocked: unlockedNow, title: r.title, mockId: r.mockId });
+    go('report', { rep: rep, scope: r.scope, n: r.n, unlocked: unlockedNow, title: r.title, mockId: r.mockId, cs0: r.cs0 });
   }
 
   function reportHead(rep, title, extraFigs) {
@@ -5420,6 +5693,7 @@ LL.chapter({
     if (rep.timeUp) h += '<p class="warn">Time ran out; your script was collected automatically.</p>';
     if (p.unlocked) h += '<p class="unlock">' + icon('star', 2) + ' ' + esc(LL.getChapter(p.unlocked).code + ' ' + LL.getChapter(p.unlocked).place) + ' is now open.</p>';
     h += profBlock(rep.comments, 'Examiner · Section A');
+    h += addedHTML(p.cs0);
     h += '<h3 class="sub">Breakdown</h3>' + topicBars(rep.topics);
     h += '<div class="title-actions">' + btn('Review every answer', 'toggle-review', '', 'btn-hot') +
       (lot ? btn('Retake test', 'test', 'data-n="' + p.n + '"') + btn('Case drills', 'lot-cases', 'data-n="' + p.n + '"') + btn('◂ Lot', 'enter', 'data-n="' + p.n + '"', 'btn-ghost') : btn('Exam Hall', 'go', 'data-view="hall"')) +
@@ -5468,7 +5742,7 @@ LL.chapter({
     var mock = id === 'random' ? null : findMock(id), seed = Date.now() % 1e9, rand = U.rng(seed);
     var qs = mock ? mockMCQs(mock) : randomMCQs(rand);
     var caseId = mock ? mock.caseId : U.shuffle(LL.cases.filter(function (c) { return c.kind === 'exam'; }), rand)[0].id;
-    S.run = { kind: 'mock', mockId: id, title: (mock ? mock.title : 'Random paper'), seed: seed, entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, tab: 'A', part: 0, caseId: caseId, answers: {}, limit: 120 * 60, started: Date.now(), submitted: false };
+    S.run = { kind: 'mock', cs0: LL.concepts.snapshot(S.save), mockId: id, title: (mock ? mock.title : 'Random paper'), seed: seed, entries: qs.map(function (q) { return makeEntry(q, rand); }), i: 0, tab: 'A', part: 0, caseId: caseId, answers: {}, limit: 120 * 60, started: Date.now(), submitted: false };
     go('mock');
   }
   VIEWS.mock = function () {
@@ -5501,6 +5775,7 @@ LL.chapter({
     r.entries.forEach(noteResult);
     var cs = LL.getCase(r.caseId);
     var mk = buildMark(cs, r.answers, { seconds: secs, limit: r.limit, mockId: r.mockId, title: r.title, repA: repA, timeUp: timeUp });
+    mk.cs0 = r.cs0;
     mk.recIdx = recordMock(r.mockId, { a: repA.earned, aMax: repA.max, b: mk.total, bMax: mk.max });
     recordCaseAttempt(cs, mk, true);
     persist();
@@ -5531,7 +5806,7 @@ LL.chapter({
   function startCase(id, exam) {
     var cs = LL.getCase(id), answers = {};
     cs.parts.forEach(function (_, i) { answers[i] = LL.store.draft(id + '.' + i); });
-    S.run = { kind: 'case', caseId: id, exam: !!exam, part: 0, answers: answers, started: Date.now(), limit: (exam ? 45 : cs.mins) * 60, submitted: false };
+    S.run = { kind: 'case', cs0: LL.concepts.snapshot(S.save), caseId: id, exam: !!exam, part: 0, answers: answers, started: Date.now(), limit: (exam ? 45 : cs.mins) * 60, submitted: false };
     go('casework');
   }
   function saveDrafts(r) { Object.keys(r.answers).forEach(function (k) { LL.store.draft(r.caseId + '.' + k, r.answers[k] || ''); }); }
@@ -5632,6 +5907,7 @@ LL.chapter({
     r.submitted = true; stopTimers(); saveDrafts(r);
     var cs = LL.getCase(r.caseId), secs = (Date.now() - r.started) / 1000;
     var mk = buildMark(cs, r.answers, { seconds: secs, limit: r.limit });
+    mk.cs0 = r.cs0;
     recordCaseAttempt(cs, mk, false);
     persist(); LL.sfx.play('win');
     S.mark = mk;
@@ -5654,6 +5930,7 @@ LL.chapter({
         '<div><dt>Marks</dt><dd>' + mk.total + ' / ' + mk.max + '</dd></div><div><dt>Score</dt><dd>' + Math.round(pct) + '%</dd></div><div><dt>Words</dt><dd>' + mk.parts.reduce(function (s, p) { return s + p.words; }, 0) + '</dd></div><div><dt>Time used</dt><dd>' + U.fmtTime(meta.seconds || 0) + '</dd></div>');
     }
     h += profBlock(G.caseComments(cs, mk, mk.answers, meta), 'Examiner · Section B');
+    h += addedHTML(mk.cs0);
     var capped = mk.parts.filter(function (p) { return p.cap < 1; });
     h += '<p class="mark-src">' + (mk.source === 'ai' ? 'Marked by Prof. Borough (Claude) against the scheme. Adjust any point you disagree with.' : 'Keyword marker: a point scores when your script names its rule, authority or key fact. It cannot judge your reasoning, so read the model answer and adjust each point honestly.') +
       (capped.length && mk.source === 'keyword' ? ' <b>Development cap:</b> ' + capped.map(function (p) { return (p.label ? p.label + ' ' : 'your answer ') + 'has ' + p.words + ' words for ' + p.marks + ' marks, so its keyword marks are scaled to ' + Math.round(p.cap * 100) + '%'; }).join('; ') + '. Naming a case is not the same as applying it.' : '') + '</p>';
@@ -5684,7 +5961,7 @@ LL.chapter({
       h += '<details class="lib-sec model"' + (pi === 0 ? ' open' : '') + '><summary>Model answer</summary><div class="model-ans">' + md(part.model) + (part.tricks && part.tricks.length ? '<h5>Exam tricks</h5><ul>' + part.tricks.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') + '</div></details>';
       h += '</article>';
     });
-    h += '<p class="lede small">Points you scored under half on are now in your Notebook and on your mistake cheat sheet.</p>';
+    h += '<p class="lede small">Points you score under half on go straight onto your cheat sheet; raise a point to three-quarters or more and it is marked mastered.</p>';
     h += '<div class="title-actions">' + btn('Try this case again', 'open-case', 'data-id="' + cs.id + '"', 'btn-hot') + btn('Case library', 'go', 'data-view="cases"') + (meta.mockId ? btn('Exam Hall', 'go', 'data-view="hall"') : '') + btn('Cheat sheets', 'go', 'data-view="cheats"', 'btn-ghost') + '</div>';
     return h + '</section>';
   };
@@ -5736,13 +6013,59 @@ LL.chapter({
     }).then(function () { aiCtl = null; });
   }
 
+  /* ---------- My cheat sheet (automatic) ---------- */
+  function aiSheet() {
+    if (!S.ai || S.aiBusy != null) return;
+    S.aiBusy = 'sheet'; render();
+    aiCtl = new AbortController();
+    S.ai(LL.concepts.aiPrompt(S.save), { modelTier: 'default', signal: aiCtl.signal, cache: false }).then(function (res) {
+      var txt = String((res && res.text) || '').trim();
+      if (!txt) { flash('Claude returned nothing. Try again.'); return; }
+      S.save.aiSheet = { at: Date.now(), text: txt.slice(0, 9000), n: LL.concepts.counts(S.save).open };
+      persist();
+    }).catch(function (e) {
+      if (e && (e.code === 'not_granted' || e.code === 'sampling_disabled')) S.ai = null;
+      if (!(e && e.code === 'cancelled')) flash(aiErr(e && e.code));
+    }).then(function () { S.aiBusy = null; aiCtl = null; if (S.view === 'mysheet') render(); });
+  }
+  VIEWS.mysheet = function () {
+    var l = LL.concepts.build(S.save), open = l.filter(function (c) { return !c.mastered; }), done = l.filter(function (c) { return c.mastered; });
+    var last = l.reduce(function (m, c) { return Math.max(m, c.lastAt || 0); }, 0);
+    var h = '<section class="lib-page"><h2 class="section-title">My cheat sheet</h2>' +
+      '<p class="lede">Built automatically from every MCQ, case-study point and lightning fact you get wrong, grouped by concept. Each card gives the rule and the trap, the matching rule from your notes, what to remember, and what to cite. It updates after every attempt. A concept is mastered once you get its questions right twice in a row.</p>';
+    h += '<div class="sheet-stats"><span><b>' + open.length + '</b> to fix</span><span><b>' + done.length + '</b> mastered</span>' + (last ? '<span>last updated ' + esc(new Date(last).toLocaleString('en-SG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + '</span>' : '') + '</div>';
+    h += '<div class="title-actions">' + (S.dl || !inViewer() ? btn(icon('sheet', 2) + ' Save to print', 'mysheet-save', '', 'btn-hot') : '') + (canPrint() ? btn('Print now', 'mysheet-print', '') : '') +
+      btn('Copy as text', 'mysheet-copy', '', 'btn-ghost') + (open.length ? btn('Drill my weakest concepts', 'mysheet-drill-all', '', '') : '') +
+      btn('Add the Exam Pack or lot one-pagers', 'go', 'data-view="cheats"', 'btn-ghost') + '</div>';
+    if (inViewer()) h += '<p class="lede small">Printing is blocked inside the Claude viewer: save the sheet, open it in your browser, then press Ctrl+P (Cmd+P on a Mac).</p>';
+    if (S.ai && open.length) {
+      h += '<div class="ai-sheet"><div class="ai-sheet-head">' + icon('bulb', 3) + '<div><h3>One-page summary by Claude</h3><p>Condenses your open concepts into terse exam bullets, using only the rules and authorities on your cards.</p></div>' +
+        (S.aiBusy === 'sheet' ? '<span class="ai-busy">Writing your summary. This can take up to a minute.</span>' + btn('Stop', 'ai-stop', '', 'btn-small btn-ghost') : btn(S.save.aiSheet ? 'Rewrite it' : 'Condense with Claude', 'mysheet-ai', '', 'btn-small btn-hot')) + '</div>';
+      if (S.save.aiSheet) h += '<div class="ai-sheet-body">' + md(S.save.aiSheet.text) + '<p class="ai-sheet-meta">Written ' + esc(new Date(S.save.aiSheet.at).toLocaleString('en-SG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + ' from ' + S.save.aiSheet.n + ' concepts' + (S.save.aiSheet.n !== open.length ? '. Your sheet has changed since; rewrite it to catch up.' : '.') + ' It is printed at the top of your saved sheet.</p></div>';
+      h += '</div>';
+    } else if (S.save.aiSheet && S.save.aiSheet.text) {
+      h += '<div class="ai-sheet"><div class="ai-sheet-body">' + md(S.save.aiSheet.text) + '</div></div>';
+    }
+    if (!l.length) h += '<div class="empty">' + icon('sheet', 6) + '<p>Your sheet is empty. Take a graded test, a training run, a lightning round or a case drill; everything you get wrong is added here automatically.</p>' + btn('Start with Mock Paper 1, Section A', 'mock-a', 'data-id="m1"', 'btn-hot') + '</div>';
+    if (open.length) {
+      var lots = {};
+      open.forEach(function (c) { (lots[c.ch] = lots[c.ch] || []).push(c); });
+      h += '<div class="sheet-lots">' + Object.keys(lots).sort(function (a, b) { return a - b; }).map(function (n) { var c = LL.getChapter(+n); return '<span class="stn-code small">L' + n + '</span> ' + esc(c ? c.short : '') + ' <b>' + lots[n].length + '</b>'; }).join(' · ') + '</div>';
+      h += '<div class="sheet-cards cs-doc">' + open.map(function (c) {
+        return LL.concepts.cardHTML(c, { actions: function (cc) { return '<div class="cs-actions">' + btn('Drill this concept', 'mysheet-drill', 'data-key="' + esc(cc.key) + '"', 'btn-small') + btn('Mark mastered', 'mysheet-learn', 'data-key="' + esc(cc.key) + '"', 'btn-small btn-paper') + '</div>'; } });
+      }).join('') + '</div>';
+    }
+    if (done.length) h += '<details class="lib-sec"><summary>Mastered (' + done.length + ')</summary><div class="sheet-cards cs-doc">' + done.map(function (c) { return LL.concepts.cardHTML(c, { compact: true }); }).join('') + '</div></details>';
+    return h + '<div class="hub-foot">' + btn('◂ Estate plan', 'go', 'data-view="map"', 'btn-small btn-ghost') + '</div></section>';
+  };
+
   /* ---------- Notebook ---------- */
   VIEWS.notebook = function () {
     var ids = openMistakes(), pts = openPoints();
     var h = '<section class="notebook"><h2 class="section-title">Mistake notebook</h2><p class="lede">Every MCQ you miss lands here; get it right twice in a row and it is marked fixed. Case-study points you scored under half on are listed too. Fixed items stay on your cheat sheet history.</p>';
     if (!ids.length && !pts.length) h += '<div class="empty">' + icon('smiley', 6) + '<p>Nothing to redo. Mistakes from training, tests, mocks and case drills appear here.</p></div>';
     if (ids.length) {
-      h += '<div class="title-actions">' + btn('Redo all ' + ids.length + ' MCQs', 'nb-train', '', 'btn-hot') + btn('Build my mistake cheat sheet', 'go', 'data-view="cheats"') + '</div><ul class="nb-list">';
+      h += '<div class="title-actions">' + btn('Redo all ' + ids.length + ' MCQs', 'nb-train', '', 'btn-hot') + btn('Open my cheat sheet', 'go', 'data-view="mysheet"') + '</div><ul class="nb-list">';
       ids.sort(function (a, b) { return S.save.mistakes[b].n - S.save.mistakes[a].n; }).forEach(function (id) {
         var q = LL.findQuestion(id), c = LL.getChapter(q.ch), m = S.save.mistakes[id];
         h += '<li><span class="stn-code">' + esc(c.code) + '</span><span class="nb-topic">' + esc(q.topic) + '</span><span class="nb-n">missed ×' + m.n + (m.streak ? ' · ' + m.streak + '/2 fixed' : '') + '</span><span class="nb-q">' + esc(q.q.length > 140 ? q.q.slice(0, 137) + '…' : q.q) + '</span></li>';
@@ -5762,7 +6085,7 @@ LL.chapter({
 
   /* ---------- Cheat sheets ---------- */
   function cheatOpts() {
-    if (!S.cheat) S.cheat = { mistakes: true, fixed: true, pack: true, lots: CH.weakLots(S.save) };
+    if (!S.cheat) S.cheat = { mistakes: true, fixed: true, pack: true, ai: true, lots: CH.weakLots(S.save) };
     return S.cheat;
   }
   VIEWS.cheats = function () {
@@ -5770,8 +6093,8 @@ LL.chapter({
     var built = CH.build(S.save, o, player() ? player().name : '');
     S.cheatDoc = built;
     var h = '<section class="lib-page"><h2 class="section-title">Cheat sheets</h2><p class="lede">Hard-copy notes are allowed in the exam. Build a sheet from your own mistakes, add the Exam Pack and one-pagers for weak lots, then print it double-sided in two columns.</p>';
-    h += '<div class="cheat-opts"><div class="set-row"><div><h3>My mistakes</h3><p>' + cnt.q + ' MCQs and ' + cnt.p + ' case points recorded, with the trap behind each one.</p></div>' + toggle('mistakes', o.mistakes) + '</div>' +
-      '<div class="set-row"><div><h3>Include fixed mistakes</h3><p>Keep items you have since got right twice.</p></div>' + toggle('fixed', o.fixed) + '</div>' +
+    h += '<div class="cheat-opts"><div class="set-row"><div><h3>My concepts to fix (automatic)</h3><p>' + cnt.open + ' concepts to fix and ' + cnt.mastered + ' mastered, built from ' + cnt.q + ' MCQs, ' + cnt.p + ' case points and your lightning misses.</p></div>' + toggle('mistakes', o.mistakes) + '</div>' +
+      '<div class="set-row"><div><h3>Include mastered concepts</h3><p>One line each, so you still see the rule.</p></div>' + toggle('fixed', o.fixed) + '</div>' +
       '<div class="set-row"><div><h3>Exam Pack</h3><p>Format, timing, ILAC frames, issue spotter, authority bank, numbers and answer methods.</p></div>' + toggle('pack', o.pack) + '</div>' +
       '<div class="set-row col"><div><h3>Lot one-pagers</h3><p>Rules, cases, sections, numbers and traps per lot.' + (weak.length ? ' Your weak lots: ' + weak.map(function (n) { return 'L' + n; }).join(', ') + '.' : '') + '</p></div><div class="chips">' +
       LL.chapters.map(function (c) { var on = o.lots.indexOf(c.n) >= 0; return btn('L' + c.n + ' ' + esc(c.short), 'cheat-lot', 'data-n="' + c.n + '" aria-pressed="' + on + '"', 'chip-btn' + (on ? ' on' : '') + (weak.indexOf(c.n) >= 0 ? ' weak' : '')); }).join('') +
@@ -5782,8 +6105,9 @@ LL.chapter({
     return h + '<div class="hub-foot">' + btn('◂ Estate plan', 'go', 'data-view="map"', 'btn-small btn-ghost') + '</div></section>';
     function toggle(key, on) { return btn(on ? 'On' : 'Off', 'cheat-toggle', 'data-k="' + key + '" aria-pressed="' + on + '"', 'btn-small' + (on ? ' btn-hot' : '')); }
   };
-  function saveCheat() {
-    var built = S.cheatDoc || CH.build(S.save, cheatOpts(), '');
+  function mySheet() { return CH.build(S.save, { mistakes: true, fixed: true, pack: false, ai: true, lots: [] }, player() ? player().name : ''); }
+  function saveCheat(built) {
+    built = built || S.cheatDoc || CH.build(S.save, cheatOpts(), '');
     var name = 'RE2702-cheat-sheet-' + new Date().toISOString().slice(0, 10) + '.html';
     if (S.dl) {
       S.dl.save({ filename: name, data: built.doc }).then(function () { flash('Saved. Open it in your browser and print.'); }, function (e) { if (!(e && e.code === 'declined')) flash('Could not save the file (' + ((e && e.code) || 'error') + ').'); });
@@ -5795,8 +6119,8 @@ LL.chapter({
       setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
     } catch (e) { flash('Saving is not available here. Use Copy as text.'); }
   }
-  function printCheat() {
-    var built = S.cheatDoc || CH.build(S.save, cheatOpts(), '');
+  function printCheat(built) {
+    built = built || S.cheatDoc || CH.build(S.save, cheatOpts(), '');
     var pr = doc.getElementById('print-root');
     pr.innerHTML = '<style>' + CH.CSS + '</style>' + built.inner;
     doc.body.classList.add('printing');
@@ -5805,8 +6129,8 @@ LL.chapter({
     try { root.print(); } catch (e) { done(); }
     setTimeout(function () { if (doc.body.classList.contains('printing') && !root.matchMedia('print').matches) done(); }, 60000);
   }
-  function copyCheat() {
-    var txt = CH.text((S.cheatDoc || CH.build(S.save, cheatOpts(), '')).inner);
+  function copyCheat(built) {
+    var txt = CH.text((built || S.cheatDoc || CH.build(S.save, cheatOpts(), '')).inner);
     var fallback = function () {
       showOverlay('<h2>Copy your sheet</h2><p>Select all and copy.</p><textarea class="copy-box" id="copy-box" readonly>' + esc(txt) + '</textarea><div class="title-actions">' + btn('Done', 'close-overlay', '', 'btn-hot') + '</div>', 'wide');
       var ta = doc.getElementById('copy-box'); if (ta) { ta.focus(); ta.select(); }
@@ -5922,7 +6246,7 @@ LL.chapter({
   };
   A['begin-test'] = function (t) { closeOverlay(); startExam('lot', { n: +attr(t, 'data-n') }); };
   A['lot-cases'] = function (t) { go('cases', { n: +attr(t, 'data-n') }); };
-  A['lot-sheet'] = function (t) { S.cheat = { mistakes: false, fixed: true, pack: false, lots: [+attr(t, 'data-n')] }; go('cheats'); };
+  A['lot-sheet'] = function (t) { S.cheat = { mistakes: false, fixed: true, pack: false, ai: true, lots: [+attr(t, 'data-n')] }; go('cheats'); };
   A['cases-filter'] = function (t) { go('cases', { n: +attr(t, 'data-n') }); };
   A['open-case'] = function (t) {
     var id = attr(t, 'data-id'), exam = attr(t, 'data-exam') === '1', cs = LL.getCase(id);
@@ -5980,7 +6304,7 @@ LL.chapter({
     e.resp = e.resp === v ? null : v; LL.sfx.play('click'); stopTimers(); render();
   };
   A.next = function () { var r = S.run; r.i++; r.checked = false; r.eliminated = []; r.hintShown = false; go('train'); };
-  A['quit-train'] = function () { var r = S.run; if (r && r.label === 'Notebook revision') go('notebook'); else if (r && r.n) go('lot', { n: r.n }); else go('map'); };
+  A['quit-train'] = function () { var r = S.run; if (r && r.back) go(r.back); else if (r && r.label === 'Notebook revision') go('notebook'); else if (r && r.n && !r.label) go('lot', { n: r.n }); else go('map'); };
   A.perk = function () {
     var r = S.run, e = r.entries[r.i];
     if (!r || r.perkLeft <= 0) return;
@@ -6022,6 +6346,31 @@ LL.chapter({
   A['cheat-save'] = function () { saveCheat(); };
   A['cheat-print'] = function () { printCheat(); };
   A['cheat-copy'] = function () { copyCheat(); };
+  A['mysheet-save'] = function () { saveCheat(mySheet()); };
+  A['mysheet-print'] = function () { printCheat(mySheet()); };
+  A['mysheet-copy'] = function () { copyCheat(mySheet()); };
+  A['mysheet-drill'] = function (t) {
+    var c = findConcept(attr(t, 'data-key')); if (!c) return;
+    var qs = LL.concepts.drillQs(c);
+    if (!qs.length) { flash('No practice MCQs match this concept yet. Redo the case study instead.'); return; }
+    startTraining(c.ch, qs, 'Drill · ' + (c.kind === 'quick' ? 'quick facts' : c.name), 'mysheet');
+  };
+  A['mysheet-drill-all'] = function () {
+    var qs = [], seen = {};
+    LL.concepts.build(S.save).filter(function (c) { return !c.mastered; }).slice(0, 4).forEach(function (c) {
+      LL.concepts.drillQs(c).slice(0, 4).forEach(function (q) { if (!seen[q.id]) { seen[q.id] = 1; qs.push(q); } });
+    });
+    if (!qs.length) { flash('Nothing to drill yet.'); return; }
+    startTraining(null, qs, 'Drill · my weakest concepts', 'mysheet');
+  };
+  A['mysheet-learn'] = function (t) {
+    var c = findConcept(attr(t, 'data-key')); if (!c) return;
+    c.qids.forEach(function (id) { if (S.save.mistakes[id]) S.save.mistakes[id].fixed = true; });
+    c.pids.forEach(function (id) { if (S.save.casePts[id]) S.save.casePts[id].fixed = true; });
+    c.lids.forEach(function (id) { if (S.save.ltMiss[id]) S.save.ltMiss[id].fixed = true; });
+    persist(); render(); flash('Marked as mastered. It stays on your sheet as one line.');
+  };
+  A['mysheet-ai'] = function () { aiSheet(); };
   A['plan-tick'] = function (t) { var id = attr(t, 'data-id'); if (S.save.plan[id]) delete S.save.plan[id]; else S.save.plan[id] = Date.now(); persist(); render(); };
   A['plan-go'] = function (t) {
     var to = attr(t, 'data-to').split(':'), k = to[0], v = to[1];
@@ -6070,8 +6419,8 @@ LL.chapter({
   function lightAI() {
     var c = root.claude;
     if (!c || typeof c.use !== 'function') return;
-    c.use('sample').then(function (s) { if (s) { S.ai = s; if (/^(lot|mark|cases)$/.test(S.view)) render(); } }, function () { /* absent */ });
-    c.use('downloads').then(function (d) { if (d) { S.dl = d; if (S.view === 'cheats') render(); } }, function () { /* absent */ });
+    c.use('sample').then(function (s) { if (s) { S.ai = s; if (/^(lot|mark|cases|mysheet)$/.test(S.view)) render(); } }, function () { /* absent */ });
+    c.use('downloads').then(function (d) { if (d) { S.dl = d; if (/^(cheats|mysheet)$/.test(S.view)) render(); } }, function () { /* absent */ });
   }
   function start(data) {
     screen = doc.getElementById('screen');
@@ -6100,7 +6449,7 @@ LL.chapter({
     LL.cloud.init(function (remote) {
       if ((remote.updated || 0) > (S.save.updated || 0)) {
         S.save = fixSave(remote); LL.store.save(S.save); loadGen(); LL.sfx.setOn(S.save.sound !== false);
-        if (!S.run && /^(title|map|plan|notebook|cheats|hall|cases|settings)$/.test(S.view)) render();
+        if (!S.run && /^(title|map|plan|notebook|cheats|mysheet|hall|cases|settings)$/.test(S.view)) render();
       } else if ((S.save.updated || 0) > (remote.updated || 0)) LL.cloud.push(S.save);
       syncTopbar();
     });

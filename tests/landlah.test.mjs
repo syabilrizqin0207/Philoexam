@@ -167,20 +167,58 @@ test('AI marking replies are validated and clamped', () => {
   assert.equal(G.validateGen({ q: 'x', o: ['a', 'b'], a: 0 }), null);
 });
 
-test('cheat sheet builds from mistakes, pack and lots', () => {
+test('cheat sheet builds from concepts, pack and lots', () => {
   const save = LL.newSave();
-  save.mistakes['c9-02'] = { n: 2, streak: 0, traps: ['absd-higher'], miss: [], fixed: false };
-  save.mistakes['c9-01'] = { n: 1, streak: 0, traps: ['whose-fraud'], miss: [2], fixed: false };
-  save.casePts['zen:0.0.0'] = { t: 'Joint tenants by default', m: 2, ch: 7, cs: 'zen', title: 'Zen', n: 1 };
+  save.mistakes['c9-02'] = { n: 2, streak: 0, traps: ['absd-higher'], miss: [], fixed: false, at: 1 };
+  save.mistakes['c9-01'] = { n: 1, streak: 0, traps: ['whose-fraud'], miss: [2], fixed: false, at: 2 };
+  save.casePts['zen:0.0.1'] = { t: 'Survivorship: a Will cannot pass a joint tenant\'s share (Shafeeg v Fatimah).', m: 3, ch: 7, cs: 'zen', title: 'Zen', n: 1 };
   const out = LL.cheats.build(save, { mistakes: true, pack: true, lots: [9, 7] }, 'Tester');
-  assert.ok(out.inner.includes('Traps I fell for'));
-  assert.ok(out.inner.includes('higher applicable ABSD') || out.inner.includes('HIGHER applicable ABSD'));
-  assert.ok(out.inner.includes('Case point'));
+  assert.ok(out.inner.includes('My concepts to fix'));
+  assert.ok(out.inner.includes('HIGHER applicable ABSD'));
+  assert.ok(out.inner.includes('from your case studies'));
+  assert.ok(out.inner.includes('Shafeeg v Fatimah'));
   assert.ok(out.inner.includes('Exam pack'));
   assert.ok(out.inner.includes('LOT 9'));
   assert.ok(out.doc.startsWith('<!doctype html>') && out.doc.includes('@page'));
   const weak = LL.cheats.weakLots(Object.assign(LL.newSave(), { ch: { 5: { best: { pct: 40 } } } }));
   assert.deepEqual([...weak], [5]);
+});
+
+test('auto cheat sheet: concepts group mistakes, find rules and authorities, and track mastery', () => {
+  const K = LL.concepts, save = LL.newSave();
+  assert.equal(K.build(save).length, 0);
+  const before = K.snapshot(save);
+  save.mistakes['c6-01'] = { n: 1, streak: 0, traps: ['label'], miss: [], fixed: false, at: 5 };
+  save.mistakes['c6-02'] = { n: 2, streak: 0, traps: ['services'], miss: [], fixed: false, at: 6 };
+  save.ltMiss['5:3'] = { ch: 5, i: 3, n: 1, at: 7, fixed: false };
+  const l = K.build(save);
+  const lease = l.find(c => c.name === 'Lease v licence');
+  assert.ok(lease, 'grouped by topic');
+  assert.equal(lease.misses, 3);
+  assert.equal(lease.qids.length, 2);
+  assert.ok(lease.auths.some(a => a.name === 'Street v Mountford'), 'finds the authority');
+  assert.ok(lease.rule && /Mountford/.test(lease.rule[1]), 'matches the rule in the notes');
+  assert.deepEqual([...lease.traps].sort(), ['label', 'services']);
+  assert.ok(l.find(c => c.kind === 'quick' && c.ch === 5), 'lightning misses become a quick-facts card');
+  assert.equal(K.added(before, save).length, 2);
+  assert.equal(K.added(K.snapshot(save), save).length, 0);
+  save.mistakes['c6-01'].fixed = true; save.mistakes['c6-02'].fixed = true;
+  const after = K.build(save).find(c => c.name === 'Lease v licence');
+  assert.ok(after.mastered);
+  assert.equal(K.counts(save).open, 1);
+  assert.ok(K.cardHTML(lease).includes('Remember'));
+  assert.ok(K.cardHTML(after, { compact: true }).includes('cs-line'));
+  assert.ok(K.aiPrompt(save).includes('CONCEPT'));
+  assert.ok(K.drillQs(lease).length >= 2);
+});
+
+test('every concept the bank can produce names a rule or an authority, with no stray citations', () => {
+  const save = LL.newSave();
+  for (const q of LL.allQuestions()) save.mistakes[q.id] = { n: 1, streak: 0, at: 1, traps: [], miss: q.s ? q.s.map((_, i) => i) : [], fixed: false };
+  const l = LL.concepts.build(save);
+  const bare = l.filter(c => !c.rule && !c.auths.length && !c.secs.length && !c.traps.length);
+  assert.ok(bare.length <= 12, 'concepts with nothing to cite: ' + bare.map(c => c.name).join(', '));
+  l.forEach(c => c.auths.forEach(a => assert.ok(!/\d/.test(a.name), 'citation number left in ' + a.name)));
 });
 
 test('plan items deep-link to things that exist', () => {
