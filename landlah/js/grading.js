@@ -252,7 +252,7 @@
     }).join('\n\n');
     return [
       'Write ONE new multiple-choice question for a Singapore university Land Law exam (NUS RE2702), on the topic "' + ch.title + '".',
-      'Match the lecturer\'s style shown in the examples: a short Singapore fact pattern with named parties ending "In this case:", or a stem "The following statement is true about ...". Exactly four options. Exactly one is the most suitable answer. Distractors should be plausible and usually fail on one word or on the reason given.',
+      'Match the lecturer\'s style shown in the examples: a short Singapore fact pattern with named parties ending "In this case:", or a stem "The following statement is true about ...". Exactly four options. Exactly one is the most suitable answer. Distractors should be plausible and usually fail on one word or on the reason given. All four options must be about the same length (within 20% of each other) and the correct option must NOT be the longest; give wrong options a plausible-sounding reason so they match in length.',
       'Use ONLY the rules and cases below. Do not invent cases, sections or facts about the law. If a rule is marked [check], do not test it.',
       '',
       'RULES:\n' + rules,
@@ -271,6 +271,9 @@
     var a = +d.a;
     if (!(a >= 0 && a <= 3)) return null;
     if (d.o.some(function (o) { return typeof o !== 'string' || !o.trim(); })) return null;
+    /* Reject a question whose correct option gives itself away by length. */
+    var lens = d.o.map(function (o) { return o.trim().length; }), others = lens.filter(function (_, i) { return i !== a; });
+    if (lens[a] > Math.max.apply(null, others) * 1.1) return null;
     return { t: 'mcq', topic: String(d.topic || 'AI question').slice(0, 40), q: d.q.slice(0, 1200), o: d.o.map(function (o) { return o.slice(0, 400); }), a: a, why: String(d.why || '').slice(0, 900) };
   };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -114,7 +114,6 @@
     if (s.length === 0) return 'None of the statements';
     var names = s.map(function (i) { return '(' + U.roman(i) + ')'; });
     if (s.length === 1) return names[0] + ' only';
-    if (s.length === n && n > 2) return 'All of ' + names[0] + ' to ' + names[n - 1];
     return names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
   };
   /* Combination options (A–D) for a statement set. Deterministic for a given seed. */
@@ -141,6 +140,12 @@
       var picks = near.slice(0, Math.min(2, near.length));
       picks = picks.concat(far.slice(0, 3 - picks.length));
       if (picks.length < 3) picks = picks.concat(near.slice(picks.length, 3));
+      /* Length must not give the answer away: at least one wrong combination lists as many statements as the right one. */
+      if (correct.length < n && !picks.some(function (p) { return p.length >= correct.length; })) {
+        var big = U.shuffle(all.filter(function (s) { return s.length >= correct.length; }), rand)
+          .sort(function (x, y) { return dist(x) - dist(y); })[0];
+        if (big) picks[picks.length - 1] = big;
+      }
       opts = picks.concat([correct]);
       opts.sort(function (a, b) {
         if (a.length !== b.length) return a.length - b.length;

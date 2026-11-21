@@ -84,11 +84,30 @@ test('the four practice-paper MCQs carry the published answers', () => {
   assert.equal(q4.a, 2); // C
 });
 
+test('option lengths never give the answer away', () => {
+  const verbatim = new Set(['c7-01', 'c8-01', 'c9-02']); // copied word for word from the practice paper
+  for (const q of LL.allQuestions()) {
+    if (q.t === 'mcq') {
+      if (verbatim.has(q.id)) continue;
+      const L = q.o.map(o => o.length), c = L[q.a], others = L.filter((_, i) => i !== q.a);
+      assert.ok(c <= Math.max(...others), `${q.id}: the correct option is the longest (${L.join('/')})`);
+      assert.ok(Math.max(...L) / Math.min(...L) <= 1.35, `${q.id}: option lengths too uneven (${L.join('/')})`);
+    } else {
+      for (let seed = 1; seed < 60; seed++) {
+        const co = LL.comboOptions(q, seed), right = co.sets[co.answer].length;
+        if (right < q.s.length) assert.ok(co.sets.some((s, i) => i !== co.answer && s.length >= right), `${q.id}: the correct combination lists the most statements`);
+        if (q.opts) break;
+      }
+    }
+  }
+  assert.equal(G.validateGen({ q: 'x', o: ['short', 'short', 'a much much longer correct option here', 'short'], a: 2, why: 'y' }), null);
+});
+
 test('combination labels follow the paper', () => {
   assert.equal(LL.comboLabel([2], 4), '(iii) only');
   assert.equal(LL.comboLabel([0, 2], 4), '(i) and (iii)');
   assert.equal(LL.comboLabel([0, 1, 3], 4), '(i), (ii) and (iv)');
-  assert.equal(LL.comboLabel([0, 1, 2, 3], 4), 'All of (i) to (iv)');
+  assert.equal(LL.comboLabel([0, 1, 2, 3], 4), '(i), (ii), (iii) and (iv)');
 });
 
 test('case studies: marks add up, keywords compile, scheme matches the model answer', () => {
@@ -163,7 +182,7 @@ test('AI marking replies are validated and clamped', () => {
   assert.equal(G.parseAiMark({ nope: 1 }, res), null);
   assert.ok(G.aiMarkPrompt(cs, 0, 'x').includes('MARKING SCHEME'));
   assert.ok(G.genPrompt(LL.getChapter(8), []).includes('JSON'));
-  assert.ok(G.validateGen({ q: 'x', o: ['a', 'b', 'c', 'd'], a: 2, why: 'y' }));
+  assert.ok(G.validateGen({ q: 'x', o: ['aaa', 'bbb', 'ccc', 'ddd'], a: 2, why: 'y' }));
   assert.equal(G.validateGen({ q: 'x', o: ['a', 'b'], a: 0 }), null);
 });
 
