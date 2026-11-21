@@ -1,3 +1,56 @@
+# Land Lah!
+
+A pixel-art study system for **RE2702 Land Law** (final: **Tuesday 24 Nov 2026, 9–11 am, Biz2 05-11**, open book,
+Section A 20 MCQs × 3 marks + Section B one 40-mark case study). Same engine and look as Reason Lah! below,
+re-themed as a survey-plan blueprint: ten **lots** (one per chapter) and the **Exam Hall**.
+
+## Use it
+
+- **Offline:** open `dist/land-lah.html` in any browser. One self-contained file; progress saves in that browser.
+- **Print now:** `dist/RE2702-exam-pack.pdf` is the Exam Pack plus a one-pager for every lot (A4, two columns, 10 pages).
+- **From source:** open `landlah/index.html`.
+
+## What's inside
+
+| Lot | Place | Lectures | Topic |
+|---|---|---|---|
+| 1 | Kampong Lorong Buangkok | L1 · L2 | Legal system, land, fixtures, title |
+| 2 | Chancery Lane | L3 | Law and equity, Equity's Darling |
+| 3 | Sunny Avenue | L4 | Covenants |
+| 4 | Tai Seng Industrial Estate | L5 | Easements, support, licences |
+| 5 | Raffles Place | L5 | Mortgages |
+| 6 | Orchard Road | L6 | Leases and licences |
+| 7 | Sentosa Cove | L7 · L8 | Co-ownership and trusts |
+| 8 | Punggol | L9 | Sale and purchase: the contract |
+| 9 | Newton · Land Registry | L10 | Torrens, caveats, stamp duty |
+| 10 | Toa Payoh | L11 · L12 | Agency and estate agency |
+
+Each lot: **lesson cards** (built from the Context and Case Guide), **training** with per-option explanations,
+a 60-second **lightning round**, a **graded test** (10 MCQs, 25 min, /30) and **case drills**.
+
+- **151 MCQs** in the practice paper's style (single best answer and "(i) and (iii)" combinations), including the
+  paper's own four MCQs with their answers. 149 lightning items, 77 named traps, 29 case studies.
+- **Case studies** are written in a workspace (facts beside the answer box, ILAC skeleton, authority bank, timer)
+  and marked point by point against a marking scheme. The keyword marker scales marks down for thin answers;
+  you then adjust each point against the model answer. In the claude.ai artifact, **Prof. Borough (Claude)** can mark
+  each part and can write new questions in the prof's style.
+- **Exam Hall:** six fixed mock papers (no MCQ repeats across papers) plus a random paper. Full 2-hour sitting,
+  Section A only, or Section B only. Paste is blocked in Section B, as in the real paper.
+- **Notebook and cheat sheets:** every wrong MCQ (with its trap) and every case point scored under half becomes a line
+  on your **My Mistakes** cheat sheet. Add the Exam Pack and one-pagers for weak lots, then save or print it.
+- **3-day plan** with deep links, and searchable open-book notes with an A–Z case index.
+
+Grading: 3 marks per MCQ, all or nothing, no penalty assumed. Letter grades use fixed bands for feedback only.
+Points marked **[check]** come from the source notes and need confirming against the lecture slides.
+
+```
+npm run test:land    # answer keys, combinations, traps, marking schemes (every model answer must pass its own scheme), mock papers
+npm run build:land   # bundles landlah/ into dist/land-lah.html
+npm run smoke:land   # plays every screen in headless Chromium at desktop and phone widths
+```
+
+---
+
 # Reason Lah!
 
 A pixel-art study game for **GET1026 / GEK2048 Effective Reasoning** (final exam: 1pm, 30 Nov 2026, Examplify, open book).

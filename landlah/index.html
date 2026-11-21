@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- APP:HEAD:START -->
+<title>Land Lah!</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A pixel-art study system for RE2702 Land Law: lessons, graded tests, ILAC case studies, full mock papers and cheat sheets built from your mistakes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap">
+<!-- APP:HEAD:END -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- APP:BODY:START -->
+<div class="crt-bg" aria-hidden="true">
+  <div class="grid-floor"></div>
+  <div class="porthole"></div>
+  <canvas class="deco deco-bolt" data-icon="key" data-scale="8"></canvas>
+  <canvas class="deco deco-smile" data-icon="scroll" data-scale="11"></canvas>
+  <canvas class="deco deco-glass" data-icon="hourglass" data-scale="11"></canvas>
+  <canvas class="deco deco-star" data-icon="star" data-scale="10"></canvas>
+</div>
+<div class="scanlines" aria-hidden="true"></div>
+<div id="app" class="app">
+  <header class="topbar">
+    <div class="badges" aria-hidden="true">
+      <canvas data-icon="house" data-scale="3"></canvas>
+      <canvas data-icon="scales" data-scale="3"></canvas>
+      <canvas data-icon="stamp" data-scale="3"></canvas>
+    </div>
+    <div class="topbar-text">
+      <span>RE2702 Land Law</span>
+      <span>Study Arcade · Final 24 Nov 2026, 9am · Biz2 05-11</span>
+      <span>Open book · 20 MCQs + a 40-mark case study</span>
+    </div>
+    <div class="topbar-tools">
+      <span class="chip chip-static" id="sync-chip">THIS DEVICE</span>
+      <button type="button" class="chip" id="btn-sound" data-act="toggle-sound" aria-pressed="true">SFX ON</button>
+      <button type="button" class="chip" id="btn-home" data-act="home">MAP</button>
+    </div>
+  </header>
+  <main id="screen" class="screen" tabindex="-1" aria-live="polite"></main>
+  <div id="overlay" class="overlay" hidden></div>
+  <footer class="foot">Unofficial revision system built from your RE2702 notes, practice paper and Q&amp;A bank. Lecture slides win every conflict; points marked [check] need confirming.</footer>
+</div>
+<div id="print-root"></div>
+<!-- APP:BODY:END -->
+<!-- APP:SCRIPTS:START -->
+<script src="js/core.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/content/cast.js"></script>
+<script src="js/content/traps.js"></script>
+<script src="js/content/ch01.js"></script>
+<script src="js/content/ch02.js"></script>
+<script src="js/content/ch03.js"></script>
+<script src="js/content/ch04.js"></script>
+<script src="js/content/ch05.js"></script>
+<script src="js/content/ch06.js"></script>
+<script src="js/content/ch07.js"></script>
+<script src="js/content/ch08.js"></script>
+<script src="js/content/ch09.js"></script>
+<script src="js/content/ch10.js"></script>
+<script src="js/content/cases-exam.js"></script>
+<script src="js/content/cases-drill.js"></script>
+<script src="js/content/reference.js"></script>
+<script src="js/grading.js"></script>
+<script src="js/cheats.js"></script>
+<script src="js/ui.js"></script>
+<!-- APP:SCRIPTS:END -->
+</body>
+</html>

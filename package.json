@@ -2,12 +2,15 @@
   "name": "reason-lah",
   "version": "1.0.0",
   "private": true,
-  "description": "Pixel-art study game for GET1026 / GEK2048 Effective Reasoning, set in Singapore.",
+  "description": "Pixel-art study games set in Singapore: Reason Lah! (GET1026 Effective Reasoning) and Land Lah! (RE2702 Land Law).",
   "scripts": {
     "test": "node --test tests/content.test.mjs",
     "build": "node scripts/build.mjs",
     "smoke": "node tests/smoke.mjs",
-    "serve": "python3 -m http.server 8080"
+    "serve": "python3 -m http.server 8080",
+    "test:land": "node --test tests/landlah.test.mjs",
+    "build:land": "node scripts/build-landlah.mjs",
+    "smoke:land": "node tests/smoke-landlah.mjs"
   },
   "license": "UNLICENSED"
 }
