@@ -9,6 +9,8 @@ re-themed as a survey-plan blueprint: ten **lots** (one per chapter) and the **E
 - **Offline:** open `dist/land-lah.html` in any browser. One self-contained file; progress saves in that browser.
 - **Print now:** `dist/RE2702-exam-pack.pdf` is the Exam Pack plus a one-pager for every lot (A4, two columns, 10 pages).
 - **From source:** open `landlah/index.html`.
+- **Host it (e.g. Netlify):** `node scripts/build-landlah.mjs --site site` writes `site/` (index.html + audio/);
+  drag that folder onto app.netlify.com/drop. Claude-only features (AI marking, Claude voices, sync) need the claude.ai artifact.
 
 ## What's inside
 
@@ -32,8 +34,8 @@ its own (it pulls in MCQs you have got wrong before), then the **graded test** (
 **training** with per-option explanations, a 60-second **lightning round**, **case drills**, and the original
 **lesson cards** for reading.
 
-- **Narration:** every lesson is pre-recorded in a natural male voice (the open-source Kokoro-82M neural voice,
-  "am_fenrir"), one MP3 per lot in `landlah/audio/`, so it sounds the same on every device, phones and Safari
+- **Narration:** every lesson is pre-recorded in a natural British male voice (the open-source Kokoro-82M neural
+  voice "bm_george", British pronunciation), one MP3 per lot in `landlah/audio/`, so it sounds the same on every device, phones and Safari
   included, and offline. The animation follows the recording line by line (`landlah/js/content/voice.js` holds each
   line's start and end). The Voice menu also offers the four Claude voices (Buttery, Airy, Glassy, Rounded; claude.ai
   artifact on desktop Chrome/Edge only), the browser's own voice, and captions only. Captions always show the words.

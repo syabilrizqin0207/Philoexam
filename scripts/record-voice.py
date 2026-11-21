@@ -5,7 +5,7 @@ joins them into one MP3 per lot and writes landlah/js/content/voice.js with the 
 so the player can sync the animation to the audio.
 
   node scripts/export-narration.mjs > narration.json
-  python3 scripts/record-voice.py narration.json MODEL_DIR [--voice am_fenrir] [--speed 0.92] [--lots 1,2]
+  python3 scripts/record-voice.py narration.json MODEL_DIR [--voice bm_george] [--speed 0.92] [--lots 1,2]
 
 MODEL_DIR holds kokoro-v1.0.onnx and voices-v1.0.bin (github.com/thewh1teagle/kokoro-onnx releases,
 model-files-v1.0). Needs: pip install kokoro-onnx soundfile; ffmpeg on PATH.
@@ -63,7 +63,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('narration')
     ap.add_argument('models')
-    ap.add_argument('--voice', default='am_fenrir')
+    ap.add_argument('--voice', default='bm_george')  # British male; b* voices read British English
     ap.add_argument('--speed', type=float, default=0.92)
     ap.add_argument('--lots', default='')
     ap.add_argument('--kbps', default='48k')
@@ -88,7 +88,7 @@ def main():
         prev_si = None
 
         def say(text):
-            audio, rate = k.create(speechify(text), voice=a.voice, speed=a.speed, lang='en-us')
+            audio, rate = k.create(speechify(text), voice=a.voice, speed=a.speed, lang='en-gb' if a.voice[0] == 'b' else 'en-us')
             assert rate == sr
             audio = audio.astype('float32')
             nz = np.nonzero(np.abs(audio) > 0.004)[0]  # trim the model's own leading/trailing silence

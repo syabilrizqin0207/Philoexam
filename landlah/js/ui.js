@@ -414,7 +414,7 @@
   function claudeModes() { return LL.CLAUDE_VOICES.map(function (n) { return ['claude-' + n, 'Claude · ' + n.charAt(0).toUpperCase() + n.slice(1)]; }); }
   function voiceModes(v) {
     var out = [];
-    if (LL.voiceFor(v)) out.push(['natural', 'Natural voice']);
+    if (LL.voiceFor(v)) out.push(['natural', 'Natural voice (British)']);
     if (S.tts) out = out.concat(claudeModes());
     if (root.speechSynthesis && root.SpeechSynthesisUtterance) out.push(['device', 'Device voice']);
     out.push(['captions', 'Captions only']);
@@ -447,7 +447,7 @@
       '<label class="vsel"><span>Voice</span><select id="v-voice">' + voiceModes(v).map(function (m) { return '<option value="' + m[0] + '"' + (m[0] === defaultMode(v) ? ' selected' : '') + '>' + m[1] + '</option>'; }).join('') + '</select></label>' +
       '<label class="vsel"><span>Speed</span><select id="v-rate">' + [0.85, 1, 1.15, 1.3, 1.5].map(function (r) { return '<option value="' + r + '"' + (r === S.vrate ? ' selected' : '') + '>' + r + '×</option>'; }).join('') + '</select></label>' +
       btn('CC', 'v-cc', 'aria-pressed="true" id="v-cc"', 'btn-small btn-ghost') + '</div></div>';
-    h += '<p class="lede small">Keys: Space to play or pause, ← → to change scene, T or F to answer a quick check. ' + (LL.voiceFor(v) ? 'Narrated in a natural recorded voice; try the other voices in the Voice menu.' : S.tts ? 'Claude reads it to you; pick a Claude voice in the Voice menu.' : 'If you hear nothing, choose another voice.') + ' Captions always show the narration.' + '</p>';
+    h += '<p class="lede small">Keys: Space to play or pause, ← → to change scene, T or F to answer a quick check. ' + (LL.voiceFor(v) ? 'Narrated in a natural British voice; the Voice menu has others.' : S.tts ? 'Claude reads it to you; pick a Claude voice in the Voice menu.' : 'If you hear nothing, choose another voice.') + ' Captions always show the narration.' + '</p>';
     return h + '<div class="hub-foot">' + (v.custom ? btn('◂ My cheat sheet', 'go', 'data-view="mysheet"', 'btn-small btn-ghost') : btn('◂ Lot', 'enter', 'data-n="' + v.n + '"', 'btn-small btn-ghost') + btn('Read the cards instead', 'lesson', 'data-n="' + v.n + '"', 'btn-small btn-ghost')) + '</div></section>';
   };
   AFTER.watch = function (p) {
