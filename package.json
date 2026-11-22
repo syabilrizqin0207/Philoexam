@@ -10,7 +10,8 @@
     "serve": "python3 -m http.server 8080",
     "test:land": "node --test tests/landlah.test.mjs",
     "build:land": "node scripts/build-landlah.mjs",
-    "smoke:land": "node tests/smoke-landlah.mjs"
+    "smoke:land": "node tests/smoke-landlah.mjs",
+    "build:papers": "node scripts/build-papers.mjs"
   },
   "license": "UNLICENSED"
 }
