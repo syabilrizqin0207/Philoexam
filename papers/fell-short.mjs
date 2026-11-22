@@ -64,23 +64,7 @@ export default {
         ['A financier loses to the landowner once the item is a fixture', ['An engine on hire-purchase that was fixed to land went with the land to a later mortgagee without notice (**Hobson v Gorringe**). The hire-purchase company keeps only a personal claim against the hirer. In the Omega question, the bank without notice took the bolted press.']],
         ['Airspace and subsoil', ['The owner holds the airspace reasonably necessary for ordinary use and enjoyment (s 2 LTA). A low intrusion, even an 8-inch sign, is trespass (**Kelsen v Imperial Tobacco**), and so is a crane jib over the roof (**Anchor Brewhouse**). An aircraft at a reasonable height is not (**Bernstein v Skyviews**). Below ground, Singapore limits ownership to the depth reasonably necessary or, if the title is silent, 30 m below the Singapore Height Datum (s 3B State Lands Act). **Bocardo v Star Energy** states the English rule, not the Singapore one.']],
         ['The legal system points you keep losing', ['Only the **ratio** of a higher court in the same hierarchy binds; obiter dicta, and all English decisions, are persuasive. The Court of Appeal is the final court (Privy Council appeals ended in 1994). Civil claims are brought by the injured party and proved on a **balance of probabilities**; criminal cases are brought by the Public Prosecutor and proved **beyond reasonable doubt**. **Arbitration** is a private tribunal whose award binds; **mediation** is assisted negotiation that binds only once the parties sign a settlement.']]
-      ],
-      quotes: {
-        'National Provincial Bank v Ainsworth': 'In **National Provincial Bank v Ainsworth** Lord Wilberforce held that a proprietary right must be definable, identifiable by third parties, capable of assumption by third parties and have some permanence. The right here [is / is not] proprietary because ...',
-        'Bernstein v Skyviews': 'Under **Bernstein v Skyviews** an owner controls only the airspace needed for the ordinary use and enjoyment of the land, so a flight at a reasonable height is no trespass; here the [drone / aircraft] at [height] is [within / above] that zone.',
-        'Kelsen v Imperial Tobacco': 'In **Kelsen v Imperial Tobacco** a sign projecting about 8 inches over the claimant\'s shop was a trespass and an injunction issued; a low intrusion such as [the signboard] is likewise a trespass.',
-        'Anchor Brewhouse v Berkley House': 'In **Anchor Brewhouse v Berkley House** crane jibs swinging over neighbouring land were a trespass and an injunction was granted, which supports [the owner] against [the developer].',
-        'Bocardo v Star Energy': '**Bocardo v Star Energy** treats deep drilling as trespass in England, but in Singapore s 3B State Lands Act limits subsoil ownership to the depth reasonably necessary or 30 m below the Singapore Height Datum.',
-        'Holland v Hodgson': 'Under **Holland v Hodgson** the court asks the degree of annexation and the object of annexation; here [item] is [fixed / resting on its own weight] and its purpose is [to improve the land / for its own enjoyment].',
-        "People's Park Chinatown v Chief Assessor": '**People\'s Park Chinatown v Chief Assessor** applied the Holland v Hodgson tests in Singapore [check facts], so the two-test approach governs [item] here.',
-        'Elitestone v Morris': 'In **Elitestone v Morris** a bungalow resting on pillars without foundations was part and parcel of the land; where the item is the building itself, the two tests do not apply.',
-        'Kiah bte Hanapiah v Sam': 'In **Kiah bte Hanapiah v Sam** a removable Malay stilt house was held to be a chattel on the strength of local custom, an exception to the rule in Elitestone.',
-        "D'Eyncourt v Gregory": 'In **D\'Eyncourt v Gregory** statues resting on their own weight were fixtures because their purpose was to complete the design of the house; purpose outweighs weight, so [item] passes with the land.',
-        'Botham v TSB': '**Botham v TSB** treated towel rails and soap dishes as chattels but items built into the structure as fixtures; [item] is closer to [which category].',
-        'Fisher v Dixon': 'Under **Fisher v Dixon** and **Spyers v Phillipson** a tenant may remove trade, ornamental and domestic fixtures during the term or soon after, making good any damage.',
-        'BP Refinery v Amazon': 'Items a tenant leaves behind after giving up possession belong to the landlord (**BP Refinery v Amazon** [check]), so [tenant] has lost the right to remove [items].',
-        'Hobson v Gorringe': 'In **Hobson v Gorringe** an engine on hire-purchase that became a fixture passed to a mortgagee without notice; [financier] keeps only a personal claim against [hirer].'
-      }
+      ]
     },
 
     2: {
@@ -94,15 +78,7 @@ export default {
         ['Damages are a right; equitable remedies are discretionary', ['Damages follow proof of breach, limited by remoteness (**Hadley v Baxendale**); a fixed sum is valid as liquidated damages only if it is a genuine pre-estimate, otherwise it is a void penalty (**Dunlop v New Garage**). Specific performance, injunctions, rescission and rectification are discretionary and can be refused for unclean hands, delay or where damages suffice. A buyer who refused to complete when the market fell and then demanded performance when it rose was refused for unclean hands (**Lee Christina v Lee Eunice**).']],
         ['Equity treats as done what ought to be done', ['Once there is a valid, specifically enforceable contract for the sale of land, the buyer owns the land in equity and the seller holds the legal title as a bare trustee until completion (conversion; **Lysaght v Edwards**). A written agreement for a lease is treated as the lease in equity if specific performance is available (**Walsh v Lonsdale**).']],
         ['The Torrens twist', ['On registered land the register replaces most of the notice inquiry. Knowing of an unregistered interest is not, of itself, fraud (s 47(2) LTA). An equitable owner such as Hana must protect herself by caveat, or prove actual dishonesty under s 46(2)(a), to defeat a registered buyer.']]
-      ],
-      quotes: {
-        "Earl of Oxford's Case": 'Since the **Earl of Oxford\'s Case** (1615), where law and equity conflict, equity prevails; s 3 Civil Law Act keeps that rule while fusing only the administration of the two.',
-        'Walsh v Lonsdale': 'Under **Walsh v Lonsdale** a specifically enforceable agreement for a lease is treated in equity as a lease, so [tenant] holds an equitable lease although no deed was executed.',
-        'Hadley v Baxendale': 'Damages cover loss arising naturally from the breach or within both parties\' contemplation (**Hadley v Baxendale**), so [the head of loss] is [recoverable / too remote].',
-        'Dunlop Pneumatic Tyre v New Garage': 'A fixed sum is enforceable only as a genuine pre-estimate of loss; one out of all proportion is a void penalty (**Dunlop v New Garage**; applied to default interest in **Hong Leong**).',
-        'Pilcher v Rawlins': 'A bona fide purchaser of the legal estate for value without notice takes free of prior equitable interests (**Pilcher v Rawlins** [check]); [buyer] fails that test because [no legal estate / no value / notice].',
-        'Tulk v Moxhay': 'In **Tulk v Moxhay** Chancery restrained a buyer who bought with notice of a promise to keep Leicester Square open: equity binds a purchaser with notice of a restrictive covenant.'
-      }
+      ]
     },
 
     3: {
@@ -116,17 +92,7 @@ export default {
         ['Burden: never at law; negative only in equity', ['The burden does not run at common law (**Austerberry v Oldham**), and the House of Lords refused to change that for positive covenants (**Rhone v Stephens**). In equity a negative burden runs (**Tulk v Moxhay**) if the covenant is negative in substance, touches and concerns benefited land nearby, was intended to bind successors, and the successor has notice. On registered land, entry on the Certificate of Title gives notice. Remedy: injunction.']],
         ['Benefit: easier to pass', ['At law the benefit passes if the covenant touches and concerns the land, the covenantee held the legal estate, the parties intended it to pass and the claimant holds a legal estate (**Swift v Combined English Stores**). In equity it passes by annexation (**Federated Homes**, a statutory route in England [check Singapore equivalent]), express assignment, or a building scheme (**Elliston v Reacher**: common seller, plots laid out with common restrictions for the benefit of all, bought on that footing).']],
         ['Getting round the positive-burden rule', ['Sue the original covenantor and rely on a chain of indemnity covenants; use benefit and burden where the successor takes a linked benefit such as using the road he must pay for (**Halsall v Brizell**); or rely on statutory schemes such as strata management corporations.']]
-      ],
-      quotes: {
-        'Tweddle v Atkinson': 'Only a party to a contract can enforce it (**Tweddle v Atkinson**), so between [covenantor] and [covenantee], the original parties, the covenant is enforced as a contract.',
-        'Austerberry v Oldham Corporation': 'The burden of a positive covenant does not run at common law (**Austerberry v Oldham**), so [successor] is not bound by the promise to [repair / maintain].',
-        'Rhone v Stephens': 'In **Rhone v Stephens** the House of Lords confirmed that a positive covenant to repair a roof did not bind a later owner and refused to change the rule; the [repair / maintenance] covenant here binds only [original covenantor].',
-        'Tulk v Moxhay': 'Under **Tulk v Moxhay** the burden of a negative covenant runs in equity to a successor with notice who did not promise anything himself; covenant [(ii)] is negative, benefits [retained land] and is on the CT, so [successor] is bound.',
-        'P&A Swift Investments v Combined English Stores': 'The benefit passes at law where the covenant touches and concerns the land (**P&A Swift v Combined English Stores**); [the covenant] relates to the use and value of [dominant land], not to the person.',
-        'Federated Homes v Mill Lodge': 'In **Federated Homes v Mill Lodge** the benefit was annexed to the land by statute (English LPA s 78) [check Singapore equivalent], so it passes to each later owner of [dominant land].',
-        'Halsall v Brizell': 'Under **Halsall v Brizell** a person who takes the benefit of a facility must bear the burden tied to it, so [successor], who uses [the road], must pay [the contribution].',
-        'Elliston v Reacher': 'Where a common seller laid out an estate with mutual restrictions for the benefit of all plots, a building scheme lets any plot owner enforce them against any other (**Elliston v Reacher** [check slides]).'
-      }
+      ]
     },
 
     4: {
@@ -139,23 +105,7 @@ export default {
         ['Creation and ending', ['Easements are created expressly (deed, noted on the CT), by implication on a sale of part (necessity, common intention, **Wheeldon v Burrows**: continuous and apparent, necessary for reasonable enjoyment, in use), or in equity by a specifically enforceable agreement. They end by unity of ownership, release, abandonment, or an alteration of the dominant land that substantially increases the burden (**Graham v Philcox**).']],
         ['Support: land, then buildings', ['Every landowner has a natural right of support for land from adjoining soil, and a cause of action arises when damage happens (**Backhouse v Bonomi**). The English line protects buildings only through an easement of support acquired by long use (**Dalton v Angus**). In Singapore, **Xpress Print v Monocrafts** held that the neighbour owes a duty to support the claimant\'s property including buildings. Add negligence for a lack of monitoring. Printwell v Costco turns on this.']],
         ['A licence is permission, not property', ['A bare licence is revocable and binds nobody else (**Wood v Leadbitter**). A contractual licence is governed by its terms and may be enforced by injunction (**Winter Garden**; **Errington**). A licence by estoppel arises from a promise, reliance and detriment (**Inwards v Baker**). A licence binds a buyer only where the buyer\'s conscience is affected so that a constructive trust arises, for example where he agreed to honour it (**Ashburn Anstalt v Arnold**).']]
-      ],
-      quotes: {
-        'Re Ellenborough Park': 'Under **Re Ellenborough Park** an easement needs a dominant and servient tenement, a right that accommodates the dominant land, different owners, and a right capable of grant; here [right] satisfies [tests] but [fails / passes] test [n] because ...',
-        'Hill v Tupper': 'A right that benefits a person\'s business rather than the land is no easement (**Hill v Tupper**), so [right] fails the accommodation test.',
-        'Copeland v Greenhalf': 'In **Copeland v Greenhalf** storing vehicles on a strip of land amounted to possession and could not be an easement; [storage right] likewise amounts to ouster.',
-        'Batchelor v Marlow': 'In **Batchelor v Marlow** a right to park all day on weekdays left the owner with no reasonable use and was not an easement; [parking right] fails for the same reason, though a narrower right might pass.',
-        'Phipps v Pears': 'There is no easement to be protected from the weather (**Phipps v Pears**); courts recognise new negative easements sparingly.',
-        'Dyce v Hay': 'The categories of easement are not closed, but new ones are admitted with care (**Dyce v Hay**).',
-        'Wheeldon v Burrows': 'On a sale of part, quasi-easements that are continuous and apparent, necessary for reasonable enjoyment and in use pass to the buyer (**Wheeldon v Burrows**), so [buyer] may claim [the right].',
-        'Graham v Philcox': 'Under **Graham v Philcox** altering the dominant land ends or limits an easement only if it substantially increases the use, so converting [the house] into [flats] leaves the right of way intact unless use grows substantially.',
-        'Backhouse v Bonomi': 'Support for land is a natural right, and the cause of action arises when damage occurs (**Backhouse v Bonomi**).',
-        'Dalton v Angus': 'In England a building needs an easement of support acquired by long use (**Dalton v Angus**), but Singapore goes further in **Xpress Print**.',
-        'Xpress Print v Monocrafts': 'In **Xpress Print v Monocrafts** the Court of Appeal held that a neighbour who removes soil without sufficient alternative support breaches a duty owed to the adjoining property, including its buildings; [Costco] breached that duty when ...',
-        'Wood v Leadbitter': 'A bare licence that grants no interest is revocable, leaving a claim in damages at most (**Wood v Leadbitter**), so [licensee] cannot insist on staying.',
-        'Inwards v Baker': 'Where the owner promised a right, the claimant relied on it and suffered detriment, equity may make the licence irrevocable (**Inwards v Baker**; and see **Errington v Errington** for a contractual licence that could not be revoked while the couple paid).',
-        'Ashburn Anstalt v Arnold': 'A contractual licence is personal and binds a buyer only where his conscience is affected so that a constructive trust arises (**Ashburn Anstalt v Arnold**), for example if [buyer] agreed to honour it.'
-      }
+      ]
     },
 
     5: {
@@ -169,24 +119,7 @@ export default {
         ['The lender\'s remedies, in order', ['A registered charge gives no inherent right to possession; after default the mortgagee may enter after one month\'s notice (s 75 LTA). The power of sale has **arisen** when all three conditions are met (mortgage by deed, money due, no exclusion) and becomes **exercisable** on any one s 25 CLPA trigger: (a) notice to pay and three months\' default, (b) interest one month in arrears, (c) breach of another term. Proceeds go to prior incumbrances, costs, the debt, later mortgagees, then the borrower (s 26(3) CLPA; s 74 LTA). Foreclosure needs a court order; the court may order sale instead (s 30 CLPA; **Palk**).']],
         ['The duty on sale', ['The mortgagee must act in good faith and take reasonable care to obtain the best price reasonably obtainable (**Cuckmere Brick**), but need not wait for a better market (**China & South Sea Bank**). A sale to its own subsidiary without advertising, at well below valuation, is the classic breach.']],
         ['A lease granted after the mortgage', ['A mortgagor in possession may grant an occupation lease of up to 3 years unless the deed excludes it (s 23 CLPA), and such a lease binds the mortgagee because it is authorised by law (s 89(1) LTA). Otherwise a later lease binds the bank only if the mortgage authorises it or the bank consents. A lease made before the mortgage binds the bank. Gabby\'s 24-month student lease is the exam example.']]
-      ],
-      quotes: {
-        'Fairclough v Swan Brewery': 'In **Fairclough v Swan Brewery** a postponement until six weeks before a lease expired was void because redemption was illusory; here [postponement] [does / does not] leave [borrower] something worth redeeming.',
-        'Knightsbridge Estates v Byrne': 'In **Knightsbridge Estates v Byrne** a 40-year postponement between commercial, advised parties was valid; [borrower], a [sophisticated investor], is held to [the lock-in].',
-        'Fiscal Consultants v Asia Commercial Finance': '**Fiscal Consultants v Asia Commercial Finance** upheld an early redemption charge between commercial parties [check facts]; the charge here is valid unless wholly disproportionate.',
-        'Esso Petroleum v Harper': 'In **Esso v Harper\'s Garage** a 21-year solus tie was an unreasonable restraint of trade and the linked postponement fell with it, while a 4.5-year tie stood.',
-        'Samuel v Jarrah Timber': 'An option for the lender to buy the mortgaged property, granted as part of the loan, is void as a clog (**Samuel v Jarrah Timber**), so [lender] cannot exercise the option over [property].',
-        'Jones v Morgan': 'A later option can still be treated as part of the original mortgage deal and fall as a clog (**Jones v Morgan** [check]).',
-        'Citicorp v Wee Ah Kee': 'Between sophisticated commercial parties the clog rule has declining force (**Citicorp v Wee Ah Kee** [check]).',
-        'Kreglinger v New Patagonia Meat': 'In **Kreglinger** a collateral option to buy sheepskins was valid because it was a separate bargain that did not stop redemption; [the tied insurance] is likewise valid unless unfair.',
-        'Multiservice Bookbinding v Marden': 'English law strikes down a term only for morally reprehensible conduct (**Multiservice Bookbinding v Marden**), a higher bar than Singapore\'s test in **BOM v BOK**.',
-        'BOM v BOK': 'Under **BOM v BOK** the claimant must show an infirmity that the other party exploited; the burden then shifts to that party to show the transaction was fair. [Borrower] [can / cannot] show such an infirmity because ...',
-        'Hong Leong Finance v Tan Gin Huay': 'In **Hong Leong Finance v Tan Gin Huay** 18% default interest against contract rates of 5.5% to 6.75% was a penalty, out of all proportion to the lender\'s greatest conceivable loss, and "industry practice" was no answer; [rate] here is [higher / comparable].',
-        'China & South Sea Bank v Tan Soon Gin': 'A mortgagee may choose when to sell and need not wait for a better market (**China & South Sea Bank v Tan Soon Gin**).',
-        'Cuckmere Brick v Mutual Finance': 'Under **Cuckmere Brick v Mutual Finance** the mortgagee must take reasonable care to obtain the true market value; selling [without advertising / to its subsidiary] at [price] breaches that duty.',
-        'Palk v Mortgage Services': 'In **Palk v Mortgage Services** the court ordered sale at the borrower\'s request in a falling market; s 30 CLPA gives [borrower] the same route.',
-        'Tan Hin Choon v Ban Hin Lee Bank': 'A mortgagee in possession must account for the rents it receives and use due diligence (**Tan Hin Choon v Ban Hin Lee Bank**; **OUB v Chua Kok Kay** [check]), so [bank] may collect the students\' rent but must credit it to the debt.'
-      }
+      ]
     },
 
     6: {
@@ -201,25 +134,7 @@ export default {
         ['Who can sue whom after assignment', ['The original landlord and tenant stay bound in **privity of contract** for the whole term (**City of London v Fell**). The current landlord and the current tenant are bound in **privity of estate** by covenants that touch and concern the land (**Spencer\'s Case**; s 10 and s 11 CLPA pass them with the reversion). A "sublease" for the whole remaining term is an assignment (**Milmo v Carreras**). Whenever you write privity of estate, add privity of contract.']],
         ['Quiet enjoyment and the tenant\'s self-help', ['The landlord impliedly covenants not to interfere substantially with the tenant\'s possession or derogate from the grant, judged by what both contemplated at the grant. The landlord does not underwrite profitability, the tenant takes the premises as found (caveat lessee), and a clause barring set-off works (**OUE v Three Sixty**). A tenant who withholds rent under a no-set-off lease is in breach: pay, then sue for damages. Making a business slightly costlier is no derogation (**Cold Storage**).']],
         ['Forfeiture in three steps', ['(1) A right to forfeit: an express re-entry clause, or s 93 LTA for a registered lease. (2) Procedure: s 18 CLPA for non-rent breaches (a notice stating the breach, asking for a remedy if it is capable of remedy, and for compensation; the tenant may seek relief), s 18A for rent (the tenant may pay arrears and costs into court and keep the lease). (3) Waiver: accepting rent with knowledge of the breach waives forfeiture for that breach (**Expert Clothing** [check holding]). For rent also consider distress under the Distress Act (up to 12 months\' rent).']]
-      ],
-      quotes: {
-        'Street v Mountford': 'In **Street v Mountford** the House of Lords held that exclusive possession for a term at a rent creates a tenancy whatever the label ("a fork is a fork"); [occupier] has exclusive possession of [rooms] for [term] at [rent], so this is a lease.',
-        'Goh Cin Chye v Peck Teck Kian Realty': 'Singapore follows **Street v Mountford** (**Goh Cin Chye v Peck Teck Kian Realty** [check facts]).',
-        'Errington v Errington': 'A family arrangement can be a contractual licence rather than a tenancy (**Errington v Errington**).',
-        'Antoniades v Villiers': 'A clause the parties never intended to operate is a sham and is ignored (**Antoniades v Villiers**), while separate agreements made at different times give no joint tenancy (**AG Securities v Vaughan**).',
-        'Aslan v Murphy': 'Retained keys do not by themselves negate exclusive possession; the question is why they were kept (**Aslan v Murphy** [check]).',
-        'Abbeyfield v Woods': 'Where the owner provides services that require unrestricted access, the occupier is a lodger with a licence (**Abbeyfield v Woods**; **Marchant v Charters**).',
-        'Lace v Chantler': 'A lease must have a term certain from the start; a lease "for the duration of the war" was void (**Lace v Chantler**).',
-        'Prudential Assurance v London Residuary': 'A lease until the land is needed for road widening is void for uncertainty, although rent paid and accepted creates a yearly tenancy (**Prudential Assurance v London Residuary**).',
-        'City of London Corporation v Fell': 'The original tenant remains liable in privity of contract for the whole contractual term (**City of London v Fell**), so [landlord] can also sue [original tenant] for [assignee]\'s rent.',
-        "Spencer's Case": 'Under **Spencer\'s Case** covenants that touch and concern the land bind an assignee in privity of estate, so [landlord] can sue [assignee] on the rent covenant.',
-        'Milmo v Carreras': 'A sublease that covers the whole of the sublessor\'s remaining term takes effect as an assignment (**Milmo v Carreras**).',
-        'Cold Storage v MCST Chancery Court': 'An act that merely makes the tenant\'s business more costly is no derogation from grant (**Cold Storage v MCST Chancery Court**).',
-        'OUE v Three Sixty Degree': 'In **OUE v Three Sixty Degree** the Court of Appeal read the lease as a commercial contract: a clause barring set-off was effective, the landlord did not underwrite profitability and the tenant took the premises as found, so withholding rent justified re-entry.',
-        'Expert Clothing v Hillgate House': 'Accepting rent with knowledge of a breach waives the right to forfeit for that breach (**Expert Clothing v Hillgate House** [check holding]).',
-        'Winter Garden Theatre v Millennium': 'A contractual licence is not revocable at will and may be protected by injunction (**Winter Garden Theatre v Millennium**; **Hurst v Picture Theatres**).',
-        'Co-operative Insurance v Argyll Stores': 'The court will not order a tenant to keep trading (**Co-operative Insurance v Argyll Stores**); the landlord\'s remedy is damages.'
-      }
+      ]
     },
 
     7: {
@@ -235,24 +150,7 @@ export default {
         ['Express trusts of land need writing; implied trusts do not', ['A declaration of trust of land must be in signed writing (s 7 Civil Law Act [check]); resulting and constructive trusts are exempt. A sister claiming an oral declaration must therefore argue a resulting or constructive trust instead.']],
         ['Step 4: severance, and what does not sever', ['**Statute**: (1) a declaration in the approved form, (2) served on every other joint tenant, (3) registered (s 53(5), (6) LTA). Severance takes effect only on registration (**Chan Lung Kien v Chan Shwe Ching** [2018], overruling **Diaz v Diaz**). **Equity** (**Williams v Hensman**): acting on one\'s own share (sale, mortgage, lease, a specifically enforceable contract, a writ of seizure and sale), mutual agreement, or a mutual course of dealing. **By law**: bankruptcy, unlawful killing (**Re K**), a divorce judgment. **Does not sever**: a Will, a unilateral oral statement, failed negotiations (**Burgess v Rawnsley**). Equity also treats business partners as tenants in common: survivorship has no place in business (**Malayan Credit v Jack Chia-MPH**).']],
         ['Ending co-ownership, and divorce', ['Co-ownership ends by survivorship, joint sale, partition or sale in lieu of partition. The court orders sale where it is necessary or expedient, weighing the relationship, the state and use of the property and the prejudice to each owner (**Abu Bakar v Jawahir**; **Chiam Heng Luan** [check each]). An occupier can offer to buy the other out. On divorce, s 112 Women\'s Charter divides matrimonial assets; it is for spouses only, so unmarried partners must use trust law.']]
-      ],
-      quotes: {
-        'Shafeeg v Fatimah': 'On the death of a joint tenant the interest passes by survivorship and does not pass under the Will (**Shafeeg v Fatimah** [check facts]), so [deceased]\'s Will leaving "all my property" passes nothing in [the property].',
-        'Diaz v Diaz': 'Statutory severance needs a declaration in the approved form, service on every joint tenant and registration, and takes effect only on registration (**Chan Lung Kien v Chan Shwe Ching** [2018], overruling **Diaz v Diaz**); [co-owner] died before registration, so the joint tenancy was not severed.',
-        'Williams v Hensman': 'Under **Williams v Hensman** a joint tenancy is severed in equity by acting on one\'s own share, by mutual agreement or by a mutual course of dealing; [act] here [is / is not] such an act.',
-        'Burgess v Rawnsley': 'Negotiations that never produce a concluded agreement do not sever (**Burgess v Rawnsley**).',
-        'Re K': 'A person who unlawfully kills a co-owner cannot benefit by survivorship: the killing severs the joint tenancy (**Re K**).',
-        'Malayan Credit v Jack Chia-MPH': 'Equity treats business partners registered as joint tenants as tenants in common because "the right of survivorship has no place in business" (**Malayan Credit v Jack Chia-MPH**).',
-        'Dyer v Dyer': 'Under **Dyer v Dyer** the trust of a legal estate results to the person who advances the purchase money, so [payer] is presumed to keep the beneficial interest.',
-        'Goh Swee Fang v Tiah Juah Kim': 'The court first looks for the transferor\'s actual intention, and applies the presumptions only if none can be found (**Goh Swee Fang v Tiah Juah Kim**; **Sitiawah Bee v Rosiyah**).',
-        'Westdeutsche Landesbank v Islington LBC': 'Lord Browne-Wilkinson\'s statement in **Westdeutsche Landesbank v Islington** explains the presumed resulting trust where a person pays for property vested in another or in joint names.',
-        'Pettitt v Pettitt': 'The presumption of advancement carries little weight today (**Pettitt v Pettitt**, Lord Diplock).',
-        'Lau Siew Kim v Yeo Guan Chye Terence': 'In **Lau Siew Kim v Yeo Guan Chye Terence** the Court of Appeal held that the person asserting a resulting trust bears the burden of proving it, that its extent is fixed at acquisition, and that the strength of the presumption of advancement depends on the relationship at the time of the transfer.',
-        'Chan Yuen Lan v See Fong Mun': 'Under **Chan Yuen Lan v See Fong Mun** unequal contributions give a presumed resulting trust in those proportions unless a common intention shows otherwise, and mortgage repayments count only if the parties\' plan treated them as contributions.',
-        'Patricia Khoo v Khoo Gaik Pin': 'Under **Patricia Khoo v Khoo Gaik Pin** presumptions are a last resort; on gratuitous joint names the court asks whether an immediate benefit, a benefit on death, or no benefit was intended. The text "[words]" points to scenario [1 / 2 / 3].',
-        'Wong Mei Lee Millie v Jake Ngor': 'The Court of Appeal in **Wong Mei Lee Millie v Jake Ngor** [2026] SGCA 27 put the transferor\'s intention first: where the registration was intended, there is no resulting trust.',
-        'DOP v DOO': 'Unequal contributions do not decide the shares where a common intention at acquisition is proved (**DOP v DOO** [2025]: 83.7:16.3 contributions, held equally).'
-      }
+      ]
     },
 
     8: {
@@ -266,26 +164,7 @@ export default {
         ['Writing and part performance', ['No action on a contract for the sale of land unless it, or a memorandum of it, is in writing and signed by the party sued (s 6(d) Civil Law Act; your slide cites s 6A(d) [check]). Emails can satisfy it and a typed name can be a signature (**Joseph Mathew**; **SM Integrated Transware**). Part performance can save an oral contract if the claimant\'s acts are unequivocally referable to it (**Maddison v Alderson**; **Hu Lee Impex**).']],
         ['The option to purchase', ['To the buyer an OTP is an irrevocable offer, and the seller cannot withdraw during the option period; the contract arises on exercise (**Spiro v Glencrown**). Exercise must follow the OTP strictly, in manner and time (**JT Chanrai**: missing the step to sign the formal agreement cost the 10% deposit). A deposit of about 10% is earnest money and can be forfeited (**Linggi Plantations**). Stamp duty on an exercised OTP is payable within 14 days. An option fee is paid against a signed OTP; a "goodwill deposit" is not one.']],
         ['Remedies, conversion and misrepresentation', ['After a valid contract the buyer is owner in equity and bears the risk (**Lysaght v Edwards**). Specific performance is the usual remedy for land, but it is discretionary (**EC Investment v Ridout Residence**) and can be refused for unclean hands (**Lee Christina**). Misrepresentation: an untrue statement of fact that induced the contract; fraudulent (**Derry v Peek**), negligent (s 2(1) Misrepresentation Act), innocent (s 2(2)). Requisitions: "subject to satisfactory replies" gives a conditional exit (**Chu Yik Man**; **Sheriffa** [check holdings]).']]
-      ],
-      quotes: {
-        'Harvey v Facey': 'A reply stating a price is an invitation to treat, not an offer (**Harvey v Facey**).',
-        'Hyde v Wrench': 'A counter-offer rejects and ends the original offer (**Hyde v Wrench**).',
-        'Neale v Merrett': 'An acceptance that changes the terms is no acceptance (**Neale v Merrett**).',
-        'Balfour v Balfour': 'Domestic arrangements are presumed not to be intended as contracts (**Balfour v Balfour**).',
-        'Spiro v Glencrown Properties': 'An OTP is an irrevocable offer that the seller cannot withdraw during the option period, and the contract arises when the buyer exercises it (**Spiro v Glencrown**); [buyer] exercised on [date], so a contract arose then.',
-        'JT Chanrai v Consolidated Hotels': 'Exercise must comply strictly with the OTP: in **JT Chanrai v Consolidated Hotels** the buyer who failed to sign the formal agreement in time lost the 10% deposit.',
-        'Linggi Plantations v Jagatheesan': 'A deposit of about 10% is earnest money that can be forfeited on default (**Linggi Plantations v Jagatheesan**); a larger sum risks being a penalty.',
-        'Lysaght v Edwards': 'Once there is a valid contract the buyer is owner in equity and the seller a bare trustee (**Lysaght v Edwards**).',
-        'Tai Tong Realty v Galstaun': 'The older strict view treated "subject to contract" as conclusive (**Tai Tong Realty v Galstaun**), but Singapore now looks at all the circumstances.',
-        'Norwest Holdings v Newport Mining': 'In **Norwest Holdings v Newport Mining** [2011] SGCA 42 the Court of Appeal held that "subject to contract" creates a strong presumption that the parties do not intend to be bound until a formal contract is made, rebutted only by strong context; here [the repeated label / promised OTP] supports that presumption.',
-        'OCBC Capital Investment Asia v Wong Hua Choon': 'In **OCBC Capital Investment v Wong Hua Choon** [2012] SGCA 54 the Court of Appeal found a binding oral contract despite the label, looking at all the circumstances; unlike that case, [facts] here point [towards / away from] an intention to be bound.',
-        'RTS Flexible Systems v Molkerei': 'A contract can be inferred from conduct even under a "subject to contract" letter (**RTS Flexible Systems v Molkerei Müller**).',
-        'Joseph Mathew v Singh Chiranjeev': 'Emails can satisfy s 6(d) and a typed name can be a signature (**Joseph Mathew v Singh Chiranjeev**; **SM Integrated Transware v Schenker**); WhatsApp messages arguably follow [check].',
-        'Maddison v Alderson': 'Part performance requires acts by the claimant that are unequivocally referable to the contract (**Maddison v Alderson**; **Hu Lee Impex v Lim Aik Seng**); [paying a deposit / renovating with the owner\'s knowledge] [is / is not] enough.',
-        'Lee Christina v Lee Eunice': 'Specific performance was refused to a buyer who rejected the title and then sought to enforce when the market rose (**Lee Christina v Lee Eunice**: unclean hands).',
-        'EC Investment Holding v Ridout Residence': 'Specific performance is not automatic: the court considers the adequacy of damages, hardship and conduct (**EC Investment Holding v Ridout Residence**).',
-        'Derry v Peek': 'Fraud requires a false statement made knowingly, without belief in its truth, or recklessly (**Derry v Peek**).'
-      }
+      ]
     },
 
     9: {
@@ -299,23 +178,7 @@ export default {
         ['The safety nets, and their limits', ['**Rectification** (s 160): the court may correct the register for fraud, omission or mistake, but not against a proprietor in possession unless he was party or privy to it (s 160(2)). **Assurance Fund** (ss 151, 155): compensation for loss caused by the Registrar\'s or staff\'s omission, mistake or misfeasance; in **Bebe** staff failed to notice a cancelled CT. A forger acting alone does not trigger it. The owner can always sue the wrongdoer.']],
         ['Caveats, section by section', ['**s 115**: any person claiming an interest in land may lodge a caveat; the interest must exist when it is lodged (**Asiatic Enterprises**), and a bare contractual right to money is not enough (**Salbiah v Micro Credit**). **s 119**: effective from lodgment, blocking conflicting dealings. **s 120**: 30 days to get a court order once a dealing is lodged. **s 121**: lapses after 5 years. **s 124**: undertaking or security. **s 127**: removal; open with s 127(1) (any reason, caveator shows cause) or s 127(2) (vexatious, frivolous or not in good faith) and say why. Disputed facts go to **American Cyanamid**: a serious question, then the balance of convenience (**Eng Mee Yong**). **s 128**: compensation for a caveat lodged wrongfully or without reasonable cause.']],
         ['Stamp duty and ABSD', ['Stamp duty on an exercised OTP is payable within 14 days. ABSD (slide figures; confirm current IRAS rates): citizens 0% / 20% / 30%, PRs 5% / 30% / 35%, foreigners 60%. For joint buyers of different profiles the **higher** rate applies to the whole purchase; rates are never averaged. SSD: 12%, 8%, 4%, then nil.']]
-      ],
-      quotes: {
-        'Gibbs v Messer': '**Gibbs v Messer** reflected the older deferred view, under which a forged instrument gave no good root [check facts]; Singapore instead follows Frazer v Walker.',
-        'Frazer v Walker': 'Singapore follows immediate indefeasibility (**Frazer v Walker**): a registered purchaser takes a good title even under a forged instrument, so [innocent proprietor]\'s title is indefeasible.',
-        'Breskvar v Wall': 'Registration is the source of title, not merely a record of it (**Breskvar v Wall**; s 45 LTA).',
-        'Assets Co v Mere Roihi': 'Fraud under s 46(2)(a) means actual dishonesty, not negligence (**Assets Co v Mere Roihi**).',
-        'Waimiha Sawmilling v Waione Timber': 'Deliberately shutting one\'s eyes to avoid learning the truth is dishonesty (**Waimiha Sawmilling v Waione Timber**); [proprietor], warned that [facts], chose not to inquire.',
-        'UOB v Bebe bte Mohammad': 'In **UOB v Bebe bte Mohammad** [2006] SGCA 30 the Court of Appeal held that fraud must be the registered proprietor\'s own actual dishonesty or his agent\'s; a third party\'s fraud does not count and a clerk\'s carelessness is not wilful blindness, so [bank]\'s mortgage stands.',
-        'Loke Yew v Port Swettenham': 'A promise to honour an interest made with no intention of keeping it is actual fraud (**Loke Yew v Port Swettenham**).',
-        'Bahr v Nicolay': 'Registering with notice of an unregistered interest is not of itself fraud (**Bahr v Nicolay**; s 47(2) LTA).',
-        'Ho Kon Kim v Lim Gek Kim Betsy': 'A later broken promise is not fraud unless the proprietor never meant to keep it (**Ho Kon Kim v Lim Gek Kim Betsy**).',
-        'Mahidon Nichiar v Dawood': 'Only a purchaser for value in good faith is protected: a donee or a mistaken transferee takes no better title than his transferor (s 46(3); **Mahidon Nichiar v Dawood**; **Chan Wai Leen v Ho Dat Khoon** [2024]).',
-        'Salbiah v Micro Credit': 'A bare contractual right to receive money is not a caveatable interest (**Salbiah v Micro Credit**), so [claimant]\'s caveat should be removed.',
-        'Asiatic Enterprises v UOB': 'The caveator\'s interest must exist when the caveat is lodged (**Asiatic Enterprises v UOB**).',
-        'Eng Mee Yong v Letchumanan': 'On a removal application the court asks whether there is a serious question to be tried and then weighs the balance of convenience; vague or contradictory claims fail (**Eng Mee Yong v Letchumanan**, applying **American Cyanamid**).',
-        'Tan Soo Leng David': 'Compensation under s 128 needs a caveat lodged wrongfully or without reasonable cause and a foreseeable loss (**Tan Soo Leng David**; **Ho Soo Fong v Standard Chartered**).'
-      }
+      ]
     },
 
     10: {
@@ -330,21 +193,7 @@ export default {
         ['The agent is a fiduciary', ['Duties: obey lawful instructions, use reasonable care and skill, act in good faith, disclose material information and every offer, avoid conflicts, make no secret profit, and do not deal with the principal\'s property for oneself or a connected person without full disclosure and consent (**McPherson v Watt**). A trade custom unknown to the principal is no defence (**Hippisley v Knee Bros**; the KFM question).']],
         ['Remedies for secret profits and bribes: list them', ['(1) **Account** for the profit. (2) **Constructive trust**: a bribe or secret commission is held on trust for the principal, who can claim it and what it bought (**FHR v Cedar Capital**; **AG for Hong Kong v Reid**). (3) **Rescind** the contract with the third party who paid the bribe. (4) **Forfeit commission** where the agent acted dishonestly (**Andrews v Ramsay**); an honest agent who took undisclosed discounts accounts for them but keeps his commission (**Hippisley**). (5) **Damages** for loss. Then say which fit the facts, and add a CEA complaint in one line.']],
         ['Commission: read the agreement first', ['Under the CEA **exclusive** form (up to 3 months, with a 3-month tail), Clause 6 makes commission payable on any binding sale in the validity period, whoever found the buyer; effective cause is irrelevant. Under a **non-exclusive** arrangement the agent must be the effective cause (**Grandhome v Ng Kok Eng**): commission promised, agent engendered the buyer\'s interest, offer conveyed, sale to the same buyer at about the same price within a short time. Then test for a break in the chain: a time gap, a price change, someone else persuading the buyer. A commission-only agent earns nothing unless the sale happens (**Luxor v Cooper**). The CEA rules also ban taking commission from both sides without consent.']]
-      ],
-      quotes: {
-        'Freeman & Lockyer v Buckhurst Park Properties': 'Apparent authority arises from the principal\'s representation, the third party\'s reliance and authority the principal could have given (**Freeman & Lockyer v Buckhurst Park**), so [principal] is bound by [agent]\'s [act].',
-        'Armagas v Mundogas': 'An agent cannot create his own apparent authority; the representation must come from the principal (**Armagas v Mundogas**).',
-        'Kelner v Baxter': 'Promoters who contract for a company not yet incorporated are personally liable, and the company cannot later ratify (**Kelner v Baxter**).',
-        'Collen v Wright': 'An agent who claims authority he does not have is liable for breach of warranty of authority (**Collen v Wright**).',
-        'Bolton v Lambert': 'Ratification relates back to the time of the unauthorised act (**Bolton v Lambert**; **Fitzmaurice v Bayley** [check]), so [owner] is bound by the OTP as if authorised when it was granted.',
-        'Hippisley v Knee Brothers': 'In **Hippisley v Knee Brothers** an agent who kept trade discounts had to account for them, since a custom unknown to the principal is no defence, but kept his commission because he acted honestly; [agent] must likewise account for [discount].',
-        'Andrews v Ramsay': 'An agent who takes a secret commission from the other side must account for it and forfeits his own commission (**Andrews v Ramsay** [check exact holding]).',
-        'McPherson v Watt': 'An agent may not sell to himself or a connected person without full disclosure and consent (**McPherson v Watt**), so [agent]\'s failure to disclose that [buyer] is his [relative] is a breach.',
-        'Attorney General for Hong Kong v Reid': 'A bribe is held on constructive trust for the principal, who may claim the property bought with it and its increase in value (**AG for Hong Kong v Reid**).',
-        'FHR European Ventures v Cedar Capital Partners': 'In **FHR European Ventures v Cedar Capital** [2014] UKSC 45 a secret commission received by an agent was held on constructive trust for the principal; [agent] holds the [$ amount] on trust for [principal] [check Singapore adoption].',
-        'Luxor (Eastbourne) v Cooper': 'A commission-only agent earns nothing unless the sale actually takes place (**Luxor v Cooper**).',
-        'Grandhome v Ng Kok Eng': 'Under **Grandhome v Ng Kok Eng** a non-exclusive agent earns commission only as the effective cause of the sale; [agent] engendered the buyer\'s interest and conveyed the offer, but [time gap / price change / another agent] [breaks / does not break] the chain.'
-      }
+      ]
     }
   },
 

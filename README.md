@@ -10,10 +10,12 @@ re-themed as a survey-plan blueprint: ten **lots** (one per chapter) and the **E
 - **Print now:** `dist/RE2702-exam-pack.pdf` is the Exam Pack plus a one-pager for every lot (A4, two columns, 10 pages).
 - **Where I fell short** (`dist/RE2702-where-i-fell-short.pdf`, 26 pages): a learning essay built from your own Land Lah!
   record (every MCQ and quick-fire fact you got wrong, your scores per lot, the patterns behind them), the key learning
-  points per lot, and every case in the course with its facts, holding and a "quote it" sentence for the exam.
-- **Section B guide** (`dist/RE2702-section-b-guide.pdf`, 21 pages): how the case study is marked and timed, an issue
-  spotter, 24 topic guides (signals, issues in order, law paragraph, application, conclusion lines, traps), 10 narrative
-  essay plans and mark plans for the past-year case studies.
+  points per lot, and every case in the course with its facts, holding and a finished "quote it" sentence applied to a
+  course fact pattern (papers/quotes.mjs).
+- **Section B guide** (`dist/RE2702-section-b-guide.pdf`, 20 pages): how the case study is marked and timed, an issue
+  spotter, 24 topics each with a sample question and a full model answer in ILAC (one Issue, Law, Application and
+  Conclusion block per issue, then advice to each party; papers/topics.mjs), 10 narrative essay plans, and the
+  past-year case studies mapped to the model answers.
 - Rebuild the papers with `npm run build:papers` (each is capped at 30 pages). To refresh your record from a newer save,
   add `-- --record path/to/save.json` (the app's synced `landlah` document, or a save exported from the browser).
 - **From source:** open `landlah/index.html`.

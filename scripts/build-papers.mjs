@@ -49,6 +49,7 @@ if (ri > 0) {
 const record = JSON.parse(fs.readFileSync(recordPath, 'utf8'));
 const FS = (await import(pathToFileURL(path.join(repo, 'papers', 'fell-short.mjs')))).default;
 const SB = (await import(pathToFileURL(path.join(repo, 'papers', 'section-b.mjs')))).default;
+const QUOTES = (await import(pathToFileURL(path.join(repo, 'papers', 'quotes.mjs')))).default;
 
 /* ---------- tiny markup: **bold**, *italic*, [check] ---------- */
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -78,20 +79,20 @@ b { font-weight: 700; }
 .cover { border: 2px solid #0e4a6b; padding: 12px 14px; margin-bottom: 10px; }
 .cover .sub { font-family: 'Inter', sans-serif; font-size: 10pt; color: #33586b; margin-bottom: 6px; }
 .cover .meta { font-family: 'Inter', sans-serif; font-size: 8pt; color: #4d6472; }
-.cols { column-count: 2; column-gap: 7mm; column-rule: 0.5px solid #c9dbe4; }
-.cols > * { break-inside: avoid-column; }
-.cols p, .cols li { break-inside: auto; }
-.lot { margin-top: 10px; }
-.lot > h2 { break-after: avoid; }
-.box { border: 1px solid #9fc6da; background: #f3f8fb; padding: 6px 8px; margin: 0 0 7px; break-inside: avoid; }
+.cols { column-count: 2; column-gap: 6mm; column-rule: 0.5px solid #c9dbe4; column-fill: auto; orphans: 2; widows: 2; }
+.cols h2 { font-size: 11.2pt; margin: 10px 0 6px; padding: 4px 7px; }
+.cols h2:first-child { margin-top: 0; }
+h2, h3, h4, .lab { break-after: avoid; }
+tr, li, .sec { break-inside: avoid; }
+.box { border: 1px solid #9fc6da; background: #f3f8fb; padding: 6px 8px; margin: 0 0 7px; }
 .box.warn { border-color: #e0a21a; background: #fff8e6; }
 .box.bad { border-color: #d9a3a3; background: #fdf3f3; }
 .lab { display: inline-block; font-size: 7.2pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; background: #0e4a6b; padding: 1px 5px; margin-right: 4px; }
 .lab.red { background: #b3261e; } .lab.amb { background: #a86b00; } .lab.grn { background: #2f7d4f; }
-table { border-collapse: collapse; width: 100%; margin: 0 0 8px; font-size: 8.3pt; break-inside: avoid; }
+table { border-collapse: collapse; width: 100%; margin: 0 0 8px; font-size: 8.3pt; }
 th { font-size: 7.6pt; text-align: left; background: #e3eff4; padding: 3px 4px; border: 0.6px solid #b9d2df; }
 td { padding: 3px 4px; border: 0.6px solid #c9dbe4; vertical-align: top; }
-.miss { border-left: 3px solid #b3261e; padding: 3px 0 3px 7px; margin: 0 0 6px; break-inside: avoid; }
+.miss { border-left: 3px solid #b3261e; padding: 3px 0 3px 7px; margin: 0 0 6px; }
 .miss.fixed { border-left-color: #2f7d4f; }
 .miss .q { font-style: italic; color: #33414b; }
 .miss .a { margin-top: 2px; }
@@ -101,12 +102,19 @@ td { padding: 3px 4px; border: 0.6px solid #c9dbe4; vertical-align: top; }
 .case .ql::before { content: "Quote it: "; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 7.4pt; color: #a86b00; text-transform: uppercase; letter-spacing: 0.04em; }
 .sec { margin: 0 0 4px; }
 .sec b { font-family: 'Inter', sans-serif; font-size: 8.3pt; }
-.topic { margin-top: 12px; }
-.topic > h3 { break-after: avoid; }
+.tt { font-size: 11pt; margin: 12px 0 5px; padding: 4px 0 3px; border-bottom: 2px solid #0e4a6b; }
+.sq { background: #fff8e6; border-left: 3px solid #e0a21a; padding: 5px 8px; margin: 4px 0 7px; font-style: italic; }
+.sq .lab { font-style: normal; }
+.ans { border-left: 3px solid #2f7d4f; background: #f4faf6; padding: 5px 8px; margin: 0 0 7px; }
+.ans .blk { margin: 0 0 6px; padding-bottom: 5px; border-bottom: 0.6px dashed #b8d8c4; }
+.ans .blk:last-of-type { border-bottom: 0; }
+.ans .il { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 8.6pt; color: #1f5c38; margin: 0 0 3px; }
+.ans .k { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 7.6pt; letter-spacing: 0.05em; text-transform: uppercase; color: #0e4a6b; margin-right: 3px; }
+.ans .adv { background: #e6f2ea; padding: 4px 6px; margin-top: 4px; }
 .law { background: #f3f8fb; border-left: 3px solid #0e4a6b; padding: 5px 8px; margin: 0 0 7px; }
 .law .lab, .app .lab { margin-bottom: 2px; }
 .app { border-left: 3px solid #2f7d4f; padding: 4px 8px; margin: 0 0 7px; background: #f4faf6; }
-.essay { margin: 0 0 9px; padding-bottom: 6px; border-bottom: 1px solid #c9dbe4; break-inside: avoid; }
+.essay { margin: 0 0 9px; padding-bottom: 6px; border-bottom: 1px solid #c9dbe4; }
 .small { font-size: 8pt; color: #4d6472; }
 .chip { display: inline-block; font-size: 7pt; font-weight: 600; border: 0.7px solid #9fc6da; padding: 0 4px; margin-right: 3px; color: #33586b; }
 `;
@@ -160,20 +168,20 @@ function paper1() {
     <div class="meta">Built from your Land Lah! record as of ${esc(record.asOf)} · ${totalMs} MCQs missed (${openMs} still open) · ${ltN} quick-fire facts missed · Mock Paper 1 Section A ${mock ? mock.pct + '% (' + mock.a + '/' + mock.aMax + ')' : 'not sat'} · video quick checks ${vq[0]}/${vq[1]}</div></div>`;
 
   /* Part A: diagnosis */
-  h += `<h2>Part A. The honest diagnosis</h2><div class="cols">`;
+  h += `<div class="cols"><h2>Part A. The honest diagnosis</h2>`;
   h += para(FS.intro);
   h += `<table><tr><th>Lot</th><th>Graded test (best; history)</th><th>Checkpoint</th><th>Training</th><th>MCQs missed (open)</th><th>Quick facts missed</th></tr>` +
     lots.map(ch => { const s = lotStats(ch.n); const L = s.L;
       return `<tr><td><b>${ch.n}</b> ${esc(ch.short)}</td><td>${L.best != null ? L.best + '%' : '–'}${L.history && L.history.length > 1 ? ' (' + L.history.join(' → ') + ')' : ''}</td><td>${L.check != null ? L.check + '%' : '–'}</td><td>${L.trained != null ? L.trained + '%' : '–'}</td><td>${s.ms.length} (${s.open})</td><td>${s.lt.length}</td></tr>`; }).join('') + `</table>`;
   FS.patterns.forEach(p => { h += `<div class="box ${p.tone || ''}"><h4 style="margin-top:0">${md(p.head)}</h4>${para([].concat(p.body).map(x => x.replace('{IV}', ivCount).replace('{SETS}', setMs.length)))}</div>`; });
   h += `<h3>What you already do well</h3>${list(FS.strengths)}`;
-  h += `<h3>How to use this essay</h3>${list(FS.howToUse)}</div>`;
+  h += `<h3>How to use this essay</h3>${list(FS.howToUse)}`;
 
   /* Part B: lot by lot */
   lots.forEach(ch => {
     const L = FS.lots[ch.n];
     const s = lotStats(ch.n);
-    h += `<section class="lot"><h2>Lot ${ch.n}. ${esc(ch.title)} <span style="font-weight:400;font-size:9pt">(${esc(ch.lec)})</span></h2><div class="cols">`;
+    h += `<h2>Lot ${ch.n}. ${esc(ch.title)} <span style="font-weight:400;font-size:8.5pt">(${esc(ch.lec)})</span></h2>`;
     h += `<h3>Where you fell short</h3>${para(L.diag)}`;
     const ms = s.ms.sort((a, b) => (a[1].fixed - b[1].fixed) || (b[1].n - a[1].n));
     h += ms.map(([id, m]) => mistakeHTML(id, m)).join('');
@@ -184,19 +192,18 @@ function paper1() {
     L.learn.forEach(pt => { h += `<h4>${md(pt[0])}</h4>${para(pt[1])}`; });
     h += `<h3>Every case in this lot, and how to quote it</h3>`;
     ch.cases.forEach(c => {
-      const q = Object.entries(L.quotes).find(([k]) => c[0].startsWith(k));
+      const q = Object.entries(QUOTES[ch.n]).find(([k]) => c[0].startsWith(k));
       if (!q) throw new Error(`No quote line for "${c[0]}" (Lot ${ch.n})`);
       h += `<div class="case"><span class="nm">${md(c[0])}</span><div><b>Facts.</b> ${md(c[1])} <b>Held.</b> ${md(c[2])} <b>Cite it for:</b> ${md(c[3])}</div><div class="ql">${md(q[1])}</div></div>`;
     });
     h += `<h3>Sections to cite</h3>` + ch.secs.map(sc => `<div class="sec"><b>${md(sc[0])}</b>: ${md(sc[1])}. <span class="small">${md(sc[2])}</span></div>`).join('');
-    h += `</div></section>`;
   });
 
   /* Part C */
-  h += `<section class="lot"><h2>Part C. Your personal exam-day rules</h2><div class="cols">`;
+  h += `<h2>Part C. Your personal exam-day rules</h2>`;
   h += `<h3>Ten rules written from your mistakes</h3>${list(FS.rules, 'ol')}`;
   h += `<h3>The numbers that cost you marks</h3><table><tr><th>Point</th><th>Figure</th></tr>${FS.numbers.map(r => `<tr><td>${md(r[0])}</td><td>${md(r[1])}</td></tr>`).join('')}</table>`;
-  h += `<h3>Last word</h3>${para(FS.closing)}</div></section>`;
+  h += `<h3>Last word</h3>${para(FS.closing)}</div>`;
   return doc('RE2702 Where I Fell Short', h);
 }
 
@@ -204,27 +211,28 @@ function paper1() {
    PAPER 2: Section B topics and how to answer them
    ===================================================================================== */
 function paper2() {
-  let h = `<div class="cover"><h1>${md(SB.title)}</h1><div class="sub">${md(SB.subtitle)}</div><div class="meta">${md(SB.meta)}</div></div>`;
-  h += `<h2>Part A. How Section B works and how to write it</h2><div class="cols">`;
-  SB.method.forEach(b => { h += `<h3>${md(b.head)}</h3>` + (b.paras ? para(b.paras) : '') + (b.list ? list(b.list, b.ordered ? 'ol' : 'ul') : '') + (b.table ? `<table><tr>${b.table[0].map(c => `<th>${md(c)}</th>`).join('')}</tr>${b.table.slice(1).map(r => `<tr>${r.map(c => `<td>${md(c)}</td>`).join('')}</tr>`).join('')}</table>` : ''); });
-  h += `</div>`;
-  h += `<h2 style="break-before:page">Part B. Every topic, and how to answer it</h2>`;
-  SB.topics.forEach((t, i) => {
-    h += `<section class="topic${i % 2 ? ' cont' : ''}" ${i === 0 ? 'style="break-before:auto"' : ''}><h3 style="font-size:11.5pt">${i + 1}. ${md(t.title)} <span class="chip">${esc(t.lots)}</span>${t.weight ? `<span class="chip">${esc(t.weight)}</span>` : ''}</h3><div class="cols">`;
-    h += `<h4>How it is asked</h4>${list(t.signals)}`;
-    h += `<h4>Issues to raise, in this order</h4>${list(t.issues, 'ol')}`;
-    h += `<div class="law"><span class="lab">Law paragraph to adapt</span>${para(t.law)}</div>`;
-    h += `<div class="app"><span class="lab grn">Applying it</span>${para(t.apply)}</div>`;
-    h += `<h4>Conclusion lines</h4>${para(t.conclude)}`;
+  const tbl = rows => `<table><tr>${rows[0].map(c => `<th>${md(c)}</th>`).join('')}</tr>${rows.slice(1).map(r => `<tr>${r.map(c => `<td>${md(String(c))}</td>`).join('')}</tr>`).join('')}</table>`;
+  let h = `<div class="cover"><h1>${md(SB.title)}</h1><div class="sub">${md(SB.subtitle)}</div><div class="meta">${md(SB.meta)}</div></div><div class="cols">`;
+  h += `<h2>Part A. How Section B works and how to write it</h2>`;
+  SB.method.forEach(b => { h += `<h3>${md(b.head)}</h3>` + (b.paras ? para(b.paras) : '') + (b.list ? list(b.list, b.ordered ? 'ol' : 'ul') : '') + (b.table ? tbl(b.table) : ''); });
+  h += `<h2>Part B. Every topic, with a model answer in ILAC</h2>`;
+  SB.topics.forEach((t, n) => {
+    h += `<h3 class="tt">${n + 1}. ${md(t.title)} <span class="chip">${esc(t.lots)}</span>${t.weight ? `<span class="chip">${esc(t.weight)}</span>` : ''}</h3>`;
+    h += `<h4>How it is asked</h4>${list(t.signals)}<h4>Issues to raise, in this order</h4>${list(t.issues, 'ol')}`;
+    h += `<div class="sq"><span class="lab amb">Sample question${t.marks ? ' · ' + esc(t.marks) : ''}</span><p>${md(t.q)}</p></div>`;
+    h += `<div class="ans"><span class="lab grn">Model answer (ILAC)</span>` + t.answer.map((b, k) =>
+      `<div class="blk"><p class="il">Issue ${t.answer.length > 1 ? (k + 1) + ': ' : ''}${md(b.i)}</p>` +
+      b.l.map((x, z) => `<p>${z ? '' : '<span class="k">Law</span>'}${md(x)}</p>`).join('') +
+      b.a.map((x, z) => `<p>${z ? '' : '<span class="k">Application</span>'}${md(x)}</p>`).join('') +
+      `<p><span class="k">Conclusion</span>${md(b.c)}</p></div>`).join('') +
+      (t.advice ? `<p class="adv"><span class="k">Advice</span>${md(t.advice)}</p>` : '') + `</div>`;
     h += `<h4>Where marks are lost</h4>${list(t.traps)}`;
-    if (t.vary) h += `<h4>If the facts change</h4><table><tr><th>Change</th><th>Effect</th></tr>${t.vary.map(r => `<tr><td>${md(r[0])}</td><td>${md(r[1])}</td></tr>`).join('')}</table>`;
-    h += `</div></section>`;
+    if (t.vary) h += `<h4>If the facts change</h4>${tbl([['Change', 'Effect']].concat(t.vary))}`;
   });
-  h += `<h2 style="break-before:page">Part C. Narrative essay questions</h2><div class="cols">${para(SB.essayIntro)}`;
+  h += `<h2>Part C. Narrative essay questions</h2>${para(SB.essayIntro)}`;
   SB.essays.forEach(e => { h += `<div class="essay"><h4 style="margin-top:0">${md(e.q)}</h4><p><b>Introduction.</b> ${md(e.intro)}</p><ol>${e.points.map(p => `<li>${md(p)}</li>`).join('')}</ol><p><b>Conclusion.</b> ${md(e.end)}</p></div>`; });
-  h += `</div>`;
-  h += `<h2 style="break-before:page">Part D. Putting topics together: the combined case study</h2><div class="cols">${para(SB.comboIntro)}`;
-  SB.combos.forEach(c => { h += `<h3>${md(c.head)}</h3>${para(c.facts)}<table><tr><th>Part</th><th>Topics (Part B no.)</th><th>Marks</th><th>Minutes</th></tr>${c.plan.map(r => `<tr>${r.map(x => `<td>${md(String(x))}</td>`).join('')}</tr>`).join('')}</table>${c.notes ? list(c.notes) : ''}`; });
+  h += `<h2>Part D. Putting topics together: the combined case study</h2>${para(SB.comboIntro)}`;
+  SB.combos.forEach(c => { h += `<h3>${md(c.head)}</h3>${para(c.facts)}${tbl([['Part', 'Model answers in topic no.', 'Marks', 'Minutes']].concat(c.plan))}${c.notes ? list(c.notes) : ''}`; });
   h += `<h3>Final checklist before you submit</h3>${list(SB.checklist, 'ol')}</div>`;
   return doc('RE2702 Section B Guide', h);
 }
