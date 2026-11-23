@@ -16,6 +16,9 @@ re-themed as a survey-plan blueprint: ten **lots** (one per chapter) and the **E
   spotter, 24 topics each with a sample question and a full model answer in ILAC (one Issue, Law, Application and
   Conclusion block per issue, then advice to each party; papers/topics.mjs), 10 narrative essay plans, and the
   past-year case studies mapped to the model answers.
+- **My one-page cheat sheet** (`dist/RE2702-my-one-page-cheat-sheet.pdf`): the one-page summary Claude writes in the app
+  (My cheat sheet), printed on a single A4 page; the type shrinks to fit. Rebuild from a save with
+  `npm run build:sheet -- path/to/save.json`. Citations not found in the notes are flagged [check].
 - Rebuild the papers with `npm run build:papers` (each is capped at 30 pages). To refresh your record from a newer save,
   add `-- --record path/to/save.json` (the app's synced `landlah` document, or a save exported from the browser).
 - **From source:** open `landlah/index.html`.

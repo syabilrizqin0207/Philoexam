@@ -11,7 +11,8 @@
     "test:land": "node --test tests/landlah.test.mjs",
     "build:land": "node scripts/build-landlah.mjs",
     "smoke:land": "node tests/smoke-landlah.mjs",
-    "build:papers": "node scripts/build-papers.mjs"
+    "build:papers": "node scripts/build-papers.mjs",
+    "build:sheet": "node scripts/build-ai-sheet.mjs"
   },
   "license": "UNLICENSED"
 }
