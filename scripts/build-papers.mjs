@@ -50,6 +50,7 @@ const record = JSON.parse(fs.readFileSync(recordPath, 'utf8'));
 const FS = (await import(pathToFileURL(path.join(repo, 'papers', 'fell-short.mjs')))).default;
 const SB = (await import(pathToFileURL(path.join(repo, 'papers', 'section-b.mjs')))).default;
 const QUOTES = (await import(pathToFileURL(path.join(repo, 'papers', 'quotes.mjs')))).default;
+const MA = (await import(pathToFileURL(path.join(repo, 'papers', 'mock-answers.mjs')))).default;
 
 /* ---------- tiny markup: **bold**, *italic*, [check] ---------- */
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -237,6 +238,56 @@ function paper2() {
   return doc('RE2702 Section B Guide', h);
 }
 
+/* =====================================================================================
+   PAPER 3: Section B answer sheet for the six mock papers
+   ===================================================================================== */
+function ansBlocks(blocks) {
+  return blocks.map((b0, k) => {
+    const b = b0.ref ? SB.topics[b0.ref[0]].answer[b0.ref[1]] : b0;
+    if (!b) throw new Error('bad answer ref ' + JSON.stringify(b0.ref));
+    return `<div class="blk"><p class="il">Issue ${blocks.length > 1 ? (k + 1) + ': ' : ''}${md(b.i)}</p>` +
+      b.l.map((x, z) => `<p>${z ? '' : '<span class="k">Law</span>'}${md(x)}</p>`).join('') +
+      b.a.map((x, z) => `<p>${z ? '' : '<span class="k">Application</span>'}${md(x)}</p>`).join('') +
+      `<p><span class="k">Conclusion</span>${md(b.c)}</p></div>`;
+  }).join('');
+}
+function factsHTML(f) {
+  const out = []; let ul = [];
+  const flush = () => { if (ul.length) { out.push(`<ul>${ul.map(x => `<li>${md(x)}</li>`).join('')}</ul>`); ul = []; } };
+  (Array.isArray(f) ? f.join('\n') : f).split('\n').forEach(line => {
+    const t = line.trim();
+    if (!t) { flush(); return; }
+    if (/^[-*•]\s+/.test(t)) ul.push(t.replace(/^[-*•]\s+/, '')); else { flush(); out.push(`<p>${md(t)}</p>`); }
+  });
+  flush();
+  return out.join('');
+}
+function paper3() {
+  let h = `<div class="cover"><h1>${md(MA.title)}</h1><div class="sub">${md(MA.subtitle)}</div><div class="meta">${md(MA.meta)}</div></div><div class="cols">${para(MA.intro)}`;
+  LL.ref.mocks.forEach((m, n) => {
+    const c = LL.cases.find(x => x.id === m.caseId), A = MA.mocks[m.id];
+    if (!c || !A) throw new Error('missing mock ' + m.id);
+    if (A.parts.length !== c.parts.length) throw new Error(`${m.id}: ${A.parts.length} answer parts for ${c.parts.length} question parts`);
+    h += `<h2>${esc(m.title)}: ${esc(c.title)}</h2><p class="small"><span class="chip">${esc(c.src)}</span><span class="chip">${c.marks} marks</span>${c.chs ? `<span class="chip">Lots ${c.chs.join(', ')}</span>` : ''}</p>`;
+    h += `<div class="sq"><span class="lab amb">The question</span>${factsHTML(c.facts)}${c.parts.map(pt => `<p><b>${md(pt.ask)}</b></p>`).join('')}</div>`;
+    let mt = `<table><tr><th>What earns the marks</th><th style="text-align:center">Marks</th></tr>`;
+    c.parts.forEach(pt => pt.issues.forEach(is => {
+      const sum = is.points.reduce((t, x) => t + x.m, 0);
+      mt += `<tr><td style="background:#e3eff4;font-family:Inter,sans-serif;font-weight:700;font-size:7.8pt">${pt.label ? esc(pt.label) + ' ' : ''}${md(is.name)}</td><td style="background:#e3eff4;text-align:center;font-weight:700">${sum}</td></tr>`;
+      is.points.forEach(x => { mt += `<tr><td>${md(x.t)}</td><td style="text-align:center">${x.m}</td></tr>`; });
+    }));
+    h += `<h4>Where the ${c.marks} marks are</h4>${mt}</table>`;
+    c.parts.forEach((pt, k) => {
+      h += `<div class="ans"><span class="lab grn">Model answer (ILAC)${c.parts.length > 1 ? ' · part ' + esc(pt.label) + ' · ' + pt.marks + ' marks' : ''}</span>${c.parts.length > 1 ? `<p class="small"><i>${md(pt.ask)}</i></p>` : ''}${ansBlocks(A.parts[k].blocks)}</div>`;
+    });
+    h += `<h4>Conclusion for each party</h4><ul>${A.parties.map(p => `<li><b>${md(p[0])}.</b> ${md(p[1])}</li>`).join('')}</ul>`;
+    const tricks = [].concat(...c.parts.map(pt => pt.tricks || []));
+    if (tricks.length) h += `<h4>Exam tricks for this paper</h4>${list(tricks)}`;
+  });
+  h += `</div>`;
+  return doc('RE2702 Section B Mock Answers', h);
+}
+
 /* ---------- render to PDF ---------- */
 const { chromium } = createRequire(import.meta.url)('playwright');
 const browser = await chromium.launch();
@@ -261,6 +312,7 @@ async function pdf(htmlStr, file, label) {
 try {
   await pdf(paper1(), 'RE2702-where-i-fell-short.pdf', 'RE2702 Land Law · Where I fell short');
   await pdf(paper2(), 'RE2702-section-b-guide.pdf', 'RE2702 Land Law · Section B: every topic and how to answer it');
+  await pdf(paper3(), 'RE2702-section-b-mock-answers.pdf', 'RE2702 Land Law · Section B answer sheet: the six mock papers');
 } finally {
   await browser.close();
 }

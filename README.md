@@ -21,6 +21,9 @@ re-themed as a survey-plan blueprint: ten **lots** (one per chapter) and the **E
   still to improve: open concepts not on page 1, Agency (weakest checkpoint), and topics fixed but fragile. Each page
   is fitted to one A4 sheet. Rebuild with `npm run build:sheet -- path/to/save.json`; citations not in the notes are
   flagged [check].
+- **Section B answer sheet** (`dist/RE2702-section-b-mock-answers.pdf`, 14 pages): the case study from each of the six
+  mock papers, where its 40 marks are (the app's marking scheme), and a full model answer in ILAC with a conclusion for
+  every party (papers/mock-answers.mjs; Mocks 1 and 2 reuse the Paper 2 answers for the past-year case studies).
 - Rebuild the papers with `npm run build:papers` (each is capped at 30 pages). To refresh your record from a newer save,
   add `-- --record path/to/save.json` (the app's synced `landlah` document, or a save exported from the browser).
 - **From source:** open `landlah/index.html`.
