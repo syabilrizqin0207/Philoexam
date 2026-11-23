@@ -51,6 +51,7 @@ const FS = (await import(pathToFileURL(path.join(repo, 'papers', 'fell-short.mjs
 const SB = (await import(pathToFileURL(path.join(repo, 'papers', 'section-b.mjs')))).default;
 const QUOTES = (await import(pathToFileURL(path.join(repo, 'papers', 'quotes.mjs')))).default;
 const MA = (await import(pathToFileURL(path.join(repo, 'papers', 'mock-answers.mjs')))).default;
+const MS = (await import(pathToFileURL(path.join(repo, 'papers', 'mock-answers-short.mjs')))).default;
 
 /* ---------- tiny markup: **bold**, *italic*, [check] ---------- */
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -288,6 +289,66 @@ function paper3() {
   return doc('RE2702 Section B Mock Answers', h);
 }
 
+/* =====================================================================================
+   PAPER 3 (short): the six mock answers on exactly four A4 pages
+   ===================================================================================== */
+const SHORT_PAGES = 4;
+function paper3short(size) {
+  const css = `
+@page { size: A4; margin: 8mm 8mm 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font: ${size}pt/1.27 'Bitstream Charter', 'Caladea', serif; color: #14202b; }
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; border-bottom: 2px solid #0e4a6b; padding-bottom: 1.5mm; margin-bottom: 2mm; font-family: Inter, sans-serif; }
+.top h1 { margin: 0; font-size: 13pt; color: #0e4a6b; }
+.top span { font-size: 7pt; color: #4d6472; text-align: right; }
+.cols { column-count: 3; column-gap: 4mm; column-rule: 0.5px solid #c9dbe4; column-fill: auto; orphans: 2; widows: 2; }
+h2 { font: 700 ${size + 1.6}pt/1.2 Inter, sans-serif; color: #fff; background: #0e4a6b; padding: 2pt 4pt; margin: ${size * 0.6}pt 0 ${size * 0.3}pt; break-after: avoid; }
+h2:first-child { margin-top: 0; }
+.facts { font-style: italic; color: #33414b; margin: 0 0 ${size * 0.35}pt; padding: 1.5pt 4pt; background: #fff8e6; border-left: 2px solid #e0a21a; }
+.iss { margin: 0 0 ${size * 0.4}pt; padding-bottom: ${size * 0.25}pt; border-bottom: 0.5px dashed #b8d8c4; }
+.iq { font: 700 ${size + 0.2}pt/1.22 Inter, sans-serif; color: #1f5c38; margin: 0 0 1pt; break-after: avoid; }
+.iq .m { font-weight: 600; color: #a86b00; margin-left: 2pt; }
+p { margin: 0 0 1.2pt; }
+.k { font: 700 ${Math.max(5.5, size - 1.3)}pt Inter, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: #0e4a6b; margin-right: 2pt; }
+.adv { background: #e6f2ea; padding: 2pt 4pt; margin: 0 0 ${size * 0.4}pt; }
+b { font-weight: 700; color: #0b3a55; }
+.chk { color: #b3261e; font: 600 ${Math.max(5.5, size - 1.4)}pt Inter, sans-serif; }`;
+  let h = `<div class="top"><h1>${md(MS.title)}</h1><span>${md(MS.note)}</span></div><div class="cols">`;
+  LL.ref.mocks.forEach(m => {
+    const c = LL.cases.find(x => x.id === m.caseId), S = MS.mocks[m.id];
+    const issues = [].concat(...c.parts.map(pt => pt.issues.map(is => ({ part: pt.label, marks: is.points.reduce((t, x) => t + x.m, 0) }))));
+    if (!S || S.blocks.length !== issues.length) throw new Error(`${m.id}: ${S ? S.blocks.length : 0} short answers for ${issues.length} scheme issues`);
+    h += `<h2>${esc(m.title.replace('Mock Paper', 'Mock'))} · ${esc(c.title)} (40)</h2><p class="facts">${md(S.facts)}</p>`;
+    S.blocks.forEach((b, k) => {
+      h += `<div class="iss"><p class="iq">${md(b[0])}<span class="m">[${issues[k].marks}]</span></p><p><span class="k">Law</span>${md(b[1])}</p><p><span class="k">Application</span>${md(b[2])}</p><p><span class="k">Conclusion</span>${md(b[3])}</p></div>`;
+    });
+    h += `<p class="adv"><span class="k">Advice</span>${md(S.advice)}</p>`;
+  });
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Section B mock answers (4 pages)</title><style>${css}</style></head><body>${h}</div></body></html>`;
+}
+async function pdfFit(build, file, label, target) {
+  const page = await browser.newPage();
+  const opts = { format: 'A4', printBackground: true, preferCSSPageSize: true, displayHeaderFooter: true, headerTemplate: '<span></span>',
+    footerTemplate: `<div style="width:100%;font:6.5pt Inter,sans-serif;color:#6b7f8a;padding:0 8mm;display:flex;justify-content:space-between"><span>${esc(label)}</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>` };
+  const count = buf => (buf.toString('latin1').match(/\/Type\s*\/Page[^s]/g) || []).length;
+  let lo = 5.5, hi = 13, best = null;
+  for (let k = 0; k < 10; k++) {            // the largest type that still fits in the target number of pages
+    const mid = (lo + hi) / 2;
+    await page.setContent(build(mid), { waitUntil: 'load' });
+    if (count(await page.pdf(opts)) <= target) { best = mid; lo = mid; } else hi = mid;
+  }
+  if (!best) throw new Error(`${file} does not fit in ${target} pages even at 5.5 pt`);
+  const size = Math.floor(best * 20) / 20;
+  await page.setContent(build(size), { waitUntil: 'load' });
+  const out = path.join(repo, 'dist', file);
+  await page.pdf({ ...opts, path: out });
+  await page.close();
+  const n = count(fs.readFileSync(out));
+  console.log(`wrote dist/${file}: ${n} pages at ${size} pt`);
+  if (n !== target) throw new Error(`${file} came out at ${n} pages, not ${target}`);
+}
+
 /* ---------- render to PDF ---------- */
 const { chromium } = createRequire(import.meta.url)('playwright');
 const browser = await chromium.launch();
@@ -313,6 +374,7 @@ try {
   await pdf(paper1(), 'RE2702-where-i-fell-short.pdf', 'RE2702 Land Law · Where I fell short');
   await pdf(paper2(), 'RE2702-section-b-guide.pdf', 'RE2702 Land Law · Section B: every topic and how to answer it');
   await pdf(paper3(), 'RE2702-section-b-mock-answers.pdf', 'RE2702 Land Law · Section B answer sheet: the six mock papers');
+  await pdfFit(paper3short, 'RE2702-section-b-mock-answers-4-pages.pdf', 'RE2702 Land Law · Section B: the six mock papers in four pages', SHORT_PAGES);
 } finally {
   await browser.close();
 }
